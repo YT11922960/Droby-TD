@@ -1,0 +1,337 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>ドロビーのタワーディフェンス</title>
+  <style>
+    body.booting{margin:0;background:#172414;overflow:hidden}
+    body.booting .mode-select,body.booting .game-screen,body.booting .library-screen,body.booting .audio-settings-screen,body.booting .credits-screen{display:none!important}
+    body:not(.booting) #startup-loading{display:none!important}
+    #startup-loading{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:#172414;color:#fff0bd;text-align:center}
+  </style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="booting">
+  <div id="startup-loading" class="startup-loading" role="status" aria-live="polite">
+    <div>
+      <strong>Loading...</strong>
+      <span>森の準備をしています</span>
+    </div>
+  </div>
+  <div id="mode-select" class="mode-select">
+    <div class="mode-card">
+      <h1>ドロビーのタワーディフェンス</h1>
+      <p>遊ぶモードを選んでください</p>
+      <button data-mode="normal"><strong>ストーリーモード</strong><small>全6章・24ウェーブ</small></button>
+      <button class="mode-hidden" data-mode="endless"><strong>エンドレスモード</strong><small>どこまで進めるか挑戦</small></button>
+      <button id="open-library"><strong>ライブラリー</strong><small>解放した絵本を読む</small></button>
+      <button id="open-audio-settings" class="credits-menu-button" type="button">⚙ 設定</button>
+      <button id="open-credits" class="credits-menu-button" type="button">📜 クレジット</button>
+      <button id="debug-mode-button" class="mode-hidden" type="button"><strong>開発者モード</strong><small>演出・高Wave確認専用</small></button>
+      <section id="debug-panel" class="debug-panel hidden" aria-label="開発者モード設定">
+        <h2>Developer Debug Mode</h2>
+        <label>開始Wave
+          <select id="debug-start-wave">
+            <option value="1">Wave 1</option><option value="10">Wave 10</option><option value="20">Wave 20</option>
+            <option value="35">Wave 35</option><option value="40">Wave 40</option><option value="60">Wave 60</option><option value="80">Wave 80</option><option value="100">Wave 100</option>
+          </select>
+        </label>
+        <button id="debug-start" type="button">選択Waveから開始</button>
+        <button id="debug-start-wave35" type="button">🌿 WAVE35から開始</button>
+        <div class="debug-preview-actions">
+          <button type="button" data-debug-cinematic="king">王様ドロビー演出</button>
+          <button type="button" data-debug-cinematic="queen">ひまわり女王演出</button>
+          <button type="button" data-debug-cinematic="star">スター猫演出</button>
+          <button type="button" data-debug-cinematic="peace">ドロビー＆ひまわり演出</button>
+          <button id="debug-achievement-preview" type="button">実績解除演出</button>
+          <button id="debug-library-preview" type="button">全ライブラリー確認</button>
+        </div>
+        <button id="debug-panel-close" type="button">閉じる</button>
+      </section>
+      <div class="endless-score mode-hidden">エンドレス最高記録：Wave <b id="endless-high-score">0</b></div>
+      <details class="debug-tools mode-hidden">
+        <summary>テスト用リセット</summary>
+        <button id="debug-reset-storybook" type="button">絵本進捗をリセット</button>
+        <button id="debug-reset-all" type="button">全進捗をリセット</button>
+      </details>
+    </div>
+  </div>
+
+  <div id="audio-settings-screen" class="audio-settings-screen hidden" role="dialog" aria-modal="true" aria-labelledby="audio-settings-title">
+    <section class="audio-settings-card">
+      <small>SETTINGS</small>
+      <h2 id="audio-settings-title">設定</h2>
+      <label class="volume-control" for="bgm-volume">
+        <span>BGM音量 <output id="bgm-volume-value">60%</output></span>
+        <input id="bgm-volume" type="range" min="0" max="100" step="1" value="60">
+      </label>
+      <label class="volume-control" for="se-volume">
+        <span>効果音音量 <output id="se-volume-value">70%</output></span>
+        <input id="se-volume" type="range" min="0" max="100" step="1" value="70">
+      </label>
+      <label class="weather-setting" for="weather-effects-toggle">
+        <span><b>天候エフェクト</b><small>森の生き物を含む、控えめな背景演出</small></span>
+        <input id="weather-effects-toggle" type="checkbox" checked>
+        <output id="weather-effects-value">ON</output>
+      </label>
+      <p>0%にするとミュートになります。</p>
+      <button id="audio-settings-close" type="button">閉じる</button>
+    </section>
+  </div>
+
+  <div id="credits-screen" class="credits-screen hidden" role="dialog" aria-modal="true" aria-labelledby="credits-title">
+    <article class="credits-parchment">
+      <header>
+        <small>CREDITS</small>
+        <h2 id="credits-title">ドロビーとひまわりのタワーディフェンス</h2>
+        <p>Version <span id="credits-version"></span></p>
+      </header>
+      <div class="credits-content">
+        <section><h3>BGM</h3><p>甘茶の音楽工房<br><a href="https://amachamusic.chagasi.com/" target="_blank" rel="noopener noreferrer">amachamusic.chagasi.com</a></p></section>
+        <section><h3>効果音</h3><p><a href="https://soundeffect-lab.info/" target="_blank" rel="noopener noreferrer">効果音ラボ</a></p></section>
+        <section><h3>制作</h3><p>Y T</p></section>
+      </div>
+      <button id="credits-back" type="button">戻る</button>
+    </article>
+  </div>
+
+  <div id="library-screen" class="library-screen hidden">
+    <nav id="library-tabs" class="library-tabs" aria-label="ライブラリー分類">
+      <button id="library-tab-books" class="active" type="button">絵本</button>
+      <button id="library-tab-mice" type="button">ネズミ図鑑</button>
+    </nav>
+    <section class="bookshelf">
+      <button id="library-close" class="book-close">x</button>
+      <header class="bookshelf-heading"><h2>ライブラリー</h2><p>読みたい本をえらんでください</p></header>
+      <div class="shelf-books">
+        <button class="book-spine book-drobby" id="open-drobby-book" data-book="drobby">
+          <span class="book-cover-frame" aria-hidden="true"></span><span class="book-title">ドロビーの物語</span><small class="book-subtitle">DROBBY STORY</small><i class="book-lock" aria-hidden="true"></i>
+        </button>
+        <button class="book-spine book-himawari" data-book="himawari">
+          <span class="book-cover-frame" aria-hidden="true"></span><span class="book-title">???</span><small class="book-subtitle"></small><i class="book-lock" aria-hidden="true"></i>
+        </button>
+        <button class="book-spine book-meeting" data-book="meeting">
+          <span class="book-cover-frame" aria-hidden="true"></span><span class="book-title">???</span><small class="book-subtitle"></small><i class="book-lock" aria-hidden="true"></i>
+        </button>
+        <button class="book-spine book-special" data-book="special">
+          <span class="book-cover-frame" aria-hidden="true"></span><span class="book-title">???</span><small class="book-subtitle"></small><i class="book-lock" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div id="library-book-message" class="library-book-message" role="status" aria-live="polite"></div>
+    </section>
+    <section id="mouse-encyclopedia" class="mouse-encyclopedia hidden" aria-label="ネズミ図鑑">
+      <button id="mouse-encyclopedia-close" class="book-close" type="button">本棚へ</button>
+      <header class="mouse-encyclopedia-heading">
+        <small>FIELD NOTES</small>
+        <h2>ネズミ図鑑</h2>
+        <p>出会ったネズミの特徴と対策を確認できます。</p>
+      </header>
+      <div id="mouse-encyclopedia-grid" class="mouse-encyclopedia-grid" aria-live="polite"></div>
+      <article id="mouse-encyclopedia-detail" class="mouse-encyclopedia-detail hidden" aria-live="polite">
+        <button id="mouse-encyclopedia-detail-close" type="button" aria-label="詳細を閉じる">×</button>
+        <div class="mouse-detail-art">
+          <img id="mouse-detail-image" src="" alt="" hidden>
+          <span id="mouse-detail-fallback" aria-hidden="true">🐭</span>
+        </div>
+        <div class="mouse-detail-copy">
+          <small id="mouse-detail-category">通常</small>
+          <h3 id="mouse-detail-name">森ネズミ</h3>
+          <p id="mouse-detail-lore"></p>
+          <dl>
+            <div><dt>特徴</dt><dd id="mouse-detail-feature"></dd></div>
+            <div><dt>能力</dt><dd id="mouse-detail-ability"></dd></div>
+            <div><dt>対策</dt><dd id="mouse-detail-counter"></dd></div>
+            <div><dt>遭遇状況</dt><dd id="mouse-detail-seen"></dd></div>
+            <div><dt>累計撃破数</dt><dd id="mouse-detail-kills"></dd></div>
+          </dl>
+        </div>
+      </article>
+    </section>
+    <section id="storybook-reader" class="storybook-reader hidden">
+      <button id="book-back" class="book-close">本棚へ</button>
+      <div id="storybook-book" class="storybook-book">
+        <img class="storybook-book-art" src="assets/antique-open-book-topdown.png" alt="" aria-hidden="true">
+        <article class="book-page left">
+          <div class="book-page-content"><img id="left-page-image" class="book-page-image" alt="" hidden><p id="left-page-text"></p></div>
+          <small id="left-page-no"></small>
+        </article>
+        <article class="book-page right">
+          <div class="book-page-content"><img id="right-page-image" class="book-page-image" alt="" hidden><p id="right-page-text"></p></div>
+          <small id="right-page-no"></small>
+        </article>
+      </div>
+      <div class="book-controls">
+        <button id="prev-pages">前へ</button>
+        <output id="book-page-indicator" aria-live="polite">1 - 2 / 6</output>
+        <button id="next-pages">次へ</button>
+      </div>
+    </section>
+    <div id="illustration-viewer" class="illustration-viewer hidden" role="dialog" aria-modal="true" aria-label="絵本イラスト拡大表示">
+      <button id="illustration-close" class="illustration-close" type="button" aria-label="閉じる">×</button>
+      <button id="illustration-prev" class="illustration-nav prev" type="button" aria-label="前のイラスト">‹</button>
+      <figure class="illustration-frame">
+        <img id="illustration-full-image" src="" alt="">
+        <figcaption id="illustration-caption"></figcaption>
+      </figure>
+      <button id="illustration-next" class="illustration-nav next" type="button" aria-label="次のイラスト">›</button>
+    </div>
+  </div>
+
+  <main class="game-screen">
+    <aside class="tower-picker panel">
+      <h2>タワーを選ぶ</h2>
+      <button class="tower-card" data-tower="doro"><span class="tower-image-wrap"><img class="tower-image" src="assets/drobby-tower.png" alt="ドロビー塔"></span><span class="tower-copy"><strong>ドロビー</strong><b>50</b><small class="tower-stats"></small></span></button>
+      <button class="tower-card" data-tower="hima"><span class="tower-image-wrap"><img class="tower-image" src="assets/himawari-tower.png" alt="ひまわり塔"></span><span class="tower-copy"><strong>ひまわり</strong><b>75</b><small class="tower-stats"></small></span></button>
+      <button class="tower-card" data-tower="mike"><span class="tower-image-wrap"><img class="tower-image" src="assets/mike-lucky-tower.png" alt="ミケ塔"></span><span class="tower-copy"><strong>ミケ</strong><b id="mike-price">120</b><small class="tower-stats"></small></span></button>
+      <button class="tower-card locked" data-tower="witch"><span class="tower-image-wrap"><img class="tower-image" src="assets/witch-mike-tower.png" alt="魔女ミケ塔"></span><span class="tower-copy"><strong>魔女ミケ</strong><b>220</b><small class="tower-stats"></small></span></button>
+      <button class="tower-card locked" data-tower="sign"><span class="tower-image-wrap"><img class="tower-image" src="assets/signboard-cat-tower.png" alt="看板猫塔"></span><span class="tower-copy"><strong>看板猫</strong><b>180</b><small class="tower-stats"></small></span></button>
+      <button class="tower-card locked" data-tower="groom"><span class="tower-image-wrap"><img class="tower-image" src="assets/grooming-cat-tower.png" alt="毛づくろい猫塔"></span><span class="tower-copy"><strong>毛づくろい</strong><b>180</b><small class="tower-stats"></small></span></button>
+      <button class="tower-card locked secret-tower" data-tower="king"><span class="tower-image-wrap secret-placeholder">?</span><span class="tower-copy"><strong>???</strong><b>---</b><small class="tower-stats">Locked</small></span></button>
+      <button class="tower-card locked secret-tower" data-tower="queen"><span class="tower-image-wrap secret-placeholder">?</span><span class="tower-copy"><strong>???</strong><b>---</b><small class="tower-stats">Locked</small></span></button>
+      <button class="tower-card locked secret-tower" data-tower="star"><span class="tower-image-wrap secret-placeholder">?</span><span class="tower-copy"><strong>???</strong><b>---</b><small class="tower-stats">Locked</small></span></button>
+      <button class="tower-card locked secret-tower" data-tower="peace"><span class="tower-image-wrap secret-placeholder">?</span><span class="tower-copy"><strong>???</strong><b>---</b><small class="tower-stats">Locked</small></span></button>
+      <div id="tower-tooltip" class="tower-tooltip visible" role="status" aria-live="polite"><p class="tower-info-default">塔を選ぶと<br>ここに詳細が表示されます</p></div>
+      <button id="tower-remove" class="sidebar-remove" disabled>塔を選んで売却</button>
+    </aside>
+
+    <section class="map-column">
+      <header class="topbar">
+        <div class="resource-bar">
+          <div><span class="heart">❤️</span><small>ライフ</small><strong id="lives">5</strong></div>
+          <div><span class="coin">🍖</span><small>おやつ</small><strong id="coins">120</strong></div>
+          <div><span class="skull">🐭</span><small>敵</small><strong id="enemy-count">0</strong></div>
+          <div class="tower-slot-status"><span>🏰</span><small>配置</small><strong id="tower-count">0</strong><span>/</span><strong id="tower-max">16</strong></div>
+        </div>
+        <div class="snack-run-totals" title="このランで敵撃破・生成により獲得したおやつ"><span>🍖 通常 <b id="normal-snacks-earned">0</b></span><span>✨ ミケ <b id="mike-bonus-earned">+0</b></span></div>
+        <div class="wave-title"><strong id="chapter-hud">第1章 朝の森</strong><span>🌊 Wave <b id="wave">1</b><i id="wave-total">/24</i></span></div>
+        <button id="weather-hud" class="weather-hud"><span id="weather-icon">-</span><strong id="weather-name">天候なし</strong></button>
+        <div class="top-actions"><button id="research-button" class="mode-hidden">研究所</button><button id="shop-button" class="mode-hidden" type="button">🛒 ショップ</button><button id="speed-button" type="button">▶ 1x</button><button id="sound-button" type="button">⚙ 設定</button><button id="restart-button">← 戻る</button></div>
+      </header>
+      <div class="field-wrap">
+        <canvas id="game" width="1200" height="760"></canvas>
+        <div id="tower-action-menu" class="tower-action-menu hidden" role="group" aria-label="選択した塔の操作">
+          <button id="tower-action-upgrade" type="button"><b>⬆ LvUP</b><small></small></button>
+        </div>
+        <aside id="tower-hint-popup" class="tower-hint-popup hidden" role="dialog" aria-modal="false" aria-labelledby="tower-hint-title">
+          <button id="tower-hint-close" type="button" aria-label="冒険のヒントを閉じる">×</button>
+          <small>ADVENTURE HINT</small>
+          <h3 id="tower-hint-title">💡 冒険のヒント</h3>
+          <strong id="tower-hint-name"></strong>
+          <ul id="tower-hint-list"></ul>
+        </aside>
+        <div id="weather-effects" class="weather-effects" aria-hidden="true"><span></span><i></i></div>
+        <div id="preparation-phase" class="preparation-phase hidden" aria-live="polite"><strong>🐾 準備中</strong><span>塔の設置・強化・売却ができます</span></div>
+        <div id="selected-tower-indicator" class="selected-tower-indicator hidden" aria-live="polite"><small>選択中：</small><strong></strong></div>
+        <div id="placement-feedback" class="placement-feedback hidden" aria-live="polite"></div>
+        <div id="weather-change-notice" class="weather-change-notice hidden" aria-live="polite"></div>
+        <div class="entrance-sign">入口</div>
+        <div id="message" class="message hidden"></div>
+        <div id="story-continue" class="story-continue hidden" role="dialog" aria-modal="true" aria-labelledby="continue-title">
+          <header><h2 id="continue-title">ゲームオーバー</h2><p>Wave <b id="continue-wave-label">1</b>で まけてしまった…</p></header>
+          <div class="continue-speech drobby-speech"><strong>ドロビー 🐾</strong><p>うぅ…<br>ぜんぶ たべられちゃった…<br>ぼくが まもれなかった…</p></div>
+          <div class="continue-speech himawari-speech"><strong>ひまわり 🌻</strong><p>だいじょうぶだよ、<br>ドロビー。<br><br>いっしょに<br>がんばろうね！</p></div>
+          <section class="continue-choice"><h3>Wave <b id="continue-wave-question">1</b>から もういちど がんばる？</h3><div id="story-gameover-snacks" class="gameover-snack-result"></div><div class="continue-actions"><button id="continue-retry">Wave <b id="continue-wave-button">1</b>から再挑戦する！<small>編成をかえて、もう一度準備できます</small></button><button id="continue-title-return">タイトルへもどる（最初から）<small>モード選択へ戻ります</small></button></div></section>
+          <footer><p>💡 おやつや塔のけいせいをかえたり、<br>つぎのWaveの敵情報をさんこうにしよう！</p><div><small>つぎのWave</small><strong id="continue-enemy-icons">🐭</strong></div></footer>
+        </div>
+        <div id="endless-retry" class="endless-retry hidden" role="dialog" aria-modal="true" aria-labelledby="endless-retry-title">
+          <div class="endless-retry-card">
+            <small>ENDLESS CHALLENGE</small>
+            <h2 id="endless-retry-title">ゲームオーバー</h2>
+            <p>Wave <b id="endless-retry-wave">1</b>へ、別の作戦で挑戦できます。</p>
+            <div class="endless-retry-summary"><span>❤️ ライフ <b id="endless-retry-lives">5</b></span><span>🍖 おやつ <b id="endless-retry-snacks">300</b></span><span>🏰 配置 <b id="endless-retry-towers">0</b></span></div>
+            <p class="endless-retry-note">再挑戦後は準備フェーズへ戻ります。<br>塔の売却・設置・強化を組み替えてみましょう。</p>
+            <div id="endless-gameover-snacks" class="gameover-snack-result"></div>
+            <div class="endless-retry-actions"><button id="endless-retry-wave-button" type="button">🔁 このWaveから再挑戦</button><button id="endless-restart-button" type="button">もう一度最初から</button><button id="endless-title-button" type="button">タイトルへ戻る</button></div>
+          </div>
+        </div>
+        <div id="chapter-reward" class="chapter-reward hidden" role="dialog" aria-modal="true" aria-labelledby="chapter-reward-title">
+          <div class="chapter-reward-book" aria-hidden="true"></div>
+          <div class="chapter-reward-shelf-copy">
+            <strong id="chapter-reward-shelf-title">📖 新しいページを獲得しました</strong>
+            <b id="chapter-reward-shelf-page">ドロビーの物語 P1</b>
+          </div>
+          <div class="chapter-reward-page">
+            <small>CHAPTER REWARD</small>
+            <strong id="chapter-reward-title">絵本ページを獲得しました</strong>
+            <div class="chapter-reward-emblem"><img id="chapter-reward-image" src="assets/drobby-story-p1.png" alt="解放された絵本ページ"></div>
+            <b id="chapter-reward-page">ドロビーの物語 P1</b>
+            <div class="chapter-complete-pages" aria-label="全6ページ完成"><span>P1</span><span>P2</span><span>P3</span><span>P4</span><span>P5</span><span>P6</span></div>
+            <div class="chapter-reward-actions">
+              <button id="chapter-reward-library">ライブラリーで見る</button>
+              <button id="chapter-reward-next">次の章へ</button>
+            </div>
+          </div>
+        </div>
+        <div id="story-choice" class="story-choice hidden"><div><small>STORY COMPLETE</small><strong>ストーリーモード クリア！</strong><p>ドロビーの物語を<br>すべて集めました。</p><div id="story-snack-result" class="snack-result"></div><button id="story-open-library">ライブラリーで見る</button><button id="story-open-credits">📜 クレジット</button><button id="continue-endless">エンドレスモードへ進む</button><button id="story-return-menu">モード選択へ戻る</button></div></div>
+        <div id="sell-confirm" class="sell-confirm hidden" role="dialog" aria-modal="true" aria-labelledby="sell-tower-name"><div><small>塔の売却</small><strong id="sell-tower-name">ドロビー塔 Lv1</strong><dl><div><dt>設置費用</dt><dd id="sell-build-cost">50🍖</dd></div><div><dt>強化費用</dt><dd id="sell-upgrade-cost">0🍖</dd></div><div class="refund"><dt>返却（80%）</dt><dd id="sell-refund">40🍖</dd></div></dl><p>この塔を売却しますか？</p><div class="sell-actions"><button id="sell-cancel">やめる</button><button id="sell-accept">売却する</button></div></div></div>
+        <div id="research-lab" class="research-lab hidden">
+          <div class="research-panel">
+            <header class="research-header">
+              <button id="research-close" type="button" aria-label="研究所を閉じる">×</button>
+              <h2>森の研究所</h2>
+              <div class="research-summary">
+                <p class="research-wallet">🍖 研究用おやつ：<b id="research-snacks">0</b></p>
+                <p>合計研究レベル：<b id="research-total">0</b>　配置上限：<b id="tower-slots">16</b> / 24</p>
+              </div>
+              <p id="research-retry-notice" class="research-retry-notice hidden">🔒 リトライ中は研究できません（研究内容は確認できます）</p>
+            </header>
+            <section id="research-options" aria-label="研究項目"></section>
+            <div id="research-complete" class="research-complete hidden" aria-live="polite"></div>
+          </div>
+        </div>
+        <div id="research-unlock-event" class="research-unlock-event hidden" role="dialog" aria-modal="true" aria-labelledby="research-unlock-title">
+          <div class="research-unlock-card">
+            <small>NEW PLACE DISCOVERED</small>
+            <h2 id="research-unlock-title">森の研究所を見つけました</h2>
+            <div class="research-house" aria-hidden="true">🏡</div>
+            <div class="research-dialogue"><p><b>ドロビー</b>「なんだろう？<br>あそこに おうちがあるよ！」</p><p><b>ひまわり</b>「おやつで<br>みんなを もっと<br>つよくできるみたい！」</p></div>
+            <p class="research-unlock-help">研究所では、おやつを使って永続強化ができます。<br>研究内容はエンドレスモードでも引き継がれます。</p>
+            <div><button id="research-unlock-go" type="button">研究所へいく</button><button id="research-unlock-later" type="button">あとで</button></div>
+          </div>
+        </div>
+        <div id="chapter-transition" class="chapter-transition hidden"><img id="chapter-art" src="assets/morning_forest.png" alt=""><div><small id="chapter-number"></small><strong id="chapter-name"></strong><p id="chapter-text"></p><b id="chapter-weather"></b><i>クリックして続ける</i></div></div>
+        <div id="king-unlock" class="legendary-unlock hidden"><div class="legendary-forest-light"></div><img id="legendary-image" src="assets/king-drobby-tower.png" alt="King Drobby"><div class="legendary-copy"><p id="legendary-intro" class="legendary-line-one">The forest recognizes a true guardian.</p><strong id="legendary-name" class="legendary-name">KING DROBBY</strong><em class="legendary-unlocked">Unlocked</em><div class="legendary-info"><b id="legendary-info-name">KING DROBBY</b><span id="legendary-role">Role: Legendary Boss Killer</span><span id="legendary-special">Special: Massive bonus damage against bosses.</span><button id="king-unlock-continue">Continue Adventure</button></div></div></div>
+        <div id="unlock-notice" class="unlock-notice hidden"></div>
+        <div id="economy-notice" class="economy-notice hidden" aria-live="polite"></div>
+        <div id="boss-wave-alert" class="boss-wave-alert hidden" aria-live="polite"><div><small id="boss-wave-label">BOSS WAVE</small><strong id="boss-wave-title">鎧ボス襲来！</strong><span id="boss-wave-subtitle">守りを固めてください</span></div></div>
+        <div id="milestone-reward" class="milestone-reward hidden" aria-live="polite"><small id="milestone-title">🎁 Wave20クリア！</small><strong id="milestone-content">🪤 ネズミ捕りを1個みつけた！</strong><p id="milestone-dialogue"></p></div>
+        <div id="shop-unlock-event" class="shop-unlock-event hidden" role="dialog" aria-modal="true" aria-labelledby="shop-unlock-title">
+          <div class="shop-unlock-card">
+            <span class="shop-unlock-sparkles" aria-hidden="true">✨　✦　✨</span>
+            <small id="shop-unlock-stage">WAVE 35 REWARD</small>
+            <h2 id="shop-unlock-title">新しいアイテムが解放されました！</h2>
+            <strong id="shop-unlock-item">🌿 またたび</strong>
+            <p id="shop-unlock-desc">一定時間、猫たちの<br>攻撃速度が上昇します。</p>
+            <button id="shop-unlock-close" type="button">冒険を続ける</button>
+          </div>
+        </div>
+        <div id="debug-toolbar" class="debug-toolbar mode-hidden" aria-label="デバッグ演出ツール"><b>DEBUG</b><button data-debug-cinematic="king">王</button><button data-debug-cinematic="queen">女王</button><button data-debug-cinematic="star">星</button><button data-debug-cinematic="peace">ふたり</button><button id="debug-toolbar-achievement">実績</button></div>
+        <div id="mouse-trap-tutorial" class="mouse-trap-tutorial hidden" role="dialog" aria-modal="true" aria-labelledby="mouse-trap-tutorial-title">
+          <div><h2 id="mouse-trap-tutorial-title">🪤 ネズミ捕り</h2><p>ピンチのときに使える<br>特別なしかけです。</p><p>ネズミの通り道に置くと、<br>近くのネズミを少しのあいだ<br>動けなくできます。</p><p>所持数には限りがあります。</p><button id="mouse-trap-tutorial-ok" type="button">わかった！</button></div>
+        </div>
+        <div id="mouse-trap-help" class="mouse-trap-help hidden" role="tooltip"><strong>🪤 ネズミ捕り</strong><span>ネズミの通り道に置き、近くの敵を少しの間止めます。ボスへの効果は短く、所持数には限りがあります。</span></div>
+        <button id="item-toggle-button" class="item-toggle-button mode-hidden" type="button" aria-expanded="false" aria-controls="item-tray"><span>🎒 アイテム</span><small id="item-toggle-status" class="hidden"></small></button>
+        <div id="item-tray" class="item-tray mode-hidden hidden" aria-label="アイテム欄">
+          <div class="item-tray-header"><strong>🎒 アイテム</strong><button id="item-tray-close" type="button" aria-label="アイテム欄を閉じる">×</button></div>
+          <button id="mouse-trap-button" class="mouse-trap-button" type="button" title="範囲内の敵を3秒間止めます" aria-describedby="mouse-trap-help">🪤 ×<b id="mouse-trap-count">0</b></button>
+          <button id="catnip-button" class="catnip-button" type="button" title="12秒間、猫塔の攻撃速度を40%上げます">🌿 ×<b id="catnip-count">0</b></button>
+          <button id="milk-button" class="milk-button" type="button" title="20秒間、補助塔の支援効果を50%強化します">🥛 ×<b id="milk-count">0</b></button>
+          <strong id="catnip-status" class="catnip-status hidden"></strong>
+          <strong id="milk-status" class="milk-status hidden"></strong>
+        </div>
+        <aside id="shop-panel" class="shop-panel hidden" aria-label="ショップ">
+          <div class="shop-window">
+            <header><h2>森のショップ</h2><button id="shop-close" type="button" aria-label="ショップを閉じる">×</button><p>🍖 おやつ <b id="shop-snacks">0</b></p></header>
+            <section id="shop-items" class="shop-items" aria-label="販売アイテム"></section>
+          </div>
+        </aside>
+        <button id="start-wave" class="start-button"><span class="hima-button">▶</span><b>ウェーブ開始</b><i>▶</i></button>
+      </div>
+      <div id="next-wave-panel" class="next-wave"><small>次のWave</small><strong id="next-enemy">🐭 ×5</strong><div class="wave-dialogue"><p><b>🐱 ドロビー</b><span id="drobby-wave-line">つぎは、どんな道になるかな。</span></p><p><b>🌻 ひまわり</b><span id="himawari-wave-line">いっしょに考えよう。</span></p></div></div>
+    </section>
+  </main>
+  <script src="config.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

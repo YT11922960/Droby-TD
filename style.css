@@ -1,0 +1,1123 @@
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Noto+Sans+JP:wght@700;900&display=swap');
+.mode-hidden{display:none!important}
+.mode-card button.mode-locked{filter:grayscale(.75);opacity:.68;cursor:not-allowed}.mode-card button.mode-locked:hover{transform:none;box-shadow:none}
+
+:root{--wood:#392611;--wood2:#75491e;--cream:#ffedb7;--ink:#392b1b;--orange:#ed970f;--blue:#0877c9}
+*{box-sizing:border-box}
+body{margin:0;background:#213719;font-family:"Noto Sans JP",sans-serif;color:var(--ink);overflow:hidden}
+button{font:inherit;color:inherit}
+.startup-loading{position:fixed;z-index:9999;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,#3a5d2b,#172414 72%);color:#fff0bd;text-align:center}
+.startup-loading>div{padding:26px 34px;border:3px solid #8a642c;border-radius:20px;background:linear-gradient(145deg,rgba(255,241,191,.18),rgba(57,38,17,.5));box-shadow:inset 0 0 0 2px rgba(255,245,207,.18),0 16px 40px rgba(0,0,0,.35)}
+.startup-loading strong,.startup-loading span{display:block}.startup-loading strong{font:22px "Mochiy Pop One";letter-spacing:.08em}.startup-loading span{margin-top:10px;font:13px "Yu Mincho",YuMincho,serif}
+body:not(.booting) .startup-loading{display:none}
+body.booting .mode-select,body.booting .game-screen,body.booting .library-screen,body.booting .audio-settings-screen,body.booting .credits-screen{display:none!important}
+.game-screen{display:grid;grid-template-columns:320px minmax(0,1fr);width:100vw;height:100vh;margin:auto;background:#82b834}
+.mode-select{position:fixed;z-index:100;inset:0;display:grid;place-items:center;background:rgba(29,53,24,.84);backdrop-filter:blur(5px)}.mode-select.hidden{display:none}.mode-card{width:min(520px,90vw);padding:32px;border:4px solid #68471e;border-radius:24px;background:linear-gradient(135deg,#fff0bd,#f5d792);box-shadow:inset 0 0 0 4px #fff4cd,0 12px 35px rgba(0,0,0,.35);text-align:center}.mode-card h1{margin:0 0 8px;font:26px "Mochiy Pop One";color:#315c32}.mode-card p{margin:0 0 22px}.mode-card button{display:block;width:100%;margin:12px 0;padding:16px;border:3px solid #76501f;border-radius:16px;background:#fff7d9;cursor:pointer}.mode-card button:hover{transform:translateY(-2px);box-shadow:0 4px #b2782c}.mode-card strong,.mode-card small{display:block}.mode-card strong{font:18px "Mochiy Pop One";color:#77501e}.mode-card small{margin-top:5px}.endless-score{margin-top:20px;padding:10px;border-radius:12px;background:#5b3a19;color:#fff}
+.library-screen{position:fixed;z-index:120;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 20%,rgba(116,84,40,.85),rgba(38,24,13,.95));color:#3b2818}.library-screen.hidden{display:none}.bookshelf{position:relative;width:min(760px,92vw);padding:34px;border:10px solid #5d3519;border-radius:18px;background:linear-gradient(90deg,#6a3d1d,#8b5928 12%,#5f3519 13%,#8b5928 28%,#6d3f1e);box-shadow:inset 0 -18px 0 rgba(49,28,12,.45),0 20px 50px rgba(0,0,0,.45)}.bookshelf h2{margin:0 0 20px;color:#fff0be;text-align:center;text-shadow:0 2px #3b210e}.book-spine{display:block;width:100%;margin:12px 0;padding:18px;border:3px solid #3f2616;border-radius:8px;background:linear-gradient(#b55b39,#7b3425);color:#fff4d6;text-align:left;box-shadow:inset 0 0 0 2px rgba(255,238,180,.25);cursor:pointer}.book-spine.available{background:linear-gradient(#d28a43,#8b4f25)}.book-spine:disabled{filter:grayscale(.75);opacity:.65;cursor:not-allowed}.book-close{position:absolute;right:18px;top:14px;border:2px solid #654019;border-radius:50%;background:#fff1c7;color:#4b3117;cursor:pointer}.storybook-reader{position:relative;width:min(950px,94vw);padding:42px 30px 26px}.storybook-reader.hidden{display:none}.storybook-book{display:grid;grid-template-columns:1fr 1fr;min-height:480px;border-radius:18px;background:linear-gradient(90deg,#d2a56a 0 2%,#f6e3b9 3% 49%,#b88c55 50%,#f0d9a8 51% 97%,#d2a56a 98%);box-shadow:0 18px 55px rgba(0,0,0,.55),inset 0 0 45px rgba(116,73,29,.22);transform-origin:center}.storybook-book.turning{animation:page-turn .65s ease}.book-page{padding:48px 42px;background:radial-gradient(circle at 35% 20%,rgba(255,250,220,.45),transparent 35%);font:20px/1.9 serif;color:#4d351d}.book-page small{display:block;margin-bottom:24px;color:#8b612e;font-weight:900}.book-page p{white-space:pre-line}.book-page.locked{display:grid;place-items:center;color:#8a765e;font:42px "Mochiy Pop One";letter-spacing:.12em}.book-controls{display:flex;justify-content:center;gap:14px;margin-top:18px}.book-controls button{padding:12px 28px;border:3px solid #64411d;border-radius:14px;background:#fff0bf;cursor:pointer}.book-controls button:disabled{opacity:.45;cursor:not-allowed}@keyframes page-turn{0%{transform:perspective(900px) rotateY(0)}50%{transform:perspective(900px) rotateY(-6deg)}100%{transform:perspective(900px) rotateY(0)}}
+.map-column{position:relative;display:flex;flex-direction:column;min-width:0;height:100vh;background:#79aa32}
+.field-wrap{position:relative;flex:1;min-height:0;overflow:hidden;background:#79aa32}
+#game{position:relative;z-index:1;display:block;width:100%;height:100%;min-height:0;background:url("assets/moonlit_forest.png") center/100% 100% no-repeat;object-fit:fill;cursor:crosshair}
+.weather-effects{display:none;pointer-events:none}
+
+.topbar{position:relative;z-index:5;flex:0 0 auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;background:#29461e;pointer-events:none}
+.resource-bar,.wave-title,.top-actions button{border:4px solid var(--wood);box-shadow:inset 0 0 0 2px #bb7e34,0 3px 0 rgba(0,0,0,.25);background:linear-gradient(#65421e,#35230f);color:#fff}
+.resource-bar{display:flex;border-radius:18px;overflow:hidden;pointer-events:auto}
+.resource-bar div{display:flex;align-items:center;gap:9px;padding:10px 22px;border-right:1px solid #76532a;font-size:22px}.resource-bar div:last-child{border:0}
+.resource-bar small{font-size:17px}.resource-bar strong{font-size:25px}.heart{color:#ff3f35;font-size:32px;text-shadow:0 2px #77140e}.coin{color:#ffc51b;font-size:29px;text-shadow:0 2px #9a5b00}.skull{color:#eee3c8}
+.wave-title{display:grid;min-width:250px;padding:7px 24px;border-radius:16px;text-align:center;letter-spacing:1px}.wave-title strong{overflow:hidden;color:#ffe6a0;font:11px "Mochiy Pop One";text-overflow:ellipsis;white-space:nowrap}.wave-title span{font:22px "Mochiy Pop One";letter-spacing:2px}.wave-title i{font-style:normal}
+.weather-hud{display:flex;align-items:center;gap:7px;padding:8px 12px;border:3px solid #68471e;border-radius:13px;background:#fff2c3;color:#4e391c;pointer-events:auto;cursor:help}.weather-hud span{font-size:22px}.weather-hud strong{font-size:11px;white-space:nowrap}
+.weather-change-notice{position:absolute;z-index:8;top:14px;left:50%;padding:7px 15px;border:1px solid rgba(107,79,42,.55);border-radius:12px;background:rgba(255,245,211,.9);color:#5e472b;box-shadow:0 5px 14px rgba(49,35,18,.18);font:700 11px/1.35 "Yu Mincho",YuMincho,serif;transform:translateX(-50%);pointer-events:none}.weather-change-notice.hidden{display:none}.weather-change-notice.show{animation:weather-change-notice 2.4s ease both}@keyframes weather-change-notice{0%{opacity:0;transform:translate(-50%,-7px)}14%,78%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-4px)}}
+.top-actions{display:flex;gap:12px;pointer-events:auto}.top-actions button{width:64px;height:64px;border-radius:15px;font-size:30px;cursor:pointer}
+
+.panel{border:3px solid #68471e;box-shadow:inset 0 0 0 3px #fff4cd,0 4px 0 rgba(55,39,13,.3);background:linear-gradient(135deg,#fff0bd,#f5d792)}
+.tower-picker{position:relative;z-index:6;width:320px;height:100vh;overflow-y:auto;border-radius:0;padding:18px 10px}
+.tower-picker h2{margin:0 -8px 7px;padding:0 12px 8px;border-bottom:2px solid #c89d54;text-align:center;font:17px "Mochiy Pop One"}
+.tower-card{display:grid;grid-template-columns:82px minmax(0,1fr);align-items:center;gap:8px;width:100%;min-height:142px;margin:7px 0;padding:7px;border:2px solid #886638;border-radius:12px;background:rgba(255,250,222,.92);color:#392b1b;overflow:hidden;cursor:pointer;transition:.15s}
+.tower-card:hover,.tower-card.selected{background:#fff7d9;transform:translateY(-2px);box-shadow:0 4px #b2782c}
+.tower-card.locked{filter:grayscale(.65);background:#d8cba8}.tower-card.locked:hover{filter:grayscale(.25)}
+.tower-card.locked .tower-copy b{opacity:.55}.unlock-text{color:#8b3e2f!important;font-weight:900}
+.tower-card.secret-hidden{display:none}.tower-card.secret-reveal{position:relative;z-index:4;animation:secret-reveal 1.8s ease-out;background:#fff2a8;border-color:#e2a817;box-shadow:0 0 12px #fff4a8,0 0 28px #ffd02b,0 0 48px rgba(255,185,23,.75)}.tower-card.secret-reveal::after{content:"✦";position:absolute;inset:0;display:grid;place-items:center;color:#fff7b0;font-size:72px;pointer-events:none;animation:secret-sparkle 1.8s ease-out forwards}
+.tower-image-wrap{display:grid;place-items:center;width:82px;height:112px;overflow:hidden;border-radius:10px;background:rgba(246,220,157,.55)}
+.tower-image{display:block;width:78px;height:108px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(68,50,20,.3))}
+.tower-image-wrap.image-error{padding:8px;color:#70401c;font-size:10px;text-align:center}
+.tower-preview{display:block;width:84px;height:108px;min-height:0;max-width:100%;max-height:100%;border:0;background:transparent;filter:drop-shadow(0 3px 2px rgba(68,50,20,.3))}
+.cat-badge{align-self:center;justify-self:center;position:relative;width:95px;height:95px;border:7px solid #8b6134;border-radius:48% 48% 44% 44%;background-size:100% 100%}
+.cat-badge:before,.cat-badge:after,.info-cat:before,.info-cat:after{content:"";position:absolute;top:-14px;width:32px;height:32px;transform:rotate(45deg);border-radius:5px;background:inherit}.cat-badge:before,.info-cat:before{left:5px}.cat-badge:after,.info-cat:after{right:5px}
+.doro-face{background:radial-gradient(ellipse at 34% 48%,#bfe3c8 0 5%,#17231e 6% 8%,transparent 9%),radial-gradient(ellipse at 66% 48%,#bfe3c8 0 5%,#17231e 6% 8%,transparent 9%),radial-gradient(ellipse at 50% 62%,#d98c82 0 4%,transparent 5%),linear-gradient(92deg,#f7f0dc 0 49%,#485a5a 50% 100%);box-shadow:inset 0 -12px rgba(0,0,0,.08)}
+.hima-face{display:grid;place-items:center;background:radial-gradient(ellipse at 34% 48%,#c4dc8f 0 5%,#211c16 6% 8%,transparent 9%),radial-gradient(ellipse at 66% 48%,#c4dc8f 0 5%,#211c16 6% 8%,transparent 9%),radial-gradient(ellipse at 50% 62%,#d98c82 0 4%,transparent 5%),repeating-linear-gradient(105deg,#e5ba72 0 14px,#8c6039 15px 19px,#e5ba72 20px 31px);color:transparent;font-size:70px;line-height:1}
+.tower-copy{display:block;min-width:0;text-align:left;color:#392b1b}.tower-copy strong{display:block;margin:0 0 4px;color:var(--blue);font:13px "Mochiy Pop One";white-space:normal}.tower-card:nth-of-type(2) strong{color:#db6b11}.tower-copy b{display:block;margin-bottom:4px;color:#5a3b19;font-size:13px}.tower-copy b:first-letter{color:#f0b200}.tower-copy small{display:block;color:#463720;font-size:9px;line-height:1.35}.tower-stats{padding:4px 0;border-top:1px solid rgba(116,79,32,.25);white-space:pre-line}.core-stats{display:block;font-weight:900;color:#4d3920}.role-badge{display:inline-block;margin:4px 0;padding:3px 7px;border-radius:9px;background:#5c7742;color:#fff;font-style:normal;font-weight:900;letter-spacing:.02em;box-shadow:inset 0 -2px rgba(42,64,27,.24)}.special-label{display:inline-block!important;margin-left:4px;padding:3px 6px;border-radius:9px;background:#315b8d;color:#fff!important;font-size:8px!important}.rating-list{display:grid;gap:1px}.rating-list span{display:block;white-space:nowrap}.rating-list i{color:#e3a816;font-style:normal;letter-spacing:-1px}.unlock-text{margin-top:4px;padding-top:3px;border-top:1px dashed #a66b45}
+.sidebar-upgrade{width:100%;margin-top:12px;padding:12px 8px;border:2px solid #865a20;border-radius:12px;background:#ffc52f;color:#4d3319;font-weight:900;cursor:pointer}.sidebar-upgrade:disabled{opacity:.55;cursor:default}
+.sidebar-remove{width:100%;margin-top:7px;padding:10px 8px;border:2px solid #7f4638;border-radius:12px;background:#f2c4ad;color:#71392f;font-weight:900;cursor:pointer}.sidebar-remove:disabled{opacity:.5;cursor:default}
+
+.entrance-sign{position:absolute;z-index:3;right:3%;top:16%;padding:8px 19px;border:4px solid #63401c;border-radius:6px;transform:rotate(5deg);color:#513415;background:#e7b96a;box-shadow:0 4px #3c2a17;font:23px "Mochiy Pop One"}
+.start-button{position:absolute;z-index:5;right:2.5%;bottom:3%;display:flex;align-items:center;gap:12px;padding:14px 25px;border:5px solid #70400e;border-radius:26px;background:linear-gradient(#ffb91e,#e98b06);box-shadow:inset 0 0 0 3px #ffd566,0 5px 0 #3d2a12;color:white;text-shadow:0 2px #79500b;cursor:pointer}
+.start-button:hover{transform:translateY(-3px)}.start-button:disabled{filter:grayscale(.7);cursor:default}.start-button b{font:22px "Mochiy Pop One"}.start-button i{font-size:25px}.hima-button{font-size:40px}
+.mouse-trap-button{position:absolute;z-index:6;right:23%;bottom:3.5%;min-width:112px;padding:12px 16px;border:3px solid #765126;border-radius:18px;background:linear-gradient(#fff0bd,#d9ad61);color:#56391c;box-shadow:inset 0 0 0 2px rgba(255,250,219,.72),0 4px 0 #4a3219;font:18px "Mochiy Pop One";cursor:pointer}.mouse-trap-button:hover,.mouse-trap-button.placing{filter:brightness(1.08);transform:translateY(-2px);box-shadow:inset 0 0 0 2px rgba(255,250,219,.8),0 4px 0 #4a3219,0 0 18px rgba(255,214,112,.7)}.mouse-trap-button.unavailable{filter:grayscale(.72);opacity:.64}.mouse-trap-button.cooldown{filter:sepia(.7);opacity:.72}.mouse-trap-button.tutorial-glow{animation:trap-tutorial-glow 1.35s ease-in-out infinite}@keyframes trap-tutorial-glow{50%{filter:brightness(1.12);transform:translateY(-3px);box-shadow:inset 0 0 0 2px #fff8d7,0 4px 0 #4a3219,0 0 24px rgba(255,215,117,.85)}}
+.catnip-button{position:absolute;z-index:6;right:35%;bottom:3.5%;display:flex;align-items:center;justify-content:center;gap:3px;min-width:112px;padding:12px 13px;border:3px solid #645222;border-radius:18px;background:linear-gradient(#eff3b9,#aebf64);color:#43501f;box-shadow:inset 0 0 0 2px rgba(255,255,221,.68),0 4px 0 #38431d;font:17px "Mochiy Pop One";cursor:pointer}.catnip-button small{margin-left:3px;font:9px "Noto Sans JP",sans-serif}.catnip-button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px)}.catnip-button:disabled{filter:grayscale(.75);opacity:.58;cursor:not-allowed}.catnip-button.active{box-shadow:inset 0 0 0 2px rgba(255,255,221,.8),0 4px 0 #38431d,0 0 18px rgba(194,217,103,.72);animation:catnip-soft-pulse 1.5s ease-in-out infinite}.milk-button{display:flex;align-items:center;justify-content:center;gap:3px;border:3px solid #75633f;border-radius:18px;background:linear-gradient(#fff9ea,#d9d0b4);color:#4e452f;box-shadow:inset 0 0 0 2px rgba(255,255,247,.75),0 4px 0 #4a3f2a;font:17px "Mochiy Pop One";cursor:pointer}.milk-button:hover:not(:disabled){filter:brightness(1.08);transform:translateY(-2px)}.milk-button:disabled{filter:grayscale(.75);opacity:.58;cursor:not-allowed}.milk-button.active{box-shadow:inset 0 0 0 2px rgba(255,255,247,.9),0 4px 0 #4a3f2a,0 0 18px rgba(255,248,224,.78);animation:catnip-soft-pulse 1.5s ease-in-out infinite}@keyframes catnip-soft-pulse{50%{filter:brightness(1.08)}}
+.item-toggle-button{position:absolute;z-index:7;right:2.5%;bottom:14%;display:grid;place-items:center;min-width:116px;padding:9px 14px;border:2px solid #765126;border-radius:14px;background:linear-gradient(#fff2c5,#d8ae65);color:#56391c;box-shadow:inset 0 0 0 2px rgba(255,250,219,.65),0 3px 0 #4a3219;font:700 13px/1.25 "Yu Mincho",YuMincho,serif;cursor:pointer}.item-toggle-button:hover,.item-toggle-button.open{filter:brightness(1.08);transform:translateY(-1px)}.item-toggle-button small{margin-top:2px;color:#506227;font:700 9px/1.1 "Noto Sans JP",sans-serif}.item-toggle-button small.hidden{display:none}.item-tray{position:absolute;z-index:13;right:2.5%;bottom:calc(14% + 48px);display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;width:292px;padding:8px;border:2px solid rgba(91,63,29,.88);border-radius:15px;background:rgba(255,242,196,.96);box-shadow:inset 0 0 0 2px rgba(255,252,225,.72),0 9px 22px rgba(49,32,13,.34)}.item-tray.hidden{display:none}.item-tray-header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:0 2px 4px;color:#74532d;font:11px/1 "Yu Mincho",YuMincho,serif}.item-tray-header button{width:25px;height:25px;padding:0;border:1px solid #79572c;border-radius:50%;background:#fff7d8;color:#5c3d1d;cursor:pointer}.item-tray .mouse-trap-button,.item-tray .catnip-button,.item-tray .milk-button{position:static;right:auto;bottom:auto;min-width:0;padding:9px 7px;border-width:2px;border-radius:10px;box-shadow:0 2px 0 rgba(62,43,23,.65);font-size:13px}.item-tray button:disabled{filter:grayscale(.72);opacity:.48}.catnip-status,.milk-status{grid-column:1/-1;color:#4d6127;font:700 9px/1.25 "Noto Sans JP",sans-serif;text-align:center}.milk-status{color:#625438}.catnip-status.hidden,.milk-status.hidden{display:none}.shop-panel:not(.hidden){animation:shop-slide-in .24s ease-out}@keyframes shop-slide-in{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+.shop-panel{width:min(350px,38%)}
+@media(max-width:900px) and (orientation:landscape){.item-toggle-button{right:1.5%;bottom:13%;min-width:80px;padding:5px 8px;border-width:1px;border-radius:8px;font-size:9px}.item-toggle-button small{font-size:7px}.item-tray{right:1.5%;bottom:calc(13% + 34px);width:210px;gap:4px;padding:5px;border-width:1px;border-radius:9px}.item-tray-header{font-size:8px}.item-tray-header button{width:19px;height:19px;font-size:10px}.item-tray .mouse-trap-button,.item-tray .catnip-button,.item-tray .milk-button{min-width:0;padding:5px 4px;border-width:1px;border-radius:7px;font-size:9px}.item-tray .catnip-button span{font-size:6px}.catnip-status,.milk-status{font-size:7px}.shop-panel{width:min(320px,48%)}}
+@media(max-width:900px) and (orientation:landscape){.catnip-button{right:35%;bottom:2%;min-width:76px;padding:7px 8px;border-width:2px;border-radius:10px;font-size:10px}.catnip-button small{font-size:7px}}
+.shop-button{position:absolute;z-index:6;right:4%;bottom:3.5%;min-width:132px;padding:10px 15px;border:2px solid #765126;border-radius:14px;background:linear-gradient(#fff2c5,#d8ae65);color:#56391c;box-shadow:inset 0 0 0 2px rgba(255,250,219,.65),0 3px 0 #4a3219;font:700 13px/1.3 "Yu Mincho",YuMincho,serif;cursor:pointer}.shop-button:hover{filter:brightness(1.09);transform:translateY(-1px)}
+.shop-item button.unavailable{filter:grayscale(.78);opacity:.58;cursor:not-allowed}
+.shop-item.locked{border-color:#8a7b61;background:rgba(92,79,60,.18);filter:saturate(.65)}.shop-item.locked .shop-item-icon{filter:sepia(.5);opacity:.76}.shop-item.locked strong,.shop-item.locked small,.shop-item.locked .shop-stock{color:#6f624f}
+.shop-unlock-event{position:absolute;z-index:24;inset:0;display:grid;place-items:center;background:rgba(32,25,16,.62);backdrop-filter:blur(2px)}.shop-unlock-event.hidden{display:none}.shop-unlock-card{position:relative;width:min(470px,82%);padding:27px 32px;border:4px solid #80602d;border-radius:26px;background:radial-gradient(circle at 50% 28%,rgba(255,241,153,.72),transparent 38%),linear-gradient(145deg,#fff1c8,#d8bb73);box-shadow:inset 0 0 0 3px rgba(255,250,221,.85),0 18px 45px rgba(0,0,0,.48),0 0 32px rgba(235,196,91,.3);color:#4c371f;text-align:center;animation:shop-unlock-in .55s ease both}.shop-unlock-card small{color:#8a682c;letter-spacing:.15em}.shop-unlock-card h2{margin:8px 0 12px;color:#6f4b1d;font:22px/1.45 "Mochiy Pop One"}.shop-unlock-card>strong{display:block;color:#496128;font:30px "Mochiy Pop One";text-shadow:0 2px 0 #fff4bd}.shop-unlock-card p{margin:10px 0 17px;font:16px/1.75 "Yu Mincho",YuMincho,serif}.shop-unlock-card button{min-width:160px;padding:10px 18px;border:2px solid #715022;border-radius:13px;background:linear-gradient(#ffe48c,#d5aa4c);color:#503719;font-weight:bold;cursor:pointer}.shop-unlock-sparkles{display:block;color:#d49d29;font-size:22px;animation:shop-unlock-glow 1.5s ease-in-out infinite}@keyframes shop-unlock-in{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}@keyframes shop-unlock-glow{50%{filter:brightness(1.25);transform:scale(1.06)}}
+.shop-panel{position:absolute;z-index:14;inset:12px 12px 82px auto;width:min(390px,44%);pointer-events:none}.shop-panel.hidden{display:none}.shop-window{box-sizing:border-box;width:100%;max-height:100%;padding:0;overflow:hidden;border:3px solid #72501f;border-radius:18px;background:linear-gradient(145deg,#fff1bf,#ddc17e);box-shadow:inset 0 0 0 3px #fff5d3,0 12px 30px rgba(0,0,0,.42);pointer-events:auto}.shop-window header{position:relative;padding:13px 16px 10px;border-bottom:2px solid rgba(114,80,31,.45);text-align:center}.shop-window h2{margin:0;color:#4f633b;font:20px "Mochiy Pop One"}.shop-window header p{margin:5px 0 0;font-weight:bold}.shop-window header button{position:absolute;top:8px;right:10px;width:34px;height:34px;padding:0;border:2px solid #6e4a20;border-radius:50%;background:#fff6d8;color:#51361a;font-size:18px;cursor:pointer}.shop-items{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-height:calc(100% - 80px);padding:11px;overflow-y:auto}.shop-item{display:grid;align-content:start;min-height:126px;padding:10px;border:2px solid #a27a3e;border-radius:13px;background:rgba(255,250,226,.8);color:#50391d}.shop-item-icon{font-size:27px;text-align:center}.shop-item strong{text-align:center}.shop-item small{min-height:34px;margin:4px 0;font-size:10px;line-height:1.45}.shop-item .shop-stock{text-align:center;font-size:11px}.shop-item button{margin-top:7px;padding:7px;border:2px solid #775322;border-radius:9px;background:#ffd263;color:#503516;font-weight:bold;cursor:pointer}.shop-item button:disabled{filter:grayscale(.78);opacity:.58;cursor:not-allowed}.shop-item.coming-soon{place-content:center;opacity:.58;text-align:center}.shop-item.coming-soon strong{font-family:Georgia,serif;letter-spacing:.04em}
+.mouse-trap-tutorial{position:absolute;z-index:22;inset:0;display:grid;place-items:center;background:rgba(25,20,13,.58);backdrop-filter:blur(1.5px)}.mouse-trap-tutorial.hidden{display:none}.mouse-trap-tutorial>div{width:min(390px,84%);padding:25px 30px;border:3px solid #7a5526;border-radius:20px;background:radial-gradient(circle at 50% 20%,#fff6d4,#ead39b);box-shadow:inset 0 0 0 3px rgba(255,251,225,.8),0 16px 40px rgba(0,0,0,.42);color:#51391d;text-align:center}.mouse-trap-tutorial h2{margin:0 0 14px;font:24px "Mochiy Pop One"}.mouse-trap-tutorial p{margin:12px 0;font:15px/1.8 "Yu Mincho",YuMincho,serif}.mouse-trap-tutorial button{min-width:150px;margin-top:10px;padding:10px 22px;border:2px solid #735022;border-radius:12px;background:linear-gradient(#ffe495,#d8a94d);color:#503516;font-weight:bold;cursor:pointer}.mouse-trap-help{position:absolute;z-index:21;right:21%;bottom:13%;width:245px;padding:10px 13px;border:2px solid #82602d;border-radius:12px;background:rgba(255,242,194,.96);box-shadow:0 7px 18px rgba(0,0,0,.28);color:#51391d;pointer-events:none}.mouse-trap-help.hidden{display:none}.mouse-trap-help strong,.mouse-trap-help span{display:block}.mouse-trap-help span{margin-top:4px;font:11px/1.55 "Yu Mincho",YuMincho,serif}
+.snack-run-totals{position:absolute;z-index:7;top:calc(100% + 6px);left:16px;display:flex;align-items:center;gap:8px;padding:5px 9px;border:2px solid #735020;border-radius:11px;background:rgba(255,241,193,.9);color:#68461d;box-shadow:0 3px 10px rgba(45,29,12,.24);font:10px "Yu Mincho",YuMincho,serif;white-space:nowrap;pointer-events:none}.snack-run-totals span:last-child{color:#a36d13}.snack-result{display:grid;gap:3px;margin:10px auto;padding:9px 14px;border:1px solid rgba(128,85,31,.55);border-radius:10px;background:rgba(255,244,205,.72);color:#61411e;font:12px/1.45 "Yu Mincho",YuMincho,serif}.snack-result span,.snack-result b,.snack-result strong{display:block}.snack-result span:nth-of-type(2){color:#a66e0c}
+.tower-ability-details,.legendary-progress{display:grid;gap:2px;margin-top:6px;padding:7px 8px;border:1px solid rgba(126,86,37,.35);border-radius:8px;background:rgba(255,248,218,.52)}.tower-ability-details strong,.legendary-progress strong{color:#7d541d}.tower-ability-details span,.legendary-progress span,.legendary-progress small{display:block;font-size:10px}.legendary-progress small{margin-top:3px;color:#886f52}
+@media(max-width:900px) and (orientation:landscape){.mouse-trap-button{right:25%;bottom:2%;min-width:76px;padding:7px 9px;border-width:2px;border-radius:10px;font-size:11px}.shop-button{right:3%;bottom:2%;min-width:94px;padding:6px 8px;border-width:1px;border-radius:8px;font-size:9px}.shop-panel{top:5px;right:5px;bottom:52px;width:min(340px,52%)}.shop-window h2{font-size:14px}.shop-window header{padding:8px 10px 6px}.shop-items{gap:5px;padding:6px}.shop-item{min-height:96px;padding:6px}.shop-item-icon{font-size:20px}.shop-item small,.shop-item .shop-stock{font-size:8px}.shop-item button{padding:4px;font-size:8px}.snack-run-totals{top:calc(100% + 3px);left:7px;gap:5px;padding:3px 6px;border-width:1px;border-radius:7px;font-size:7px}.tower-ability-details,.legendary-progress{padding:5px}.tower-ability-details span,.legendary-progress span,.legendary-progress small{font-size:8px}}
+.unlock-notice.library-registered{top:18px;right:18px;left:auto;transform:none;padding:10px 16px;border-width:2px;border-radius:10px;font:12px "Yu Mincho",YuMincho,serif;animation:library-registered 2s ease both}@keyframes library-registered{0%{opacity:0;transform:translateY(-8px)}15%,80%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-5px)}}
+.next-wave{position:absolute;z-index:4;right:18px;top:86px;width:min(270px,31%);padding:9px 13px;border:3px solid #68471e;border-radius:12px;background:rgba(255,237,183,.94);box-shadow:0 5px 16px rgba(55,39,13,.28);color:#513719;transition:opacity .2s,transform .2s}.next-wave small,.next-wave strong{display:block}.next-wave small{font-size:9px;letter-spacing:.08em}.next-wave strong{margin:3px 0 6px;font-size:12px;line-height:1.5}.next-wave.in-wave{opacity:.38;transform:translateY(-4px)}.next-wave.in-wave .wave-dialogue{display:none}.wave-dialogue{display:grid;gap:4px;padding-top:6px;border-top:1px solid rgba(109,73,27,.35)}.wave-dialogue p{display:grid;grid-template-columns:auto 1fr;gap:5px;margin:0;font:9px/1.35 "Yu Mincho",YuMincho,serif}.wave-dialogue b{color:#815821;white-space:nowrap}.wave-dialogue span{min-width:0}
+.sell-confirm{position:absolute;z-index:19;inset:0;display:grid;place-items:center;background:rgba(28,20,12,.48);backdrop-filter:blur(1.5px)}.sell-confirm.hidden{display:none}.sell-confirm>div{width:min(380px,82%);padding:22px;border:4px solid #70491f;border-radius:13px;background:linear-gradient(145deg,#fff0c1,#d8b373);box-shadow:inset 0 0 0 2px #fff6d7,0 18px 42px rgba(0,0,0,.45);color:#51361a;text-align:center}.sell-confirm small,.sell-confirm strong{display:block}.sell-confirm small{font:10px Georgia,serif;letter-spacing:.18em}.sell-confirm strong{margin:7px 0 12px;font:20px "Yu Mincho",YuMincho,serif}.sell-confirm dl{margin:0}.sell-confirm dl>div{display:flex;justify-content:space-between;padding:5px 9px;border-bottom:1px solid rgba(107,72,31,.25)}.sell-confirm dt,.sell-confirm dd{margin:0}.sell-confirm .refund{margin-top:6px;border:2px solid #b37b22;border-radius:8px;background:rgba(255,235,164,.72);font-weight:900}.sell-confirm p{margin:13px 0 9px}.sell-actions{display:flex;gap:8px}.sell-actions button{flex:1;padding:9px;border:2px solid #70491f;border-radius:8px;background:#fff1c4;color:#57391c;font-weight:900;cursor:pointer}.sell-actions button:last-child{background:#c77d47;color:#fff8e8}
+
+.message{position:absolute;z-index:10;inset:0;display:grid;place-content:center;text-align:center;color:white;background:rgba(35,54,18,.75);font:38px/1.7 "Mochiy Pop One";text-shadow:0 3px #263516}.message small{display:block;font:17px "Noto Sans JP"}.hidden{display:none}
+.story-continue{position:absolute;z-index:24;inset:0;overflow:hidden;background:linear-gradient(rgba(255,244,205,.06),rgba(89,61,29,.16)),url("assets/story-continue-bg.png") center calc(50% - 14px)/cover no-repeat;color:#4f341b;animation:continue-screen-in 1.1s ease both}.story-continue.hidden{display:none}.story-continue::after{content:"";position:absolute;inset:0;z-index:-1;box-shadow:inset 0 0 70px rgba(64,40,18,.25);pointer-events:none}.story-continue header{position:absolute;top:3%;left:50%;width:70%;text-align:center;transform:translateX(-50%);text-shadow:0 1px rgba(255,249,222,.8)}.story-continue header h2{margin:0;font:clamp(25px,3vw,42px) "Mochiy Pop One";letter-spacing:.06em}.story-continue header p{margin:3px 0;font:clamp(13px,1.5vw,20px) "Yu Mincho",YuMincho,serif;font-weight:900}.continue-speech{position:absolute;top:18%;display:flex;flex-direction:column;align-items:center;justify-content:center;box-sizing:border-box;width:34%;min-height:205px;padding:26px 32px;border:2px solid rgba(112,73,29,.58);border-radius:38% 45% 42% 35%;background:rgba(255,243,204,.92);box-shadow:inset 0 0 18px rgba(144,99,38,.1),0 8px 20px rgba(73,48,20,.16);font:clamp(11px,1.18vw,16px)/1.65 "Yu Mincho",YuMincho,serif;text-align:left;white-space:normal;overflow:hidden;overflow-wrap:anywhere;word-break:normal;animation:continue-dialogue-in .8s .55s ease both}.continue-speech strong,.continue-speech p{width:min(100%,240px)}.continue-speech strong{display:block;margin-bottom:9px;font-size:1.1em}.continue-speech p{max-width:100%;margin:0}.drobby-speech{left:2%}.drobby-speech strong{color:#9a4934}.himawari-speech{right:2%;width:35%}.himawari-speech strong{color:#52743d}.continue-choice{position:absolute;left:50%;bottom:10%;width:min(760px,76%);padding:14px 18px;border:3px double #88602f;border-radius:18px;background:rgba(255,239,194,.94);box-shadow:0 12px 30px rgba(65,40,17,.25);text-align:center;transform:translateX(-50%)}.continue-choice h3{margin:0 0 9px;font:clamp(13px,1.4vw,19px) "Yu Mincho",YuMincho,serif}.continue-choice>div{display:grid;grid-template-columns:1fr 1fr;gap:12px}.continue-choice button{padding:10px 12px;border:3px solid #805433;border-radius:14px;background:linear-gradient(#e7a37f,#c9765b);color:#4e2d1d;box-shadow:inset 0 0 0 2px rgba(255,239,205,.48),0 4px 9px rgba(73,42,20,.18);font:700 clamp(11px,1.15vw,16px) "Yu Mincho",YuMincho,serif;cursor:pointer;opacity:0;animation:continue-buttons-in .75s 1.2s ease forwards}.continue-choice button:last-child{background:linear-gradient(#b7d1d0,#7ca4a5)}.continue-choice button:hover{filter:brightness(1.06);transform:translateY(-2px)}.continue-choice button small{display:block;margin-top:3px;font-size:.65em;font-weight:400}.story-continue footer{position:absolute;right:3%;bottom:1.8%;left:3%;display:flex;align-items:center;justify-content:space-between;padding:5px 14px;border:1px solid rgba(119,78,30,.45);border-radius:11px;background:rgba(255,239,196,.84);font:9px/1.35 "Yu Mincho",YuMincho,serif}.story-continue footer p{margin:0}.story-continue footer div{text-align:center}.story-continue footer small,.story-continue footer strong{display:block}.story-continue footer strong{margin-top:2px;font-size:17px;letter-spacing:.12em}@keyframes continue-screen-in{from{opacity:0}to{opacity:1}}@keyframes continue-dialogue-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}@keyframes continue-buttons-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.endless-retry{position:absolute;z-index:25;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 50% 35%,rgba(65,73,49,.58),rgba(20,24,16,.9));backdrop-filter:blur(2px);color:#4f351b}.endless-retry.hidden{display:none}.endless-retry-card{width:min(570px,86%);padding:28px 34px;border:4px double #8a6231;border-radius:24px;background:linear-gradient(145deg,#fff1c5,#dcc080);box-shadow:inset 0 0 0 3px rgba(255,250,219,.78),0 18px 48px rgba(0,0,0,.5);text-align:center;animation:endless-retry-in .65s ease both}.endless-retry-card>small{color:#80602e;letter-spacing:.16em}.endless-retry-card h2{margin:8px 0 4px;font:27px "Mochiy Pop One"}.endless-retry-card>p{margin:7px 0;font:14px/1.65 "Yu Mincho",YuMincho,serif}.endless-retry-summary{display:flex;justify-content:center;gap:10px;margin:16px 0}.endless-retry-summary span{padding:7px 11px;border:1px solid rgba(116,80,34,.48);border-radius:10px;background:rgba(255,249,222,.68);font:12px "Yu Mincho",YuMincho,serif}.endless-retry-note{color:#72502c}.endless-retry-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:17px}.endless-retry-actions button{padding:12px;border:2px solid #765025;border-radius:13px;background:linear-gradient(#ffe08a,#d6a249);color:#4d3319;font:700 14px "Yu Mincho",YuMincho,serif;cursor:pointer}.endless-retry-actions button:last-child{background:linear-gradient(#e7d5ad,#b99b68)}.endless-retry-actions button:hover{filter:brightness(1.07);transform:translateY(-2px)}@keyframes endless-retry-in{from{opacity:0;transform:translateY(15px) scale(.97)}to{opacity:1;transform:none}}
+.top-actions #research-button.retry-locked{filter:grayscale(.75);opacity:.55;cursor:not-allowed}
+.top-actions button.audio-off{filter:grayscale(.85);opacity:.62;background:#b9aa8c}
+.audio-settings-screen{position:fixed;z-index:142;inset:0;display:grid;place-items:center;padding:18px;background:rgba(24,14,8,.7);backdrop-filter:blur(2px)}.audio-settings-screen.hidden{display:none}
+.audio-settings-card{width:min(460px,88vw);padding:28px 34px;border:4px double #795326;border-radius:20px;background:radial-gradient(circle at 50% 10%,rgba(255,249,218,.75),transparent 32%),linear-gradient(145deg,#f3e1ae,#d8b878);color:#4d351c;box-shadow:0 20px 55px rgba(0,0,0,.55),inset 0 0 28px rgba(99,63,24,.18);text-align:center}.audio-settings-card>small{color:#8a642e;letter-spacing:.2em}.audio-settings-card h2{margin:7px 0 20px;font:24px "Mochiy Pop One"}.audio-settings-card>p{margin:14px 0;color:#795d3b;font-size:12px}
+.volume-control{display:block;margin:16px 0;padding:13px 15px;border:1px solid rgba(115,78,34,.42);border-radius:13px;background:rgba(255,249,220,.55);text-align:left}.volume-control span{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-weight:800}.volume-control output{min-width:48px;color:#87571e;text-align:right}.volume-control input{width:100%;accent-color:#b77a2c;cursor:pointer}.volume-control input:focus-visible{outline:2px solid #d49a48;outline-offset:4px}
+#audio-settings-close{min-width:140px;padding:9px 24px;border:2px solid #70491f;border-radius:10px;background:linear-gradient(#fff0c2,#cba66b);color:#4c3218;font-weight:800;cursor:pointer}
+.weather-setting{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;margin:14px 0;padding:12px 15px;border:1px solid rgba(116,77,31,.42);border-radius:12px;background:rgba(255,248,219,.5);text-align:left;cursor:pointer}.weather-setting span{display:grid;gap:2px}.weather-setting b{font-size:13px}.weather-setting small{color:#806744;font-size:9px}.weather-setting input{width:20px;height:20px;accent-color:#6f8a42;cursor:pointer}.weather-setting output{min-width:34px;color:#48622f;font-weight:900;text-align:center}.weather-setting input:not(:checked)+output{color:#826e55}
+@media(max-height:520px) and (orientation:landscape){.audio-settings-card{padding:15px 24px}.audio-settings-card h2{margin:3px 0 8px;font-size:18px}.volume-control{margin:8px 0;padding:8px 11px}.audio-settings-card>p{margin:7px 0}}
+.story-choice{position:absolute;z-index:14;inset:0;display:grid;place-items:center;background:rgba(18,31,18,.88);backdrop-filter:blur(3px)}.story-choice.hidden{display:none}.story-choice>div{width:min(580px,88%);padding:30px;border:3px solid #9b7134;border-radius:22px;background:linear-gradient(145deg,#fff0be,#e7cd91);box-shadow:inset 0 0 0 3px #fff4cf,0 15px 40px rgba(0,0,0,.45);text-align:center}.story-choice small,.story-choice strong{display:block}.story-choice small{color:#87642e}.story-choice strong{margin-top:14px;font:26px "Mochiy Pop One";color:#385b35}.story-choice p{margin:9px 0 22px}.story-choice button{display:block;width:100%;margin:10px 0;padding:14px;border:3px solid #76501f;border-radius:14px;background:#fff8dc;cursor:pointer}.story-choice button:first-of-type{background:#ffd269;color:#503616}
+.research-lab{position:absolute;z-index:15;inset:0;display:grid;place-items:center;background:rgba(18,31,18,.75);backdrop-filter:blur(2px)}.research-lab.hidden{display:none}.research-lab>div{position:relative;width:min(620px,92%);padding:24px;border:3px solid #72501f;border-radius:20px;background:linear-gradient(145deg,#fff1bf,#ddc17e);box-shadow:inset 0 0 0 3px #fff5d3,0 15px 35px rgba(0,0,0,.4)}.research-lab h2,.research-lab p{text-align:center}.research-lab h2{margin:0;color:#365b38}.research-lab>div>#research-close{position:absolute;top:10px;right:12px;width:38px;height:38px;border:2px solid #6e4a20;border-radius:50%;background:#fff6d8;cursor:pointer}.research-option{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:8px 0;padding:11px;border:2px solid #a27a3e;border-radius:12px;background:rgba(255,250,226,.78)}.research-option span{font-size:11px}.research-option button{grid-column:2;grid-row:1/3;min-width:130px;border:2px solid #775322;border-radius:10px;background:#ffd263;cursor:pointer}.research-option button:disabled{filter:grayscale(.7);opacity:.6;cursor:not-allowed}
+.chapter-transition{position:absolute;z-index:11;inset:0;display:grid;place-items:center;overflow:hidden;background:#172415;animation:chapter-fade .8s ease both;cursor:pointer}.chapter-transition.hidden{display:none}.chapter-transition img{position:absolute;width:100%;height:100%;object-fit:cover;filter:brightness(.48) saturate(.85);transform:scale(1.04);animation:chapter-art 8s ease both}.chapter-transition div{position:relative;padding:25px 50px;border-top:1px solid rgba(255,239,178,.75);border-bottom:1px solid rgba(255,239,178,.75);color:#fff7cf;text-align:center;text-shadow:0 3px 8px #18220f}.chapter-transition small,.chapter-transition strong{display:block}.chapter-transition small{font:18px "Mochiy Pop One";letter-spacing:.25em}.chapter-transition strong{margin-top:12px;font:clamp(28px,5vw,58px) "Mochiy Pop One";letter-spacing:.06em}.chapter-transition p{max-width:680px;margin:18px auto 0;font-size:16px}.chapter-transition i{display:block;margin-top:26px;font-style:normal;font-size:12px;animation:continue-pulse 1.2s ease-in-out infinite}.mode-card button.mode-locked{filter:grayscale(.8);opacity:.65;cursor:not-allowed}@keyframes chapter-fade{from{opacity:0}to{opacity:1}}@keyframes chapter-art{from{transform:scale(1.12)}to{transform:scale(1.02)}}@keyframes continue-pulse{50%{opacity:.35}}
+.chapter-transition b{display:block;margin-top:18px;color:#ffe99b;font-size:15px}
+.legendary-unlock{position:absolute;z-index:20;inset:0;display:grid;place-items:center;overflow:hidden;background:rgba(4,9,12,.96);cursor:pointer;animation:legendary-black-fade 1.4s ease both}.legendary-unlock.hidden{display:none}.legendary-unlock::before{content:"";position:absolute;inset:-20%;background:linear-gradient(115deg,transparent 28%,rgba(255,221,132,.11) 38%,transparent 48%),linear-gradient(70deg,transparent 48%,rgba(92,171,255,.09) 58%,transparent 68%);animation:legendary-light 8s ease-in-out infinite}.legendary-unlock::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 46%,rgba(70,151,255,.16),transparent 35%),radial-gradient(ellipse at 28% 20%,rgba(222,180,88,.13) 0 2px,transparent 3px),radial-gradient(ellipse at 72% 35%,rgba(114,145,71,.16) 0 3px,transparent 4px);background-size:auto,170px 130px,220px 170px;opacity:.65}.legendary-unlock img{position:absolute;width:min(66%,680px);height:75%;object-fit:contain;filter:drop-shadow(0 0 22px rgba(83,157,255,.42)) drop-shadow(0 0 38px rgba(255,205,89,.22));animation:legendary-reveal 8s ease-out both}.legendary-copy{position:relative;z-index:2;align-self:end;width:min(760px,88%);margin-bottom:5%;padding:20px;text-align:center;color:#fff5cf;text-shadow:0 3px 10px #000;background:linear-gradient(90deg,transparent,rgba(3,8,12,.72),transparent)}.legendary-copy p{margin:0 0 8px;font-size:15px;letter-spacing:.08em}.legendary-copy strong,.legendary-copy b,.legendary-copy span,.legendary-copy i{display:block}.legendary-copy strong{font:clamp(25px,4vw,48px) "Mochiy Pop One";color:#ffe6a0;letter-spacing:.08em}.legendary-copy b{margin-top:12px;color:#a9d5ff}.legendary-copy span{margin-top:4px;font-size:13px}.legendary-copy i{margin-top:16px;font-size:11px;font-style:normal;animation:continue-pulse 1.5s ease-in-out infinite}@keyframes legendary-black-fade{from{opacity:0}to{opacity:1}}@keyframes legendary-reveal{from{opacity:0;transform:scale(.88)}30%{opacity:1}to{opacity:1;transform:scale(1.04)}}@keyframes legendary-light{50%{transform:translateX(4%) rotate(2deg)}}
+.legendary-unlock{background:#030608;cursor:default;animation:legendary-black-fade 2s ease both}.legendary-forest-light{position:absolute;inset:-15%;background:radial-gradient(ellipse at 50% 48%,rgba(58,133,208,.2),transparent 32%),linear-gradient(112deg,transparent 27%,rgba(255,222,132,.14) 37%,transparent 48%),linear-gradient(72deg,transparent 48%,rgba(255,214,111,.1) 58%,transparent 69%);opacity:0;animation:forest-light-awaken 4s 1.8s ease-out forwards,legendary-light 9s 5.8s ease-in-out infinite}.legendary-unlock::after{animation:legendary-particles 18s 2s linear infinite}.legendary-unlock img{opacity:0;animation:legendary-reveal 10s 3.2s ease-out forwards}.legendary-copy{margin-bottom:3%;background:linear-gradient(90deg,transparent,rgba(3,8,12,.78),transparent)}.legendary-copy p,.legendary-copy strong,.legendary-copy em,.legendary-info{opacity:0}.legendary-line-one{animation:legendary-text-in 1.8s 5.2s ease forwards,legendary-text-out 1s 7.5s ease forwards}.legendary-copy .legendary-name{animation:legendary-text-in 1.5s 7.8s ease forwards,legendary-text-out 1s 10s ease forwards}.legendary-unlocked{display:block;margin-top:5px;color:#ffe6a0;font:22px "Mochiy Pop One";font-style:normal;animation:legendary-text-in 1.2s 9s ease forwards,legendary-text-out 1s 10s ease forwards}.legendary-info{animation:legendary-text-in 1.5s 10.8s ease forwards}.legendary-info b{color:#ffe6a0;font:22px "Mochiy Pop One"}.legendary-info span{margin-top:5px}.legendary-info button{margin-top:15px;padding:12px 28px;border:2px solid #d7ad55;border-radius:12px;background:rgba(255,239,187,.92);color:#493518;cursor:pointer;font-weight:900}.legendary-info button:hover{background:#fff5cf}.legendary-unlock.burst::before{content:"";position:absolute;z-index:1;inset:-30%;background:radial-gradient(circle,rgba(255,227,139,.4),transparent 38%);animation:legendary-burst 1.4s ease-out forwards}@keyframes forest-light-awaken{to{opacity:1}}@keyframes legendary-black-fade{from{opacity:0}to{opacity:1}}@keyframes legendary-reveal{from{opacity:0;transform:scale(.82)}25%{opacity:1}to{opacity:1;transform:scale(1.07)}}@keyframes legendary-light{50%{transform:translateX(3%) rotate(1deg)}}@keyframes legendary-particles{to{background-position:0 0,170px 260px,-220px 300px}}@keyframes legendary-text-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}@keyframes legendary-text-out{to{opacity:0;transform:translateY(-8px)}}@keyframes legendary-burst{from{opacity:0;transform:scale(.5)}35%{opacity:1}to{opacity:0;transform:scale(1.4)}}
+.unlock-notice{position:absolute;z-index:12;top:22px;left:50%;transform:translateX(-50%);padding:14px 22px;border:3px solid #7b531c;border-radius:16px;background:#fff0ad;color:#674117;box-shadow:0 5px 18px rgba(0,0,0,.3);font:15px "Mochiy Pop One";white-space:nowrap}.unlock-notice.secret-notice{border-color:#ffe078;background:linear-gradient(135deg,#6f4311,#d89b18,#fff1a1,#b7780c);color:#fff;text-shadow:0 2px 2px #633b00;box-shadow:0 0 18px #ffe36b,0 0 42px rgba(255,190,28,.75);animation:secret-notice 3.8s ease-out}
+.unlock-notice.enemy-growth-dialogue{top:13%;min-width:250px;padding:14px 25px;border-color:#93703a;background:linear-gradient(145deg,rgba(255,244,204,.97),rgba(223,196,133,.97));color:#51391e;white-space:normal;text-align:center;animation:enemy-growth-dialogue 2.7s ease both}.unlock-notice.enemy-growth-dialogue b,.unlock-notice.enemy-growth-dialogue span{display:block}.unlock-notice.enemy-growth-dialogue b{margin-bottom:6px;color:#795024;font-size:13px}.unlock-notice.enemy-growth-dialogue span{font:15px/1.55 "Yu Mincho",YuMincho,serif}@keyframes enemy-growth-dialogue{0%{opacity:0;transform:translate(-50%,-8px)}12%,82%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-5px)}}
+.economy-notice{position:absolute;z-index:14;top:78px;left:50%;min-width:260px;padding:10px 18px;border:2px solid #b98229;border-radius:14px;background:linear-gradient(145deg,rgba(255,247,202,.97),rgba(224,184,91,.96));color:#624017;box-shadow:0 7px 22px rgba(58,35,10,.3),0 0 18px rgba(255,215,91,.3);font:700 14px/1.45 "Yu Mincho",YuMincho,serif;text-align:center;transform:translateX(-50%);pointer-events:none}
+.economy-notice.hidden{display:none}.economy-notice.play{animation:economy-notice 2.2s ease both}.economy-notice.golden{border-color:#e0ad35;background:linear-gradient(145deg,#fff8be,#e6ae37);box-shadow:0 7px 22px rgba(58,35,10,.3),0 0 24px rgba(255,218,74,.65)}
+@keyframes economy-notice{0%{opacity:0;transform:translate(-50%,-9px) scale(.96)}14%,78%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-5px) scale(.99)}}
+.milestone-reward{position:absolute;z-index:14;top:17%;left:50%;min-width:310px;padding:16px 25px;border:3px solid #8a642c;border-radius:17px;background:linear-gradient(145deg,rgba(255,245,207,.98),rgba(222,192,126,.98));box-shadow:inset 0 0 0 2px rgba(255,252,228,.8),0 10px 28px rgba(32,22,12,.34),0 0 20px rgba(255,218,122,.28);color:#52381b;text-align:center;transform:translateX(-50%);pointer-events:none}.milestone-reward.hidden{display:none}.milestone-reward small,.milestone-reward strong,.milestone-reward p{display:block}.milestone-reward small{color:#8a5f20;font:12px "Mochiy Pop One"}.milestone-reward strong{margin-top:7px;font:17px "Mochiy Pop One"}.milestone-reward p{min-height:1em;margin:8px 0 0;color:#765127;font:13px/1.5 "Yu Mincho",YuMincho,serif}.milestone-reward.play{animation:milestone-reward 2.2s ease both}@keyframes milestone-reward{0%{opacity:0;transform:translate(-50%,-12px) scale(.96)}12%,82%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-5px) scale(.99)}}
+.boss-wave-alert{position:absolute;z-index:13;inset:0;display:grid;place-items:center;pointer-events:none;background:rgba(19,14,10,.28);backdrop-filter:brightness(.72) sepia(.08)}
+.boss-wave-alert.hidden{display:none}
+.boss-wave-alert div{position:relative;z-index:1;min-width:min(560px,70%);padding:24px 46px;border:2px solid rgba(255,226,148,.76);border-radius:22px;background:linear-gradient(135deg,rgba(50,28,16,.86),rgba(112,73,29,.68));box-shadow:0 0 0 4px rgba(255,238,181,.12),0 18px 50px rgba(0,0,0,.42),inset 0 0 34px rgba(255,220,126,.16);color:#fff1c4;text-align:center;text-shadow:0 3px 7px #211006}
+.boss-wave-alert small,.boss-wave-alert strong,.boss-wave-alert span{display:block}
+.boss-wave-alert small{font:15px "Mochiy Pop One";letter-spacing:.25em;color:#ffd986}
+.boss-wave-alert strong{margin-top:10px;font:clamp(28px,4vw,54px) "Mochiy Pop One";letter-spacing:.05em}
+.boss-wave-alert span{margin-top:10px;font:15px "Yu Mincho",YuMincho,serif;color:#fff4d3}
+.boss-wave-alert.play div{animation:boss-wave-card 2.45s ease both}
+.boss-wave-alert::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 44%,rgba(255,225,133,.24),transparent 34%),linear-gradient(110deg,transparent 32%,rgba(255,225,148,.13) 43%,transparent 54%);opacity:.82}
+.boss-wave-alert::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 24% 28%,rgba(255,228,150,.82) 0 1px,transparent 3px),radial-gradient(circle at 72% 58%,rgba(255,207,91,.62) 0 1px,transparent 3px);background-size:130px 100px,170px 140px;opacity:.48;animation:legendary-particles 10s linear infinite}
+.boss-wave-alert.march{background:rgba(24,15,9,.34)}
+.boss-wave-alert.march div{background:linear-gradient(135deg,rgba(63,34,12,.9),rgba(136,82,20,.72));border-color:rgba(255,219,115,.88)}
+.boss-wave-alert.march small::before,.boss-wave-alert.march small::after{content:"♬";margin:0 10px;color:#ffe39a}
+@keyframes boss-wave-card{0%{opacity:0;transform:translateY(18px) scale(.92)}18%,74%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-10px) scale(1.02)}}
+@keyframes secret-reveal{0%{opacity:0;transform:scale(.25) rotate(-8deg);filter:brightness(3)}45%{opacity:1;transform:scale(1.12) rotate(2deg);filter:brightness(1.8)}70%{transform:scale(.96) rotate(-1deg)}100%{transform:scale(1);filter:brightness(1)}}@keyframes secret-sparkle{0%{opacity:0;transform:scale(.2) rotate(0)}35%{opacity:1;transform:scale(1.7) rotate(120deg)}100%{opacity:0;transform:scale(2.4) rotate(260deg)}}@keyframes secret-notice{0%{opacity:0;transform:translateX(-50%) scale(.4)}18%{opacity:1;transform:translateX(-50%) scale(1.1)}32%,55%{transform:translateX(-50%) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-12px)}}
+
+@media(max-width:900px){.game-screen{grid-template-columns:250px minmax(0,1fr)}.tower-picker{width:250px;padding:10px 7px}.resource-bar div{padding:8px}.resource-bar small{display:none}.wave-title{padding:10px 20px;font-size:18px}.top-actions button{width:48px;height:48px}.tower-card{grid-template-columns:72px 1fr;height:108px}.tower-image-wrap{width:72px;height:92px}.tower-image,.tower-preview{width:68px;height:88px}.tower-copy strong{font-size:13px}.tower-copy small{font-size:9px}.start-button b{font-size:15px}.next-wave{display:none}}
+
+/* Compact tower picker: buttons stay visible; details move into the info panel. */
+.game-screen{grid-template-columns:240px minmax(0,1fr)}
+.tower-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:6px;width:240px;overflow:visible;padding:10px 8px}
+.tower-picker h2,.tower-tooltip,.sidebar-upgrade,.sidebar-remove{grid-column:1/-1}
+.tower-picker h2{margin:0 0 2px;padding:0 4px 7px;font-size:14px}
+.tower-card{display:grid!important;grid-template-columns:1fr!important;grid-template-rows:44px 22px 16px;place-items:center;width:100%;min-height:0!important;height:88px;margin:0;padding:5px;border-radius:11px;vertical-align:top}
+.tower-image-wrap{width:58px!important;height:42px!important;border-radius:9px}
+.tower-image,.tower-preview{width:56px!important;height:40px!important}
+.tower-image-wrap.secret-placeholder{display:grid;place-items:center;background:linear-gradient(135deg,#75674f,#3f372b)!important;color:#fff4ce;font:24px "Mochiy Pop One";text-shadow:0 2px 4px #1f1a13;box-shadow:inset 0 0 0 2px rgba(255,242,196,.22)}
+.tower-card.secret-unknown .tower-copy strong{color:#6d5b42!important;letter-spacing:.12em}
+.tower-card.secret-unknown .tower-copy b{color:#6d5b42!important}
+.tower-card.secret-unknown .tower-stats{display:block!important;color:#6d5b42!important;font-size:9px!important;font-weight:900;text-align:center}
+.tower-copy{display:contents!important}
+.tower-copy strong{max-width:94px;overflow:hidden;font-size:10px!important;line-height:1.1;text-align:center;text-overflow:ellipsis;white-space:nowrap}
+.tower-copy b{margin:0!important;font-size:12px!important;line-height:1}
+.tower-copy b::before{content:"🍖 ";font-size:10px}
+.tower-copy small,.unlock-text{display:none!important}
+.tower-tooltip{position:absolute;z-index:30;left:8px;right:8px;top:468px;min-height:0;margin:0;padding:10px;border:2px solid #8a6330;border-radius:12px;background:rgba(255,246,210,.98);box-shadow:0 8px 24px rgba(55,35,10,.24),inset 0 0 0 2px rgba(255,255,255,.45);font-size:10px;line-height:1.35;pointer-events:none;opacity:0;transform:translateY(-4px);transition:.12s}
+.tower-tooltip.visible{opacity:1;transform:none}
+.tower-tooltip h3{margin:0 0 4px;color:#0a69b7;font:12px "Mochiy Pop One"}
+.tower-tooltip .tower-description{margin:0 0 5px;padding-bottom:4px;border-bottom:1px dashed rgba(122,83,37,.35);color:#654721;font-family:"Yu Mincho",YuMincho,serif;line-height:1.45}
+.tower-tooltip .tower-buff-line{font-weight:900}.tower-tooltip .tower-buff-line.sunflower{color:#9b6500}.tower-tooltip .tower-buff-line.target{color:#17679b}
+.tower-tooltip b{color:#6b4318}.tower-tooltip .locked-note{color:#8b3e2f;font-weight:900}
+.sidebar-upgrade{margin-top:4px;padding:9px 6px;font-size:12px}
+.sidebar-remove{margin-top:5px;padding:8px 6px;font-size:12px}
+.topbar{gap:8px;padding:8px 10px}
+.resource-bar{flex:0 1 auto;border-radius:14px}
+.resource-bar div{gap:5px;padding:7px 10px;font-size:14px;white-space:nowrap}
+.resource-bar small{font-size:12px;line-height:1;white-space:nowrap}
+.resource-bar strong{font-size:16px;line-height:1}
+.heart,.coin,.skull{font-size:17px!important;text-shadow:none}
+.wave-title{min-width:210px;padding:6px 12px;border-radius:13px}
+.wave-title strong{font-size:10px}.wave-title span{font-size:18px}
+.weather-hud{padding:6px 9px}.weather-hud span{font-size:17px}.weather-hud strong{font-size:10px}
+.top-actions{gap:6px}
+.top-actions button{width:auto;min-width:42px;height:40px;padding:0 10px;border-width:3px;border-radius:11px;font-size:13px;white-space:nowrap}
+#restart-button{min-width:70px}
+@media(max-width:900px){.game-screen{grid-template-columns:220px minmax(0,1fr)}.tower-picker{width:220px;grid-template-columns:repeat(2,minmax(0,1fr));padding:8px 6px}.tower-card{height:82px}.tower-image-wrap{width:52px!important;height:38px!important}.tower-image,.tower-preview{width:50px!important;height:36px!important}.resource-bar div{padding:6px 7px}.resource-bar small{font-size:10px}.resource-bar strong{font-size:14px}.wave-title{min-width:160px}.top-actions button{height:36px;min-width:38px;padding:0 7px;font-size:12px}#restart-button{min-width:58px}}
+
+/* Antique storybook library view */
+.library-screen{background:radial-gradient(ellipse at 50% 38%,rgba(132,88,45,.48),rgba(39,22,12,.82) 58%,rgba(18,10,6,.97)),linear-gradient(115deg,#2b160b,#68401f 42%,#231107);color:#3b2818}
+.library-screen::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,.46)),repeating-linear-gradient(90deg,rgba(255,230,175,.018) 0 2px,transparent 2px 8px);mix-blend-mode:multiply}
+.storybook-reader{width:min(1120px,96vw);padding:54px 34px 34px;perspective:1400px}
+.storybook-reader::after{content:"";position:absolute;left:8%;right:8%;bottom:22px;height:42px;border-radius:50%;background:rgba(0,0,0,.45);filter:blur(18px);z-index:-1}
+.storybook-book{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:560px;border-radius:28px 28px 24px 24px;background:linear-gradient(90deg,#7b4a26 0 1.5%,#c59a5f 2.3%,#efe0b6 4%,#f5e8c0 48%,#6d4324 49.5%,#3b2415 50%,#6d4324 50.5%,#f0dfb2 52%,#f5e8c0 96%,#c5965c 97.7%,#704321 99%);box-shadow:0 32px 70px rgba(0,0,0,.62),0 7px 0 #5b351d,inset 0 0 70px rgba(72,40,19,.2);overflow:hidden;transform:rotateX(2deg)}
+.storybook-book::before{content:"";position:absolute;z-index:3;top:0;bottom:0;left:50%;width:42px;transform:translateX(-50%);background:linear-gradient(90deg,rgba(47,26,14,.42),rgba(255,244,202,.12) 38%,rgba(24,13,8,.55) 50%,rgba(255,244,202,.12) 62%,rgba(47,26,14,.42));box-shadow:-16px 0 24px rgba(69,41,22,.2),16px 0 24px rgba(69,41,22,.2);pointer-events:none}
+.storybook-book::after{content:"";position:absolute;inset:12px 18px;z-index:2;border-radius:22px;background:radial-gradient(circle at 18% 22%,rgba(255,255,237,.22),transparent 22%),radial-gradient(circle at 85% 18%,rgba(255,255,237,.16),transparent 24%),repeating-radial-gradient(circle at 30% 40%,rgba(92,61,30,.045) 0 1px,transparent 1px 7px);pointer-events:none;mix-blend-mode:multiply}
+.storybook-book.turning{animation:page-turn 760ms ease}
+.book-page{position:relative;min-height:560px;padding:72px 62px 58px;background:radial-gradient(ellipse at 50% 45%,rgba(255,249,220,.38),transparent 58%),linear-gradient(90deg,rgba(92,54,27,.16),transparent 8%,transparent 90%,rgba(94,56,27,.16)),linear-gradient(#f5e8c2,#ecd8a4);font-family:Georgia,"Times New Roman","Yu Mincho","Hiragino Mincho ProN",serif;font-size:21px;line-height:2.05;color:#4b321b;text-shadow:0 1px rgba(255,250,225,.6);box-shadow:inset 0 0 46px rgba(105,67,30,.22)}
+.book-page.left{border-radius:24px 8px 8px 22px;background:radial-gradient(ellipse at 55% 40%,rgba(255,250,224,.45),transparent 58%),linear-gradient(90deg,rgba(88,49,24,.22),transparent 9%,transparent 92%,rgba(55,31,17,.18)),linear-gradient(#f7e9c1,#ead6a2)}
+.book-page.right{border-radius:8px 24px 22px 8px;background:radial-gradient(ellipse at 45% 40%,rgba(255,250,224,.45),transparent 58%),linear-gradient(90deg,rgba(55,31,17,.18),transparent 8%,transparent 91%,rgba(88,49,24,.22)),linear-gradient(#f7e9c1,#ead6a2)}
+.book-page::before{content:"";position:absolute;inset:30px;border:2px solid rgba(111,72,32,.48);border-radius:18px;box-shadow:inset 0 0 0 1px rgba(255,245,203,.55),0 0 0 5px rgba(139,91,39,.08);pointer-events:none}
+.book-page::after{content:"";position:absolute;inset:44px;border:1px solid rgba(129,83,35,.28);border-radius:13px;pointer-events:none}
+.book-page small{display:block;margin:0 0 28px;color:#8b6335;font:13px Georgia,"Times New Roman",serif;font-variant:small-caps;letter-spacing:.18em;text-align:center}
+.book-page p{position:relative;z-index:1;margin:0;white-space:pre-line}
+.book-page.left p{padding-right:18px}.book-page.right p{padding-left:18px}
+.book-page.left::marker,.book-page.right::marker{display:none}
+.book-page.locked{display:grid;place-items:center;color:rgba(82,58,37,.42);font:54px Georgia,"Times New Roman",serif;letter-spacing:.16em;text-shadow:0 1px rgba(255,246,215,.7)}
+.book-page.locked p{position:relative;padding:28px 42px;border:1px solid rgba(112,75,39,.22);border-radius:50%;background:radial-gradient(ellipse at center,rgba(111,72,36,.08),transparent 68%)}
+.book-page.locked p::before{content:"✦";display:block;margin-bottom:10px;color:rgba(118,78,39,.28);font-size:26px;text-align:center}
+.book-controls{gap:18px;margin-top:24px}
+.book-controls button,.book-close{border:2px solid #6a4422;border-radius:4px 14px 14px 4px;background:linear-gradient(#d5b47a,#9f6b39);color:#fff1cf;box-shadow:inset 0 0 0 1px rgba(255,239,192,.35),0 5px 14px rgba(0,0,0,.28);font-family:Georgia,"Yu Mincho",serif;font-weight:900;letter-spacing:.08em;text-shadow:0 1px #4a2b16;cursor:pointer}
+.book-controls button{min-width:96px;padding:12px 24px}
+.book-controls button:disabled{opacity:.38;filter:sepia(.5);cursor:not-allowed}
+.book-close{position:absolute;top:18px;right:24px;width:auto;height:auto;padding:9px 17px;border-radius:3px 13px 13px 3px}
+#book-back{left:24px;right:auto}
+@keyframes page-turn{0%{transform:rotateX(2deg) rotateY(0)}48%{transform:rotateX(2deg) rotateY(-4deg) translateY(-2px)}100%{transform:rotateX(2deg) rotateY(0)}}
+@media(max-width:900px){.storybook-reader{padding:44px 18px 22px}.storybook-book{min-height:470px}.book-page{min-height:470px;padding:58px 34px 44px;font-size:17px}.book-page::before{inset:22px}.book-page::after{inset:34px}}
+
+/* Antique library shelf */
+.bookshelf{position:relative;width:min(1080px,94vw);min-height:650px;padding:44px 54px 72px;border:12px ridge #4d2b12;border-radius:8px;background:radial-gradient(ellipse at 50% 38%,rgba(112,67,29,.2),transparent 44%),repeating-linear-gradient(90deg,rgba(255,221,158,.025) 0 2px,transparent 2px 68px),linear-gradient(#1a0f09 0 18%,#2b180d 18% 82%,#160c07 82%);box-shadow:inset 0 0 0 5px #1d0f08,inset 0 0 75px #050302,0 24px 70px rgba(0,0,0,.72)}
+.bookshelf::before{content:"";position:absolute;left:25px;right:25px;bottom:56px;height:35px;border:4px solid #281408;border-radius:4px;background:linear-gradient(#8a5125 0 8%,#4c2912 20% 66%,#241207 82%);box-shadow:0 16px 22px rgba(0,0,0,.58),inset 0 3px rgba(255,205,120,.13);pointer-events:none}
+.bookshelf::after{content:"";position:absolute;inset:12px;border:1px solid rgba(194,130,54,.28);box-shadow:inset 0 0 0 7px rgba(35,17,7,.72);pointer-events:none}
+.bookshelf-heading{position:relative;z-index:1;text-align:center;color:#d9a85c}
+.bookshelf-heading h2{display:inline-block;margin:0;padding:11px 64px;border:1px solid #9b6a32;background:linear-gradient(#4b2b16,#261408);box-shadow:inset 0 0 0 3px #1b0e07,0 8px 18px rgba(0,0,0,.42);font:700 32px Georgia,"Yu Mincho",serif;letter-spacing:.16em;text-shadow:0 2px #160b05}
+.bookshelf-heading p{margin:20px 0 27px;font:700 15px Georgia,"Yu Mincho",serif;letter-spacing:.14em;color:#d6aa62}
+.shelf-books{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:center;gap:24px;min-height:410px;padding:0 18px 10px}
+.book-spine{position:relative;display:flex;width:190px;height:375px;margin:0;padding:52px 24px 58px;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;border:5px solid #21120b;border-radius:8px 13px 12px 7px;background:linear-gradient(115deg,rgba(255,232,178,.08),transparent 18% 82%,rgba(0,0,0,.38)),repeating-radial-gradient(circle at 30% 25%,rgba(255,255,255,.025) 0 1px,transparent 1px 5px),linear-gradient(90deg,#211a17,#3b302a 8%,#171615 92%,#080706);color:#deb46c;box-shadow:inset 13px 0 12px rgba(0,0,0,.34),inset -4px 0 9px rgba(229,174,91,.08),0 9px 13px rgba(0,0,0,.55);font-family:Georgia,"Yu Mincho",serif;text-align:center;cursor:pointer;transform-origin:bottom center;transition:transform .34s ease,filter .34s ease,box-shadow .34s ease}
+.book-spine::before,.book-spine::after{content:"";position:absolute;left:15px;right:15px;height:3px;border-top:1px solid #b17b39;border-bottom:1px solid #5f3c1c;opacity:.78}.book-spine::before{top:24px}.book-spine::after{bottom:25px}
+.book-cover-frame{position:absolute;inset:17px;border:2px solid rgba(190,132,56,.72);box-shadow:inset 0 0 0 5px rgba(72,42,20,.55),inset 0 0 0 7px rgba(190,132,56,.2);pointer-events:none}
+.book-title{position:relative;z-index:1;font-size:27px;font-weight:700;line-height:1.5;letter-spacing:.1em;text-shadow:0 2px 2px #130a05}
+.book-subtitle{position:relative;z-index:1;margin-top:16px;padding-top:11px;border-top:1px solid currentColor;font-size:11px;letter-spacing:.16em}
+.book-spine.book-himawari{background-color:#66513d}.book-spine.book-meeting{background-color:#202326}.book-spine.book-special{background-color:#682c19}.book-spine.book-drobby{background-color:#181b1a}
+.book-spine.available:hover,.book-spine.available:focus-visible,.book-spine.pulled{transform:translateY(-14px) scale(1.025);filter:brightness(1.13);box-shadow:0 0 0 2px rgba(230,181,91,.4),0 0 26px rgba(235,168,61,.3),0 18px 20px rgba(0,0,0,.62);outline:none}
+.book-spine.locked{filter:saturate(.35) brightness(.57);cursor:not-allowed}.book-spine.locked:hover{transform:none}.book-spine.locked .book-title{font-size:34px;color:#a58c69}.book-spine.locked .book-cover-frame{opacity:.45}
+.book-lock{position:absolute;z-index:2;left:50%;bottom:65px;width:25px;height:22px;border:2px solid #b09263;border-radius:3px;background:#453621;transform:translateX(-50%);box-shadow:0 2px 5px #090604}
+.book-lock::before{content:"";position:absolute;left:5px;top:-15px;width:11px;height:14px;border:3px solid #b09263;border-bottom:0;border-radius:9px 9px 0 0}
+.book-lock[hidden]{display:none}
+.library-book-message{position:absolute;z-index:4;left:50%;bottom:15px;min-height:24px;transform:translateX(-50%);color:#e4bd79;font:700 14px Georgia,"Yu Mincho",serif;letter-spacing:.08em;white-space:nowrap;text-shadow:0 2px #120a05}
+
+/* Open book, based on the supplied final visual reference */
+.library-screen{overflow:hidden;background:radial-gradient(ellipse at 73% 7%,rgba(224,145,56,.2),transparent 28%),radial-gradient(ellipse at 50% 42%,rgba(102,56,24,.24),rgba(24,12,6,.72) 67%,#0c0704),repeating-linear-gradient(0deg,#3b2010 0 3px,#2b160b 4px 47px,#1d0e07 48px 50px)}
+.storybook-reader{width:min(1320px,97vw);padding:74px 40px 76px}
+.storybook-book{min-height:min(680px,72vh);border:13px solid #192219;border-radius:17px 22px 26px 18px;background:linear-gradient(90deg,#182118,#30402d 2%,#8a5c2e 3.2%,#f0d59a 4.2% 48.8%,#422610 49.8% 50.2%,#f0d59a 51.2% 95.8%,#8a5c2e 96.8%,#30402d 98%,#182118);box-shadow:0 7px 0 #6a3d1c,0 34px 65px rgba(0,0,0,.72),inset 0 0 0 2px #9b6b2f;overflow:visible;transform:rotateX(1deg)}
+.storybook-book::before{width:56px;top:-3px;bottom:-3px;background:linear-gradient(90deg,rgba(31,18,8,.52),rgba(255,237,184,.15) 36%,rgba(34,19,8,.66) 50%,rgba(255,237,184,.13) 64%,rgba(31,18,8,.52));filter:blur(.2px)}
+.storybook-book::after{inset:9px 15px;border-radius:8px;background:repeating-radial-gradient(circle at 30% 35%,rgba(84,52,25,.055) 0 1px,transparent 1px 6px),linear-gradient(90deg,rgba(70,37,16,.18),transparent 5% 95%,rgba(70,37,16,.18));mix-blend-mode:multiply}
+.book-page{display:flex;min-height:min(680px,72vh);padding:65px 68px 54px;align-items:stretch;background:radial-gradient(ellipse at 48% 42%,rgba(255,245,203,.76),transparent 64%),repeating-radial-gradient(circle at 35% 30%,rgba(103,68,31,.035) 0 1px,transparent 1px 5px),linear-gradient(#efd49a,#e4c17f);box-shadow:inset 0 0 55px rgba(84,48,19,.32);transform-style:preserve-3d;backface-visibility:hidden}
+.book-page.left,.book-page.right{background:radial-gradient(ellipse at 48% 42%,rgba(255,246,207,.72),transparent 64%),repeating-radial-gradient(circle at 35% 30%,rgba(103,68,31,.035) 0 1px,transparent 1px 5px),linear-gradient(#f0d69e,#e5c483)}
+.book-page::before{inset:31px;border:1px solid rgba(121,76,28,.72);border-radius:6px;background:radial-gradient(circle at 0 0,transparent 0 21px,rgba(123,76,27,.28) 22px 23px,transparent 24px),radial-gradient(circle at 100% 0,transparent 0 21px,rgba(123,76,27,.28) 22px 23px,transparent 24px),radial-gradient(circle at 0 100%,transparent 0 21px,rgba(123,76,27,.28) 22px 23px,transparent 24px),radial-gradient(circle at 100% 100%,transparent 0 21px,rgba(123,76,27,.28) 22px 23px,transparent 24px);box-shadow:inset 0 0 0 5px rgba(139,91,39,.06)}
+.book-page::after{inset:40px;border:1px solid rgba(129,83,35,.32);border-radius:3px}
+.book-page-content{position:relative;z-index:4;display:flex;width:100%;padding:18px 8px 24px;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.book-page-image{display:block;max-width:90%;max-height:58%;margin:0 auto 22px;border:7px solid rgba(101,63,29,.2);object-fit:contain;box-shadow:0 8px 18px rgba(76,43,18,.2)}.book-page-image[hidden]{display:none}
+.book-page p{width:100%;font:20px/2 Georgia,"Yu Mincho","Hiragino Mincho ProN",serif;text-align:center}
+.book-page small{position:absolute;z-index:5;bottom:16px;margin:0;color:#765023;font-size:12px}.book-page.left small{left:53px}.book-page.right small{right:53px}
+.book-page.locked p{width:auto}.book-page.empty-page p{display:none}
+.storybook-book.turning{animation:none}.storybook-book.turn-forward .book-page.right{z-index:8;transform-origin:left center;animation:paper-forward .44s ease-in-out}.storybook-book.turn-backward .book-page.left{z-index:8;transform-origin:right center;animation:paper-backward .44s ease-in-out}
+@keyframes paper-forward{0%{transform:perspective(1300px) rotateY(0);filter:brightness(1)}48%{transform:perspective(1300px) rotateY(-78deg) skewY(-1.5deg);filter:brightness(.82);box-shadow:-22px 5px 28px rgba(45,24,10,.35)}100%{transform:perspective(1300px) rotateY(0);filter:brightness(1)}}
+@keyframes paper-backward{0%{transform:perspective(1300px) rotateY(0);filter:brightness(1)}48%{transform:perspective(1300px) rotateY(78deg) skewY(1.5deg);filter:brightness(.82);box-shadow:22px 5px 28px rgba(45,24,10,.35)}100%{transform:perspective(1300px) rotateY(0);filter:brightness(1)}}
+#book-back{position:fixed;top:28px;right:30px;left:auto;z-index:8}.book-controls{position:absolute;left:42px;right:42px;bottom:18px;display:flex;align-items:center;justify-content:space-between;margin:0}.book-controls output{color:#e2bc78;font:18px Georgia,"Yu Mincho",serif;letter-spacing:.12em;text-shadow:0 2px #180b05}.book-controls button{min-width:150px}
+@media(max-width:900px){.bookshelf{min-height:560px;padding:38px 28px 64px}.shelf-books{gap:10px;min-height:350px}.book-spine{width:22%;height:325px;padding:42px 12px}.book-title{font-size:18px}.book-subtitle{font-size:8px}.storybook-reader{padding:68px 16px 70px}.storybook-book,.book-page{min-height:56vh}.book-page{padding:48px 30px 42px}.book-page::before{inset:20px}.book-page::after{inset:28px}.book-page p{font-size:15px}.book-controls{left:18px;right:18px}.book-controls button{min-width:105px;padding:10px 15px}}
+
+.resource-bar .tower-slot-status{gap:5px;padding-inline:12px;white-space:nowrap}.tower-slot-status small{color:#ffe5a5}.tower-slot-status span{font-size:13px;color:#d8bd82}.tower-slot-status strong{min-width:18px;text-align:center}
+.tower-slot-status span:first-child{font-size:17px;color:inherit}
+
+/* Premium opened antique book */
+.storybook-reader{display:grid;width:100vw;height:100vh;max-width:none;padding:0;place-items:center;overflow:hidden}
+.storybook-reader::after{left:3%;right:3%;bottom:1.5%;height:8%;filter:blur(24px)}
+.storybook-book{display:grid;width:min(100vw,177.777vh);height:auto;min-height:0;aspect-ratio:16/9;padding:3.25% 9.9% 5%;grid-template-columns:1fr 1fr;border:0;border-radius:0;background:url("assets/antique-open-book-topdown.png") center/100% 100% no-repeat;box-shadow:0 25px 70px rgba(0,0,0,.62);overflow:visible;transform:none}
+.storybook-book::before{top:5.5%;bottom:7%;width:4.5%;background:linear-gradient(90deg,transparent,rgba(68,35,13,.16) 38%,rgba(38,20,8,.32) 50%,rgba(255,235,183,.07) 62%,transparent);box-shadow:none;filter:blur(3px)}
+.storybook-book::after{display:none}
+.book-page,.book-page.left,.book-page.right{display:flex;width:100%;height:100%;min-height:0;padding:9% 10% 9%;border-radius:0;background:transparent;box-shadow:none;align-items:stretch;overflow:hidden}
+.book-page.left{background:linear-gradient(90deg,rgba(91,50,18,.05),transparent 18% 88%,rgba(78,39,13,.14))}.book-page.right{background:linear-gradient(90deg,rgba(78,39,13,.14),transparent 12% 82%,rgba(91,50,18,.05))}
+.book-page::before{inset:4%;border:0;background:none;box-shadow:inset 0 0 26px rgba(87,47,17,.08);pointer-events:none}.book-page::after{display:none}
+.book-page-content{padding:4% 2% 10%;justify-content:center}
+.book-page p{max-width:88%;margin:auto;color:#493019;font:clamp(16px,1.35vw,23px)/2.05 Georgia,"Yu Mincho","Hiragino Mincho ProN",serif;text-shadow:0 1px rgba(255,242,196,.72)}
+.book-page small{bottom:3%;color:#77501e;font-size:clamp(10px,.8vw,13px)}.book-page.left small{left:10%}.book-page.right small{right:10%}
+.book-page.locked{display:flex;color:#6c4d2d;font:inherit;letter-spacing:0}.book-page.locked .book-page-content{justify-content:center}.book-page.locked p{position:relative;width:min(78%,430px);padding:84px 20px 22px;border:0;border-radius:0;background:radial-gradient(ellipse at center,rgba(116,77,34,.08),transparent 68%);color:rgba(74,50,27,.68);font-size:clamp(15px,1.15vw,20px);letter-spacing:.08em}
+.book-page.locked p::before{content:"";position:absolute;left:50%;top:27px;width:38px;height:31px;margin:0;border:3px solid rgba(112,76,37,.55);border-radius:5px;background:rgba(117,77,35,.09);transform:translateX(-50%);box-shadow:inset 0 0 0 2px rgba(255,231,173,.18)}
+.book-page.locked p::after{content:"";position:absolute;left:50%;top:10px;width:24px;height:24px;border:4px solid rgba(112,76,37,.55);border-bottom:0;border-radius:15px 15px 0 0;transform:translateX(-50%)}
+.book-page.empty-page .book-page-content{display:none}
+#book-back{top:22px;right:26px}.book-controls{left:5%;right:5%;bottom:2.2%}.book-controls button{min-width:145px}.book-controls output{color:#e9c983;text-shadow:0 2px 4px #1a0b04}
+@media(max-width:900px){.storybook-book{width:min(100vw,177.777vh)}.book-page,.book-page.left,.book-page.right{padding:8% 7% 10%}.book-page p{max-width:94%;font-size:13px}.book-controls{bottom:1%}.book-controls button{min-width:96px;padding:8px 12px}#book-back{top:10px;right:12px}}
+
+/* Real antique bookshelf asset and physical leather books */
+.library-screen:has(.bookshelf:not(.hidden)){background:#090503}
+.bookshelf{position:relative;width:min(100vw,177.777vh);height:auto;min-height:0;aspect-ratio:16/9;padding:0;border:0;border-radius:0;background:url("assets/library-bookshelf-bg.png") center/100% 100% no-repeat;box-shadow:0 0 80px #000;overflow:hidden}
+.bookshelf::before,.bookshelf::after{display:none}
+.bookshelf-heading{position:absolute;z-index:4;top:10.5%;left:50%;width:min(460px,40%);transform:translateX(-50%);color:#e2b86f;text-align:center}
+.bookshelf-heading h2{display:block;margin:0;padding:10px 42px;border:1px solid rgba(194,137,61,.72);border-radius:3px;background:linear-gradient(90deg,rgba(37,18,8,.8),rgba(78,43,19,.84),rgba(37,18,8,.8));box-shadow:inset 0 0 0 3px rgba(24,11,5,.76),0 8px 18px rgba(0,0,0,.46);font-size:clamp(20px,2.1vw,34px);letter-spacing:.17em;text-shadow:0 2px 3px #170a04}
+.bookshelf-heading p{margin:14px 0 0;color:#d6aa65;font-size:clamp(10px,.95vw,15px);text-shadow:0 2px 4px #160a04}
+.shelf-books{position:absolute;z-index:3;left:16.2%;right:16.2%;top:29%;bottom:23.5%;display:flex;min-height:0;padding:0;align-items:flex-end;justify-content:center;gap:clamp(8px,1.45vw,25px)}
+.book-spine{position:relative;display:flex;width:min(14.1vw,220px);height:100%;max-height:470px;margin:0;padding:17% 16% 14%;flex:0 1 220px;align-items:center;justify-content:center;overflow:visible;border:0;border-radius:0;background:url("assets/antique-book.png") center bottom/100% 100% no-repeat;color:#d7ae68;box-shadow:none;font-family:Georgia,"Yu Mincho",serif;text-align:center;cursor:pointer;filter:drop-shadow(8px 11px 8px rgba(0,0,0,.55));transform-origin:bottom center;transition:transform .34s ease,filter .34s ease}
+.book-spine::before,.book-spine::after,.book-cover-frame{display:none}
+.book-title{max-width:78%;margin-left:-2%;font-size:clamp(15px,1.55vw,26px);line-height:1.52;letter-spacing:.08em;color:#d6ad67;text-shadow:0 1px #160c07,0 0 8px rgba(221,170,81,.16)}
+.book-subtitle{max-width:75%;margin:14px 0 0 -2%;padding-top:9px;font-size:clamp(7px,.64vw,11px);letter-spacing:.12em;color:#c59650}
+.book-spine.available:hover,.book-spine.available:focus-visible,.book-spine.pulled{transform:translateY(-15px) scale(1.025);filter:brightness(1.12) drop-shadow(10px 18px 12px rgba(0,0,0,.62)) drop-shadow(0 0 10px rgba(224,163,65,.28));box-shadow:none;outline:none}
+.book-spine.book-himawari.available{filter:sepia(.2) brightness(1.13) saturate(.8)}.book-spine.book-meeting.available{filter:hue-rotate(172deg) saturate(.65) brightness(.92)}.book-spine.book-special.available{filter:sepia(.75) saturate(1.4) hue-rotate(325deg) brightness(.9)}
+.book-spine.locked{filter:grayscale(.5) brightness(.38) drop-shadow(7px 10px 8px rgba(0,0,0,.75));cursor:pointer}.book-spine.locked:hover{transform:translateY(-5px);filter:grayscale(.45) brightness(.48) drop-shadow(8px 14px 9px rgba(0,0,0,.76))}.book-spine.locked .book-title{font-size:clamp(24px,2.1vw,36px);color:#a38a65}.book-spine.locked .book-subtitle{display:none}
+.book-lock{bottom:17%;margin-left:-2%;border-color:#9b7c50;background:#30261a}.book-lock::before{border-color:#9b7c50}
+.library-book-message{bottom:16%;padding:7px 18px;border:1px solid rgba(163,111,50,.42);border-radius:2px;background:rgba(25,12,5,.72);color:#e0b76f;box-shadow:0 5px 14px rgba(0,0,0,.38)}
+.bookshelf #library-close{position:absolute;z-index:8;top:5%;right:5%;border-radius:3px 13px 13px 3px}
+@media(max-width:900px){.bookshelf-heading{top:8%;width:46%}.bookshelf-heading h2{padding:7px 18px}.bookshelf-heading p{margin-top:7px}.shelf-books{left:15%;right:15%;top:27%;bottom:21%;gap:4px}.book-spine{width:16%;height:100%;padding:15% 10% 13%}.book-title{font-size:11px}.book-subtitle{font-size:6px}.book-spine.locked .book-title{font-size:18px}.library-book-message{bottom:10%;font-size:10px}}
+
+/* Compact two-column tower controls */
+.game-screen{grid-template-columns:336px minmax(0,1fr)}
+.tower-picker{width:336px;height:100vh;padding:10px 11px;grid-template-columns:repeat(2,minmax(0,118px));grid-template-rows:auto repeat(5,104px) minmax(0,1fr) auto;justify-content:center;gap:10px;overflow:hidden}
+.field-wrap{--map-left-crop:56px}
+#game{width:calc(100% + var(--map-left-crop));max-width:none;margin-left:calc(0px - var(--map-left-crop))}
+.tower-picker h2{margin:0 0 1px;padding:0 4px 6px;font-size:15px;line-height:1.25}
+.tower-card{width:100%;height:104px!important;grid-template-columns:1fr!important;grid-template-rows:52px minmax(0,1fr)!important;padding:6px;border-width:2px;border-radius:12px;overflow:hidden}
+.tower-image-wrap{width:66px!important;height:50px!important;border-radius:9px}
+.tower-image,.tower-preview{width:64px!important;height:49px!important}
+.tower-card .tower-copy{display:grid;min-width:0;min-height:0;margin:0;grid-template-rows:auto auto auto;align-content:center;justify-items:center;overflow:hidden;text-align:center}
+.tower-copy strong{display:block;width:100%;max-width:108px;margin:0!important;overflow:hidden;font-size:10.5px!important;line-height:1.15;text-align:center;text-overflow:ellipsis;white-space:nowrap}
+.tower-copy b{margin:1px 0 0!important;font-size:12px!important;line-height:1.05}
+.tower-copy small{max-width:100%;margin:0;overflow:hidden;font-size:8px;line-height:1.05;text-overflow:ellipsis;white-space:nowrap}
+.tower-copy b::before{font-size:10px}
+.tower-card.locked{filter:grayscale(.35) brightness(.92);border-color:#8f7b58;background:#ddd0ae;color:#55462f}
+.tower-card.locked:hover,.tower-card.locked:focus-visible{filter:grayscale(.12) brightness(1);box-shadow:0 0 0 2px rgba(255,226,153,.55),0 4px #8c6c3b}
+.tower-card.locked .tower-copy{grid-template-rows:1fr;align-content:center}
+.tower-card.locked .tower-copy b,.tower-card.locked .tower-copy small{display:none!important}
+.tower-card.locked .tower-copy strong{margin:0!important;font-size:11px!important;line-height:1.25}
+.tower-tooltip{left:6px;right:6px;top:407px;padding:8px;font-size:9px;line-height:1.3}
+.tower-tooltip h3{font-size:11px}
+.sidebar-remove{width:100%;height:52px;min-height:52px;margin-top:8px;padding:7px 10px;border-radius:11px;font-size:13px;line-height:1.2}
+@media(max-width:900px){.game-screen{grid-template-columns:296px minmax(0,1fr)}.tower-picker{width:296px;padding:8px 7px;grid-template-columns:repeat(2,minmax(0,108px));grid-template-rows:auto repeat(5,94px) minmax(0,1fr) auto;gap:8px}.field-wrap{--map-left-crop:46px}.tower-card{height:94px!important;grid-template-rows:46px minmax(0,1fr)!important}.tower-image-wrap{width:60px!important;height:45px!important}.tower-image,.tower-preview{width:58px!important;height:44px!important}.tower-copy strong{max-width:98px;font-size:9.5px!important}.tower-tooltip{top:367px}.sidebar-remove{height:46px;min-height:46px;margin-top:6px;font-size:12px}}
+
+/* Bookshelf selection uses physical book spines, never front covers */
+.shelf-books{left:27%;right:27%;gap:clamp(4px,.6vw,10px)}
+.book-spine{width:clamp(62px,6.4vw,106px);height:100%;max-height:475px;padding:9% 10% 11%;flex:0 0 clamp(62px,6.4vw,106px);background:url("assets/antique-book-spine.png") center bottom/100% 100% no-repeat;filter:drop-shadow(6px 10px 7px rgba(0,0,0,.62))}
+.book-spine .book-title{display:block;width:auto;max-width:none;height:58%;margin:0;color:#e2bb72;font-size:clamp(14px,1.35vw,22px);line-height:1.25;letter-spacing:.12em;text-shadow:0 1px #160b05,0 0 7px rgba(226,177,84,.22);writing-mode:vertical-rl;text-orientation:upright}
+.book-spine .book-subtitle{display:none}
+.book-spine.available:hover,.book-spine.available:focus-visible,.book-spine.pulled{transform:translateY(-13px) scale(1.035);filter:brightness(1.14) drop-shadow(7px 17px 9px rgba(0,0,0,.67)) drop-shadow(0 0 9px rgba(225,167,73,.28))}
+.book-spine.book-himawari.available{filter:sepia(.25) brightness(1.08) saturate(.85)}.book-spine.book-meeting.available{filter:hue-rotate(165deg) saturate(.6) brightness(.86)}.book-spine.book-special.available{filter:sepia(.7) saturate(1.25) hue-rotate(330deg) brightness(.88)}
+.book-spine.locked{filter:grayscale(.6) brightness(.34) drop-shadow(5px 9px 7px rgba(0,0,0,.78))}.book-spine.locked:hover{transform:translateY(-5px);filter:grayscale(.55) brightness(.44) drop-shadow(6px 13px 8px rgba(0,0,0,.8))}.book-spine.locked .book-title{height:auto;font-size:clamp(18px,1.7vw,28px);color:#a68c67;writing-mode:horizontal-tb}
+.book-spine .book-lock{bottom:13%;margin-left:0;transform:translateX(-50%) scale(.82)}
+@media(max-width:900px){.shelf-books{left:25%;right:25%;gap:3px}.book-spine{width:clamp(42px,7vw,64px);padding:8% 7% 10%;flex-basis:clamp(42px,7vw,64px)}.book-spine .book-title{font-size:11px}.book-spine.locked .book-title{font-size:16px}}
+
+/* Seat every spine on the actual wooden shelf surface */
+.shelf-books{top:25%;bottom:33.4%;align-items:stretch;gap:clamp(5px,.65vw,11px)}
+.book-spine,.book-spine.book-drobby,.book-spine.book-himawari,.book-spine.book-meeting,.book-spine.book-special{align-self:stretch;height:100%;max-height:none;background-color:transparent!important;background-image:url("assets/antique-book-spine.png")!important;background-position:center bottom!important;background-size:100% 100%!important;background-repeat:no-repeat!important;isolation:isolate}
+.book-spine .book-cover-frame{display:block;position:absolute;z-index:-1;left:7%;right:7%;bottom:-8px;height:14px;border:0;border-radius:50%;background:radial-gradient(ellipse,rgba(14,7,3,.8),rgba(14,7,3,.42) 48%,transparent 76%);box-shadow:none;filter:blur(3px);pointer-events:none}
+.book-spine.book-drobby{filter:brightness(1.12) saturate(1.08) drop-shadow(2px 4px 2px rgba(23,10,4,.5)) drop-shadow(7px 10px 7px rgba(0,0,0,.52))}
+.book-spine.locked{filter:grayscale(.62) brightness(.34) drop-shadow(2px 4px 2px rgba(18,8,3,.65)) drop-shadow(6px 10px 7px rgba(0,0,0,.78))}
+.book-spine.available:hover,.book-spine.available:focus-visible,.book-spine.pulled{transform:translateY(-11px) scale(1.025);filter:brightness(1.18) saturate(1.08) drop-shadow(3px 6px 3px rgba(20,9,3,.55)) drop-shadow(8px 15px 9px rgba(0,0,0,.62)) drop-shadow(0 0 9px rgba(225,167,73,.25))}
+.book-spine.locked:hover{transform:translateY(-4px);filter:grayscale(.58) brightness(.44) drop-shadow(3px 6px 3px rgba(18,8,3,.7)) drop-shadow(7px 13px 8px rgba(0,0,0,.8))}
+@media(max-width:900px){.shelf-books{top:24%;bottom:32.8%;gap:3px}}
+
+/* Books are baked into the shelf artwork; controls are transparent hotspots */
+.bookshelf{background-image:url("assets/library-bookshelf-with-books.png")}
+.shelf-books{left:34.33%;right:34.33%;top:20.83%;bottom:33.47%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.5%;align-items:stretch}
+.book-spine,.book-spine.book-drobby,.book-spine.book-himawari,.book-spine.book-meeting,.book-spine.book-special{width:100%;height:100%;min-width:0;max-height:none;padding:8% 10% 12%;background:none!important;border:0!important;box-shadow:none!important;filter:none!important;transform-origin:bottom center}
+.book-spine .book-cover-frame{display:block;position:absolute;z-index:0;inset:1px;bottom:0;height:auto;border:1px solid transparent;border-radius:6px;background:linear-gradient(90deg,transparent,rgba(255,215,139,.08),transparent);box-shadow:none;filter:none;opacity:0;transition:opacity .25s,transform .25s,box-shadow .25s}
+.book-spine .book-title,.book-spine .book-lock{z-index:2}
+.book-spine.book-drobby .book-title{color:#f0c87c;text-shadow:0 2px 2px #1a0c04,0 0 8px rgba(244,190,92,.32)}
+.book-spine.locked .book-title{color:#a9906b;text-shadow:0 2px 3px #090604}
+.book-spine.available:hover,.book-spine.available:focus-visible,.book-spine.pulled,.book-spine.locked:hover{transform:translateY(-3px) scale(1.012);filter:none!important}
+.book-spine:hover .book-cover-frame,.book-spine:focus-visible .book-cover-frame,.book-spine.pulled .book-cover-frame{opacity:1;transform:translateY(-2px);border-color:rgba(226,175,86,.24);box-shadow:0 0 15px rgba(226,158,60,.23),inset 0 0 14px rgba(255,215,139,.08)}
+.book-spine.locked:hover .book-cover-frame{border-color:rgba(174,145,104,.15);box-shadow:0 0 10px rgba(119,94,66,.15)}
+.book-spine .book-lock{bottom:12%;transform:translateX(-50%) scale(.78)}
+@media(max-width:900px){.shelf-books{left:34.33%;right:34.33%;top:20.83%;bottom:33.47%;gap:1.5%}.book-spine{padding:7% 6% 11%}.book-spine .book-title{font-size:10px}.book-spine.locked .book-title{font-size:15px}}
+
+/* Tower details float over the map so sidebar controls remain accessible. */
+.field-wrap > .tower-tooltip{
+  position:absolute;
+  z-index:30;
+  top:14px;
+  right:14px;
+  left:auto;
+  width:min(250px,calc(100% - 28px));
+  max-width:250px;
+  min-height:0;
+  padding:10px 12px;
+  border:2px solid #8a6330;
+  border-radius:12px;
+  background:rgba(255,246,210,.97);
+  box-shadow:0 8px 24px rgba(44,30,10,.28),inset 0 0 0 2px rgba(255,255,255,.45);
+  color:#35250f;
+  font-size:10px;
+  line-height:1.45;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(-5px);
+  transition:opacity .14s ease,transform .14s ease;
+}
+.field-wrap > .tower-tooltip.visible{
+  opacity:1;
+  transform:none;
+}
+.field-wrap > .tower-tooltip h3{
+  margin:0 0 5px;
+  color:#5b3b14;
+  font-size:13px;
+  line-height:1.25;
+}
+
+/* Gentle chapter-clear storybook reward. */
+.chapter-reward{position:absolute;z-index:18;inset:0;display:grid;place-items:center;background:rgba(24,18,11,.72);backdrop-filter:blur(2px)}
+.chapter-reward.hidden{display:none}
+.chapter-reward-page{position:relative;width:min(620px,88%);padding:30px 38px 26px;overflow:hidden;border:5px solid #765126;border-radius:8px 18px 18px 8px;background:radial-gradient(circle at 50% 38%,rgba(255,249,210,.98),rgba(230,199,139,.98) 72%),#ead19a;box-shadow:inset 15px 0 22px rgba(87,51,20,.16),inset 0 0 0 3px rgba(255,245,202,.72),0 0 30px rgba(255,210,94,.32),0 20px 50px rgba(0,0,0,.48);color:#4a3118;text-align:center;animation:chapter-reward-open .48s ease-out both}
+.chapter-reward-page::before{content:"";position:absolute;inset:12px;border:1px solid rgba(125,84,37,.55);border-radius:5px 13px 13px 5px;box-shadow:inset 0 0 18px rgba(112,72,27,.12);pointer-events:none}
+.chapter-reward-page::after{content:"";position:absolute;top:22px;right:28px;width:44px;height:8px;background:radial-gradient(circle,rgba(166,112,36,.5) 0 2px,transparent 3px);background-size:14px 8px;animation:paper-glimmer 2.8s ease-in-out infinite}
+.chapter-reward-page small,.chapter-reward-page strong,.chapter-reward-page b{position:relative;display:block}
+.chapter-reward-page small{color:#947044;font:10px Georgia,serif;letter-spacing:.28em}
+.chapter-reward-page strong{margin-top:12px;font:clamp(18px,2.3vw,27px) "Yu Mincho",YuMincho,serif;letter-spacing:.06em}
+.chapter-reward-emblem{position:relative;display:grid;place-items:center;width:min(480px,96%);height:220px;margin:16px auto 12px;overflow:hidden;border:2px solid #a87936;border-radius:5px 12px 12px 5px;background:linear-gradient(145deg,#f7e9bd,#d5ad66);box-shadow:inset 9px 0 12px rgba(79,48,18,.16),0 0 24px rgba(255,209,91,.48)}
+.chapter-reward-emblem img{display:block;width:100%;height:100%;object-fit:contain;background:#e8cf97}
+.chapter-reward-page b{font:17px "Yu Mincho",YuMincho,serif}
+.chapter-reward-actions{position:relative;display:flex;gap:10px;margin-top:24px}
+.chapter-reward-actions button{flex:1;padding:11px 9px;border:2px solid #765126;border-radius:9px;background:#f8e8b9;color:#50351a;box-shadow:inset 0 0 0 2px rgba(255,251,224,.65);font-weight:900;cursor:pointer}
+.chapter-reward-actions button:last-child{background:#dca84d;color:#fffaf0}
+.chapter-reward-actions button:hover{filter:brightness(1.06);transform:translateY(-1px)}
+@keyframes chapter-reward-open{from{opacity:0;transform:perspective(700px) rotateY(-7deg) scale(.92)}to{opacity:1;transform:none}}
+@keyframes paper-glimmer{50%{opacity:.3}}
+
+.book-page-content{position:absolute;z-index:1;inset:52px 48px 48px;display:grid;grid-template-rows:minmax(0,3fr) minmax(0,2fr);gap:14px;min-height:0;padding:0;overflow:hidden}
+.book-page-image{position:relative;z-index:1;grid-row:1;width:100%;max-width:none;height:100%;max-height:none;min-height:0;margin:0;object-fit:contain;object-position:center;border:1px solid rgba(120,79,38,.12);border-radius:8px;filter:sepia(.06) saturate(.94) contrast(.98);box-shadow:0 5px 13px rgba(72,42,17,.11),inset 0 0 13px rgba(255,244,207,.28);-webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.96) 0 91%,transparent 100%);mask-image:linear-gradient(to bottom,rgba(0,0,0,.96) 0 91%,transparent 100%)}
+.book-page-content > p{position:relative!important;z-index:2;grid-row:2;display:flex;align-items:center;justify-content:center;margin:0!important;padding:8px 7%!important;color:#4b321b;font-size:clamp(16px,1.45vw,21px);line-height:1.9;text-align:center;white-space:pre-line}
+.book-page-image[hidden] + p{grid-row:1 / -1}
+.book-page.locked .book-page-content,.book-page.empty-page .book-page-content{grid-template-rows:1fr;place-items:center}
+.book-page.locked .book-page-content > p,.book-page.empty-page .book-page-content > p{grid-row:1}
+.book-page > small{position:absolute;z-index:4;right:0;bottom:18px;left:0;margin:0;text-align:center}
+
+@media(max-width:900px){
+  .book-page-content{inset:42px 30px 42px;gap:9px}
+  .book-page-content > p{padding:5px 4%!important;font-size:13px;line-height:1.65}
+}
+
+/* Front-facing reading view: artwork stays flat while a paper layer turns. */
+.storybook-reader{
+  width:100vw;
+  height:100vh;
+  max-width:none;
+  padding:1.5vh 1.5vw 5vh;
+  perspective:none;
+  transform:none;
+}
+.storybook-book{
+  width:min(97vw,168vh);
+  min-height:0;
+  aspect-ratio:16/9;
+  transform:none!important;
+  transform-style:flat;
+  perspective:none;
+  box-shadow:0 20px 52px rgba(0,0,0,.58);
+}
+.book-page,.book-page.left,.book-page.right{
+  transform:none!important;
+  transform-style:flat;
+  backface-visibility:visible;
+}
+.book-page-image{
+  border-radius:2px;
+  transform:none!important;
+}
+.storybook-book.turn-forward .book-page.right,
+.storybook-book.turn-backward .book-page.left{
+  animation:none!important;
+  transform:none!important;
+  filter:none!important;
+  box-shadow:none!important;
+}
+.storybook-book.turning::after{
+  content:"";
+  position:absolute;
+  z-index:12;
+  display:block;
+  top:7%;
+  bottom:9%;
+  width:45.5%;
+  border:1px solid rgba(121,78,31,.22);
+  background:linear-gradient(90deg,rgba(225,194,132,.18),rgba(255,241,196,.82) 45%,rgba(116,72,28,.22));
+  box-shadow:0 5px 20px rgba(55,31,12,.28);
+  pointer-events:none;
+}
+.storybook-book.turn-forward::after{
+  left:50%;
+  transform-origin:left center;
+  animation:flat-paper-forward .44s ease-in-out both;
+}
+.storybook-book.turn-backward::after{
+  right:50%;
+  transform-origin:right center;
+  animation:flat-paper-backward .44s ease-in-out both;
+}
+@keyframes flat-paper-forward{
+  0%{opacity:.18;transform:scaleX(1)}
+  48%{opacity:.82;transform:scaleX(.035)}
+  52%{opacity:.82;transform:translateX(-100%) scaleX(.035)}
+  100%{opacity:0;transform:translateX(-100%) scaleX(1)}
+}
+@keyframes flat-paper-backward{
+  0%{opacity:.18;transform:scaleX(1)}
+  48%{opacity:.82;transform:scaleX(.035)}
+  52%{opacity:.82;transform:translateX(100%) scaleX(.035)}
+  100%{opacity:0;transform:translateX(100%) scaleX(1)}
+}
+
+@media(max-width:900px){
+  .storybook-reader{padding:1vh 1vw 6vh}
+  .storybook-book{width:min(99vw,168vh)}
+}
+
+/* Chapter reward journey: bookshelf, highlighted volume, then opened page. */
+.chapter-reward{
+  isolation:isolate;
+  overflow:hidden;
+  background:#090503 url("assets/library-bookshelf-with-books.png") center/contain no-repeat;
+  backdrop-filter:none;
+  animation:reward-scene-fade .65s ease both;
+}
+.chapter-reward::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:radial-gradient(ellipse at 38% 45%,rgba(218,157,54,.05),rgba(5,3,2,.3) 64%),rgba(9,5,3,.22);
+  pointer-events:none;
+}
+.chapter-reward-book{
+  position:absolute;
+  z-index:2;
+  inset:0;
+  opacity:0;
+  background:url("assets/library-bookshelf-with-books.png") center/contain no-repeat;
+  clip-path:polygon(34.4% 21%,41.6% 21%,41.6% 67.2%,34.4% 67.2%);
+  transform-origin:38% 64%;
+  pointer-events:none;
+}
+.chapter-reward.shelf-stage .chapter-reward-book{
+  animation:reward-book-pull 1.15s ease-out both;
+}
+.chapter-reward-shelf-copy{
+  position:absolute;
+  z-index:4;
+  right:8%;
+  bottom:10%;
+  left:8%;
+  padding:14px 24px;
+  color:#f6ddb0;
+  text-align:center;
+  text-shadow:0 2px 7px #160b05;
+  background:linear-gradient(90deg,transparent,rgba(28,14,6,.82),transparent);
+  opacity:0;
+}
+.chapter-reward-shelf-copy strong,.chapter-reward-shelf-copy b{display:block}
+.chapter-reward-shelf-copy strong{font:clamp(18px,2.4vw,31px) "Yu Mincho",YuMincho,serif;letter-spacing:.08em}
+.chapter-reward-shelf-copy b{margin-top:7px;color:#e7b963;font:clamp(14px,1.5vw,20px) "Yu Mincho",YuMincho,serif}
+.chapter-reward.shelf-stage .chapter-reward-shelf-copy{animation:reward-copy-in .7s .32s ease both}
+.chapter-reward.page-stage .chapter-reward-shelf-copy{opacity:0;transition:opacity .28s}
+.chapter-reward .chapter-reward-page{
+  z-index:6;
+  opacity:0;
+  pointer-events:none;
+  animation:none;
+  transform:scale(.9);
+}
+.chapter-reward.page-stage .chapter-reward-page{
+  pointer-events:auto;
+  animation:reward-page-open .58s ease-out both;
+}
+.chapter-reward.page-stage .chapter-reward-book{opacity:0;transition:opacity .3s}
+.chapter-complete-pages{display:none;position:relative;justify-content:center;gap:6px;margin:12px 0 0}
+.chapter-complete-pages span{display:grid;width:31px;height:31px;place-items:center;border:1px solid #a97935;border-radius:50%;background:#f4dfa8;color:#6b431b;font:9px Georgia,serif;box-shadow:0 0 8px rgba(234,182,69,.28)}
+.chapter-reward.final-page .chapter-complete-pages{display:flex}
+.chapter-reward.final-page .chapter-reward-page{box-shadow:inset 15px 0 22px rgba(87,51,20,.16),inset 0 0 0 3px rgba(255,245,202,.72),0 0 42px rgba(255,207,84,.58),0 20px 55px rgba(0,0,0,.5)}
+.chapter-reward.final-page .chapter-reward-book{filter:drop-shadow(0 0 18px rgba(255,207,91,.9)) drop-shadow(0 0 38px rgba(255,170,45,.46))}
+@keyframes reward-scene-fade{from{opacity:0}to{opacity:1}}
+@keyframes reward-book-pull{0%{opacity:0;transform:translateY(0) scale(1);filter:none}30%{opacity:1}70%{opacity:1;transform:translateY(-8px) scale(1.018);filter:drop-shadow(0 0 13px rgba(247,192,84,.72))}100%{opacity:1;transform:translateY(-12px) scale(1.025);filter:drop-shadow(0 0 19px rgba(255,204,100,.88)) drop-shadow(0 12px 9px rgba(0,0,0,.66))}}
+@keyframes reward-copy-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes reward-page-open{0%{opacity:0;transform:scale(.88)}45%{opacity:1;transform:scale(1.018)}100%{opacity:1;transform:none}}
+
+@media(max-width:900px){
+  .chapter-reward-shelf-copy{bottom:7%;padding:10px 14px}
+  .chapter-reward .chapter-reward-page{width:min(560px,91%);padding:24px 28px 21px}
+  .chapter-reward .chapter-reward-emblem{height:180px}
+}
+
+/* Keep the Drobby spine title high and use the explicit top-down book artwork. */
+.book-spine.book-drobby .book-title{
+  position:absolute;
+  top:25%;
+  left:50%;
+  width:auto;
+  height:auto;
+  margin:0;
+  transform:translateX(-50%);
+  writing-mode:vertical-rl;
+  text-orientation:upright;
+}
+.storybook-book{
+  background:none!important;
+}
+.storybook-book-art{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  pointer-events:none;
+  user-select:none;
+}
+.storybook-book > .book-page{
+  position:relative;
+  z-index:1;
+}
+
+@media(max-width:900px){
+  .book-spine.book-drobby .book-title{top:22%}
+}
+
+/* Keep illustrations inside the printable area of each physical page. */
+.storybook-book > .book-page,
+.storybook-book > .book-page.left,
+.storybook-book > .book-page.right{
+  position:relative;
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.storybook-book .book-page-content{
+  position:absolute;
+  z-index:2;
+  inset:0;
+  display:grid;
+  grid-template-rows:minmax(0,49%) minmax(0,1fr);
+  gap:2.5%;
+  min-width:0;
+  min-height:0;
+  padding:16% 14% 8%;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+.storybook-book .book-page-image{
+  position:relative;
+  grid-row:1;
+  align-self:stretch;
+  justify-self:stretch;
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:100%;
+  max-height:100%;
+  margin:0;
+  object-fit:contain;
+  object-position:center;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+.storybook-book .book-page-image[hidden]{display:none}
+.storybook-book .book-page-content > p{
+  grid-row:2;
+  min-width:0;
+  min-height:0;
+  overflow:hidden;
+}
+.storybook-book .book-page-image[hidden] + p{
+  grid-row:1 / -1;
+}
+.storybook-book .book-page > small{
+  z-index:5;
+  bottom:3.5%;
+}
+
+@media(max-width:900px){
+  .storybook-book .book-page-content{
+    inset:0;
+    gap:2%;
+    padding:14% 12% 9%;
+  }
+}
+
+/* Touch devices scale the complete spread as one unit. This keeps artwork,
+   captions, margins and page numbers on the same coordinate system. */
+@media (hover:none) and (pointer:coarse){
+  .storybook-reader.mobile-book-fit{position:relative;width:100vw;height:100vh;padding:0;overflow:hidden;place-items:initial}
+  .storybook-reader.mobile-book-fit .storybook-book{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:1600px!important;
+    min-width:1600px!important;
+    max-width:none!important;
+    height:900px!important;
+    min-height:900px!important;
+    aspect-ratio:auto!important;
+    transform:translate(-50%,-50%) scale(var(--mobile-book-scale, .5))!important;
+    transform-origin:center center!important;
+    contain:layout paint;
+  }
+  .storybook-reader.mobile-book-fit .storybook-book > .book-page,
+  .storybook-reader.mobile-book-fit .storybook-book > .book-page.left,
+  .storybook-reader.mobile-book-fit .storybook-book > .book-page.right{width:100%;height:100%;min-height:0;padding:9% 10% 9%}
+  .storybook-reader.mobile-book-fit .storybook-book .book-page-content{inset:0;grid-template-rows:minmax(0,49%) minmax(0,1fr);gap:2.5%;padding:16% 14% 8%}
+  .storybook-reader.mobile-book-fit .storybook-book .book-page-image{width:100%;height:100%;max-width:100%;max-height:100%;transform:none!important}
+  .storybook-reader.mobile-book-fit .storybook-book .book-page-content > p{font-size:21px!important;line-height:1.9!important;padding:8px 7%!important;transform:none!important}
+  .storybook-reader.mobile-book-fit .storybook-book .book-page > small{bottom:3.5%;font-size:13px}
+}
+
+/* Full-screen illustration viewer layered above the open book. */
+.book-page-image:not([hidden]){cursor:zoom-in}
+.book-page-image:focus-visible{outline:2px solid rgba(171,116,47,.72);outline-offset:3px}
+.illustration-viewer{
+  position:fixed;
+  z-index:220;
+  inset:0;
+  display:grid;
+  grid-template-columns:minmax(44px,1fr) minmax(0,12fr) minmax(44px,1fr);
+  place-items:center;
+  padding:3vh 3vw;
+  background:radial-gradient(ellipse at center,rgba(75,48,25,.42),rgba(10,6,4,.94) 72%),rgba(7,4,3,.94);
+  backdrop-filter:blur(4px);
+  animation:illustration-viewer-in .24s ease both;
+}
+.illustration-viewer.hidden{display:none}
+.illustration-frame{
+  grid-column:2;
+  display:grid;
+  max-width:100%;
+  max-height:94vh;
+  margin:0;
+  padding:clamp(9px,1.2vw,18px);
+  border:2px solid #8c622d;
+  border-radius:7px;
+  background:linear-gradient(145deg,#ead6a4,#c99f5d);
+  box-shadow:inset 0 0 0 3px rgba(255,239,192,.5),0 24px 65px rgba(0,0,0,.72),0 0 28px rgba(174,117,43,.18);
+}
+.illustration-frame img{
+  display:block;
+  width:auto;
+  max-width:min(84vw,1400px);
+  height:auto;
+  max-height:80vh;
+  margin:auto;
+  object-fit:contain;
+  background:#d8bd83;
+  box-shadow:0 3px 14px rgba(61,34,14,.3);
+}
+.illustration-frame figcaption{
+  padding:10px 8px 1px;
+  color:#503619;
+  font:clamp(13px,1.2vw,18px) "Yu Mincho",YuMincho,Georgia,serif;
+  letter-spacing:.08em;
+  text-align:center;
+}
+.illustration-close,.illustration-nav{
+  border:2px solid #8b622f;
+  background:linear-gradient(#dfc083,#9d6a34);
+  color:#fff0c8;
+  box-shadow:inset 0 0 0 1px rgba(255,239,190,.4),0 6px 18px rgba(0,0,0,.4);
+  text-shadow:0 1px #4a2b16;
+  cursor:pointer;
+}
+.illustration-close{
+  position:absolute;
+  top:22px;
+  right:25px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  font-size:24px;
+}
+.illustration-nav{
+  width:46px;
+  height:72px;
+  border-radius:20px;
+  font:38px/1 Georgia,serif;
+}
+.illustration-nav.prev{grid-column:1}.illustration-nav.next{grid-column:3}
+.illustration-nav:disabled{visibility:hidden}
+.illustration-close:hover,.illustration-nav:not(:disabled):hover{filter:brightness(1.12)}
+@keyframes illustration-viewer-in{from{opacity:0}to{opacity:1}}
+
+@media(max-width:700px){
+  .illustration-viewer{grid-template-columns:38px minmax(0,1fr) 38px;padding:2vh 1.5vw}
+  .illustration-frame img{max-width:78vw;max-height:77vh}
+  .illustration-close{top:10px;right:10px;width:38px;height:38px}
+  .illustration-nav{width:34px;height:58px;font-size:29px}
+}
+
+/* Strong tower selection feedback. */
+.tower-picker .tower-card.selected{
+  position:relative;
+  z-index:4;
+  border:3px solid #ffd35a!important;
+  background:#fff5c8!important;
+  box-shadow:0 0 0 2px rgba(116,72,21,.72),0 0 14px rgba(255,211,80,.9),0 0 27px rgba(255,177,39,.48)!important;
+  transform:scale(1.06)!important;
+}
+.selected-tower-indicator{
+  position:absolute;
+  z-index:10;
+  top:12px;
+  left:50%;
+  min-width:180px;
+  padding:7px 17px 8px;
+  border:2px solid #d5a538;
+  border-radius:5px 5px 12px 12px;
+  background:linear-gradient(#fff0b4,#d6a34c);
+  color:#4f3215;
+  box-shadow:inset 0 0 0 2px rgba(255,248,210,.62),0 5px 18px rgba(42,26,9,.35);
+  text-align:center;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.preparation-phase{position:absolute;z-index:7;top:12px;left:50%;display:grid;min-width:270px;padding:8px 20px;border:3px solid #795326;border-radius:15px;background:rgba(255,241,193,.94);color:#60411f;box-shadow:inset 0 0 0 2px rgba(255,252,225,.75),0 5px 16px rgba(55,36,16,.25);text-align:center;transform:translateX(-50%);pointer-events:none;animation:preparation-in .42s ease both}.preparation-phase.hidden{display:none}.preparation-phase strong{font:15px "Mochiy Pop One";letter-spacing:.08em}.preparation-phase span{margin-top:2px;font:10px "Yu Mincho",YuMincho,serif}@keyframes preparation-in{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+.preparation-phase:not(.hidden)~.selected-tower-indicator:not(.hidden){top:72px}
+.selected-tower-indicator.hidden{display:none}
+.selected-tower-indicator small,.selected-tower-indicator strong{display:block}
+.selected-tower-indicator small{font-size:9px;letter-spacing:.12em}
+.selected-tower-indicator strong{margin-top:1px;font:12px "Mochiy Pop One"}
+.placement-feedback{
+  position:absolute;
+  z-index:11;
+  top:82px;
+  left:50%;
+  padding:8px 18px;
+  border:2px solid rgba(244,205,111,.8);
+  border-radius:18px;
+  background:rgba(62,40,18,.88);
+  color:#fff0bd;
+  font:12px "Mochiy Pop One";
+  text-shadow:0 2px #39220d;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.placement-feedback.hidden{display:none}
+.placement-feedback.flash{animation:tower-placed-flash .9s ease both}
+@keyframes tower-placed-flash{0%{opacity:0;transform:translateX(-50%) translateY(8px) scale(.94)}20%,70%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}100%{opacity:0;transform:translateX(-50%) translateY(-5px)}}
+
+/* Fixed parchment tower information panel inside the sidebar. */
+.tower-picker > .tower-tooltip{
+  position:relative;
+  z-index:2;
+  left:auto;
+  right:auto;
+  top:auto;
+  grid-column:1 / -1;
+  display:block;
+  width:100%;
+  max-width:none;
+  height:100%;
+  min-height:0;
+  max-height:none;
+  margin:3px 0 1px;
+  padding:14px 16px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  align-self:stretch;
+  border:2px solid #8a6330;
+  border-radius:10px;
+  background:radial-gradient(circle at 50% 20%,#fff6d5,#e5c98e);
+  box-shadow:inset 0 0 0 2px rgba(255,250,222,.62),0 3px 8px rgba(56,34,12,.22);
+  color:#3f2b16;
+  font-size:11.5px;
+  line-height:1.62;
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(126,86,37,.58) transparent;
+}
+.tower-picker > .tower-tooltip h3{margin:0 0 3px;color:#684317;font-size:18px;line-height:1.3}
+.tower-info-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.tower-info-heading h3{min-width:0;margin:0!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tower-hint-button{flex:0 0 auto;padding:5px 7px;border:1px solid #9a713c;border-radius:8px;background:linear-gradient(#fff2c6,#dfbd79);color:#65451e;font:9px/1.2 "Yu Mincho",YuMincho,serif;font-weight:900;box-shadow:0 2px 5px rgba(66,43,18,.18);cursor:pointer;white-space:nowrap}
+.tower-hint-button:hover,.tower-hint-button:focus-visible{filter:brightness(1.06);box-shadow:0 0 0 2px rgba(255,223,143,.42)}
+.tower-rating{margin:0 0 8px;color:#d39a2f;font-size:14px;letter-spacing:.08em;line-height:1;text-shadow:0 1px rgba(255,255,255,.8)}
+.tower-rating span{color:#b9a47e}
+.tower-role-line{display:grid;grid-template-columns:auto 1fr;gap:8px;margin-bottom:6px;padding:6px 8px;border-radius:7px;background:rgba(128,84,34,.08)}
+.tower-role-line strong,.tower-use-grid strong{color:#8a5a20}
+.tower-picker > .tower-tooltip .tower-description{margin:0 0 8px;padding:0 2px 8px;font-size:11.5px;line-height:1.72}
+.tower-use-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;margin-bottom:8px}
+.tower-use-grid section{min-width:0;padding:6px 8px;border:1px solid rgba(126,86,37,.23);border-radius:6px;background:rgba(255,249,225,.48);line-height:1.45}
+.tower-use-grid strong{display:block;font-size:9px;letter-spacing:.06em}
+.tower-use-grid ul{margin:2px 0 0;padding:0;list-style:none}.tower-use-grid li::before{content:"・"}.tower-use-grid li{white-space:normal}
+.tower-stat-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 9px;margin-top:7px;padding-top:7px;border-top:1px dashed rgba(122,83,37,.38)}
+.tower-stat-summary span{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;padding:3px 5px;border-radius:5px;background:rgba(255,249,228,.38);white-space:nowrap}
+.tower-stat-summary b{white-space:nowrap}
+.tower-stat-summary .wide-stat{grid-column:1/-1}
+.tower-special-line{margin-top:7px;line-height:1.45}
+.tower-modifier-section{min-height:62px;margin-top:4px;padding:5px 7px;border:1px solid rgba(126,86,37,.35);border-radius:7px;background:rgba(255,248,218,.58);box-sizing:border-box}
+.tower-modifier-section>strong{display:block;margin-bottom:2px;color:#7d541d;font-size:9px}
+.tower-modifier-list{display:grid;gap:2px;max-height:72px;overflow-y:auto;scrollbar-width:thin;pointer-events:auto}
+.tower-modifier-list span{display:block;min-width:0;color:#4c3923;font-size:9px;font-weight:800;line-height:1.25;white-space:nowrap}
+.tower-picker > .tower-tooltip .tower-ability-details{margin-top:8px;padding:7px 9px;gap:3px;border-radius:7px;background:rgba(255,248,218,.58)}
+.tower-picker > .tower-tooltip .tower-ability-details strong{color:#7d541d;font-size:10px}
+.tower-picker > .tower-tooltip .tower-ability-details span{font-size:10.5px;line-height:1.45}
+.tower-picker > .tower-tooltip .compact-ability{display:block}
+.tower-picker > .tower-tooltip .compact-ability>strong{display:block;margin-bottom:2px}
+.ability-value-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px 6px}
+.ability-value-grid span{min-width:0;white-space:nowrap}
+.support-target-summary{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:2px;color:#665038;font-size:9px;line-height:1.35}
+.support-target-summary span{padding:0;border:0;background:none;text-align:left}
+.support-stacking-note{margin:8px 0 0;padding:7px 9px;border-left:3px solid rgba(200,145,65,.7);background:rgba(255,244,203,.54);font:10px/1.55 "Yu Mincho",YuMincho,serif}
+.tower-recommend{display:grid;gap:2px;margin-top:8px;padding:7px 9px;border-top:1px dashed rgba(122,83,37,.38);background:rgba(255,246,211,.42)}
+.tower-recommend strong{color:#8a5a20;font-size:10px}.tower-recommend span{font-family:"Yu Mincho",YuMincho,serif;line-height:1.55}
+.tower-essential-info{display:block}
+.tower-essential-info .tower-rating{margin-bottom:3px}
+.tower-essential-info .tower-role-line{display:flex;gap:3px;margin:1px 0 2px;padding:0;border-radius:0;background:none;line-height:1.35}
+.tower-essential-info .tower-role-line strong{flex:0 0 auto}
+.tower-use-lines{display:grid;gap:0;margin:0;padding:2px 0 3px;border-top:1px dotted rgba(122,83,37,.32);line-height:1.35}
+.tower-use-lines span{display:block;min-width:0}
+.tower-use-lines strong{color:#8a5a20}
+.tower-essential-info .tower-stat-summary{margin-top:1px;padding:3px 0;border-top:1px dotted rgba(122,83,37,.32);gap:1px 12px}
+.tower-essential-info .tower-stat-summary span{padding:0;border-radius:0;background:none;line-height:1.35}
+.tower-special-compact{display:grid;gap:1px;padding:3px 0 0;border-top:1px dotted rgba(122,83,37,.32);line-height:1.35}
+.tower-special-compact strong{color:#7d541d}
+.tower-special-compact small{color:#665038;font-size:9px;line-height:1.35}
+.tower-supplemental-info{margin-top:3px;padding-top:0;border-top:0}
+.tower-supplemental-info:empty{display:none}
+.tower-description strong{display:block;margin-bottom:2px;color:#8a5a20;font-size:10px}
+.tower-picker > .tower-tooltip{scrollbar-width:thin;scrollbar-color:rgba(145,104,55,.42) rgba(231,207,157,.18)}
+.tower-picker > .tower-tooltip:hover{scrollbar-color:rgba(126,84,37,.72) rgba(231,207,157,.3)}
+.tower-picker > .tower-tooltip::-webkit-scrollbar{width:6px}
+.tower-picker > .tower-tooltip::-webkit-scrollbar-track{margin:7px 0;border-radius:8px;background:rgba(222,197,147,.2)}
+.tower-picker > .tower-tooltip::-webkit-scrollbar-thumb{border:1px solid rgba(255,243,207,.45);border-radius:8px;background:linear-gradient(#c7a875,#92704a)}
+.tower-picker > .tower-tooltip:hover::-webkit-scrollbar-thumb{background:linear-gradient(#d0af76,#76512e)}
+.tower-info-default{display:grid;min-height:90px;margin:0;place-items:center;color:#765b38;font:11px/1.7 "Yu Mincho",YuMincho,serif;text-align:center}
+
+.tower-hint-popup{position:absolute;z-index:17;top:70px;left:16px;width:min(340px,calc(100% - 32px));padding:17px 20px 16px;border:3px solid #765027;border-radius:16px;background:radial-gradient(circle at 45% 10%,rgba(255,251,225,.96),rgba(227,198,137,.98));box-shadow:inset 0 0 0 2px rgba(255,249,218,.72),0 12px 32px rgba(43,28,13,.38);color:#4d351c;animation:tower-hint-in .2s ease-out}
+.tower-hint-popup.hidden{display:none}
+.tower-hint-popup>small{display:block;color:#9a702c;font:8px Georgia,serif;letter-spacing:.18em}
+.tower-hint-popup h3{margin:4px 32px 8px 0;color:#6d4a20;font:17px "Mochiy Pop One"}
+.tower-hint-popup>strong{display:block;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed rgba(117,77,34,.42);font:14px "Yu Mincho",YuMincho,serif}
+.tower-hint-popup ul{display:grid;gap:7px;margin:0;padding:0;list-style:none;font:12px/1.55 "Yu Mincho",YuMincho,serif}
+.tower-hint-popup li{padding-left:1em}.tower-hint-popup li::before{content:"・";margin-left:-1em}
+.tower-hint-popup>button{position:absolute;top:9px;right:10px;width:30px;height:30px;padding:0;border:1px solid #805a2c;border-radius:50%;background:#fff1c5;color:#62421e;font-size:17px;cursor:pointer}
+@keyframes tower-hint-in{from{opacity:0;transform:translateY(-5px) scale(.98)}to{opacity:1;transform:none}}
+
+/* Tap/click menu beside the selected tower. */
+.tower-action-menu{position:absolute;z-index:13;display:grid;min-width:118px;padding:6px;border:2px solid #795326;border-radius:12px;background:linear-gradient(145deg,rgba(255,247,215,.98),rgba(222,191,126,.98));box-shadow:inset 0 0 0 2px rgba(255,253,232,.7),0 8px 22px rgba(40,27,13,.35);color:#50371d;transform-origin:center;animation:tower-action-in .16s ease-out}
+.tower-action-menu.hidden{display:none}
+.tower-action-menu button{display:grid;min-width:108px;min-height:48px;padding:6px 9px;border:2px solid #7a5527;border-radius:9px;background:linear-gradient(#fff0b8,#d9ad57);color:#4b3218;box-shadow:0 2px #6c4b27;cursor:pointer;place-items:center}
+.tower-action-menu button b{font-size:14px}.tower-action-menu button small{font-size:9px;line-height:1.2}
+.tower-action-menu button:hover:not(:disabled),.tower-action-menu button:focus-visible:not(:disabled){filter:brightness(1.07);transform:translateY(-1px)}
+.tower-action-menu button:disabled{border-color:#988a6f;background:#c9bea6;color:#6f6657;box-shadow:none;cursor:not-allowed;filter:grayscale(.35)}
+@keyframes tower-action-in{from{opacity:0;transform:scale(.94) translateY(4px)}to{opacity:1;transform:none}}
+
+@media(max-width:900px){
+  .tower-picker > .tower-tooltip{height:100%;min-height:0;max-height:none;padding:11px 12px;font-size:10.5px;line-height:1.55;overflow-x:hidden;overflow-y:auto}
+  .tower-picker > .tower-tooltip h3{font-size:15px}.tower-picker > .tower-tooltip .tower-description{font-size:10px}.tower-use-grid{gap:4px}.tower-use-grid strong{font-size:8.5px}
+  .tower-use-lines{font-size:9.5px}.tower-special-compact small{font-size:8.5px}
+  .tower-modifier-section{min-height:50px;margin-top:3px;padding:4px 5px}.tower-modifier-list{max-height:55px}.tower-modifier-list span,.tower-modifier-section>strong{font-size:8px}
+  .tower-info-default{min-height:78px;font-size:10px}
+  .selected-tower-indicator{top:9px;min-width:150px;padding:5px 12px}
+  .tower-action-menu{min-width:112px;padding:5px}.tower-action-menu button{min-width:102px;min-height:48px;padding:5px}.tower-action-menu button b{font-size:13px}
+  .tower-hint-popup{top:54px;left:10px;width:min(300px,calc(100% - 20px));padding:13px 16px}.tower-hint-popup h3{font-size:14px}.tower-hint-popup ul{font-size:10px}
+}
+
+/* Developer-only progress reset tools on the mode screen. */
+.debug-tools{margin-top:12px;padding:8px 10px;border:1px solid rgba(120,78,31,.52);border-radius:9px;background:rgba(54,32,15,.35);color:#795329;font-size:11px}
+.debug-tools summary{cursor:pointer;font-weight:900}
+.debug-tools button{display:inline-block;width:calc(50% - 5px);min-height:34px;margin:8px 2px 0;padding:5px 7px!important;border:1px solid #876035!important;border-radius:7px!important;background:#efe0b8!important;color:#5c3b1c!important;font-size:10px!important;box-shadow:none!important}
+.debug-tools button:hover{background:#ffe9ae!important}
+.debug-panel{margin-top:10px;padding:12px;border:2px solid #765225;border-radius:12px;background:rgba(65,40,18,.92);color:#fff1bd;text-align:left}.debug-panel.hidden{display:none}.debug-panel h2{margin:0 0 8px;font:14px "Mochiy Pop One";color:#ffe49a}.debug-panel label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px}.debug-panel select{min-width:120px;padding:6px;border:1px solid #a77a36;border-radius:7px;background:#fff0c2;color:#503515}.mode-card .debug-panel button{display:inline-block;width:auto;margin:5px 2px;padding:6px 9px;border-width:1px;border-radius:7px;font-size:10px}.mode-card .debug-panel>#debug-start,.mode-card .debug-panel>#debug-start-wave35{display:block;width:100%;background:#ffd36a}.mode-card .debug-panel>#debug-start-wave35{background:#bfe48a;color:#3e3517}.debug-preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:2px}.mode-card .debug-panel>#debug-panel-close{display:block;width:100%;background:#c8b48b}.debug-toolbar{position:absolute;z-index:18;right:12px;bottom:150px;display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;max-width:190px;gap:3px;padding:5px;border:1px solid rgba(255,219,126,.72);border-radius:9px;background:rgba(42,27,16,.86);color:#ffe7a0;font-size:8px}.debug-toolbar.mode-hidden{display:none}.debug-toolbar button{padding:4px 6px;border:1px solid #9b7234;border-radius:5px;background:#f5dfaa;color:#493216;font-size:8px;cursor:pointer}.unlock-notice.debug-achievement{top:18%;border-color:#d0a547;background:linear-gradient(145deg,#fff2b8,#d9aa4f);color:#4c3418;font-size:18px}
+
+/* Mobile landscape only. Desktop layout remains unchanged. */
+@media (orientation:landscape) and (hover:none) and (pointer:coarse){
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%;touch-action:manipulation}
+  body{min-height:100dvh;background:#172414}
+  .game-screen{grid-template-columns:236px minmax(0,1fr)!important;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);background:#172414}
+  .map-column{height:100%!important;min-height:0}
+  .field-wrap{--map-left-crop:32px}
+  .tower-picker{width:236px!important;height:100%!important;padding:6px!important;grid-template-columns:repeat(2,minmax(0,88px))!important;grid-template-rows:auto repeat(5,76px) minmax(0,1fr) auto!important;justify-content:center!important;gap:6px!important;overflow:hidden!important}
+  .tower-picker h2{padding:0 2px 3px;font-size:10px;line-height:1.15}
+  .tower-card{height:76px!important;grid-template-rows:38px minmax(0,1fr)!important;padding:4px!important;border-radius:9px!important}
+  .tower-image-wrap{width:52px!important;height:38px!important}
+  .tower-image,.tower-preview{width:50px!important;height:37px!important}
+  .tower-copy strong{max-width:78px!important;font-size:8.5px!important}
+  .tower-copy b{font-size:9px!important}.tower-copy b::before{font-size:8px}
+  .tower-picker > .tower-tooltip{height:100%!important;min-height:0!important;max-height:none!important;margin:2px 0!important;padding:8px 9px!important;font-size:9px!important;line-height:1.45!important;overflow-x:hidden!important;overflow-y:auto!important}
+  .tower-modifier-section{min-height:42px;padding:3px 4px}.tower-modifier-list{max-height:46px}
+  .tower-picker > .tower-tooltip h3{margin-bottom:2px;font-size:12px}.tower-picker > .tower-tooltip .tower-description{font-size:9px}.tower-rating{font-size:9px}.tower-use-grid{grid-template-columns:1fr}.tower-essential-info .tower-stat-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:1px 5px;font-size:8.3px}.tower-use-lines{font-size:8.5px}.tower-special-compact small{font-size:8px}.tower-info-default{min-height:62px;font-size:9px}
+  .tower-info-heading{gap:4px}.tower-hint-button{padding:3px 5px;font-size:7px}.tower-hint-popup{top:43px;left:7px;width:min(270px,calc(100% - 14px));padding:10px 13px}.tower-hint-popup h3{font-size:12px}.tower-hint-popup>strong{font-size:10px}.tower-hint-popup ul{gap:4px;font-size:8.5px;line-height:1.4}
+  .tower-action-menu{min-width:108px;padding:5px}.tower-action-menu button{min-width:98px;min-height:46px;padding:5px 6px}.tower-action-menu button b{font-size:12px}.tower-action-menu button small{font-size:8px}
+  .sidebar-remove{height:44px!important;min-height:44px!important;margin-top:5px!important;padding:5px 7px!important;font-size:10px!important}
+  .topbar{gap:3px;padding:3px 5px;min-height:43px}
+  .resource-bar{border-width:2px;border-radius:9px}.resource-bar div{gap:3px;padding:3px 5px}.resource-bar small{display:block!important;font-size:8px}.resource-bar strong{font-size:11px}.heart,.coin,.skull{font-size:12px!important}.resource-bar .tower-slot-status{gap:2px;padding-inline:5px}.tower-slot-status span:first-child{font-size:12px}
+  .wave-title{min-width:118px;padding:3px 6px;border-width:2px;border-radius:8px}.wave-title strong{font-size:7px}.wave-title span{font-size:11px;letter-spacing:.3px}
+  .weather-hud{gap:3px;padding:3px 5px;border-width:2px;border-radius:8px}.weather-hud span{font-size:11px}.weather-hud strong{font-size:7.5px}
+  .top-actions{gap:3px}.top-actions button{min-width:28px;height:29px;padding:0 5px;border-width:2px;border-radius:7px;font-size:8px}#restart-button{min-width:42px}
+  .start-button{right:2%;bottom:2%;min-width:132px;padding:8px 12px;border-width:2px;border-radius:12px}.start-button b{font-size:11px}.start-button i{font-size:15px}
+  .selected-tower-indicator{top:6px;min-width:125px;padding:4px 9px}.selected-tower-indicator small{font-size:7px}.selected-tower-indicator strong{font-size:9px}
+  .placement-feedback{top:54px;padding:5px 12px;font-size:8px}
+  .chapter-transition small{font-size:15.3px}.chapter-transition strong{font-size:clamp(24px,4.25vw,49px)}.chapter-transition p{font-size:13.6px}.chapter-transition b{font-size:12.75px}.chapter-transition i{margin-top:20px;font-size:10.2px}
+  .mode-card{width:min(470px,88vw);max-height:92dvh;padding:14px 20px;overflow:auto}.mode-card h1{font-size:18px}.mode-card p{margin-bottom:8px;font-size:11px}.mode-card button{margin:6px 0;padding:8px}.mode-card strong{font-size:13px}.mode-card small{font-size:9px}.debug-tools{margin-top:6px;padding:5px}
+  .research-lab>div{max-height:88%;padding:15px;overflow:auto}.research-lab h2{font-size:17px}
+}
+
+@media(max-width:900px){
+  .field-wrap > .tower-tooltip{
+    top:10px;
+    right:10px;
+    width:min(220px,calc(100% - 20px));
+    font-size:9px;
+  }
+}
+
+/* Persistent Forest Research Lab. */
+.research-wallet{color:#76501f;font-weight:900}
+.research-option.legendary{border-color:#aa7924;background:linear-gradient(135deg,rgba(255,248,209,.92),rgba(225,188,104,.82))}
+.research-complete{position:absolute;z-index:3;inset:42% auto auto 50%;padding:14px 24px;border:2px solid #b58228;border-radius:18px;background:rgba(255,245,193,.96);color:#765019;box-shadow:0 0 22px rgba(255,211,91,.78);font:16px "Yu Mincho",YuMincho,serif;white-space:nowrap;transform:translate(-50%,-50%);pointer-events:none}
+.research-complete.hidden{display:none}.research-complete.play{animation:research-complete 1.25s ease both}
+.tower-tooltip .tower-buff-line.research{color:#53733b}
+@keyframes research-complete{0%{opacity:0;transform:translate(-50%,-35%) scale(.88)}22%,72%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-62%) scale(1.02)}}
+
+/* Final secret tower research and starlight unlock. */
+.research-option.star-research{border-color:#7c6aa3;background:linear-gradient(135deg,rgba(245,239,255,.94),rgba(205,190,232,.84))}
+.star-progress{color:#493e68;font-weight:900;line-height:1.55}
+.legendary-unlock.star-unlock{background:radial-gradient(circle at 50% 38%,#17274b 0,#080d20 48%,#02040c 100%)}
+.legendary-unlock.star-unlock::before{inset:0;background:radial-gradient(circle at 12% 20%,#fff7c8 0 1px,transparent 2px),radial-gradient(circle at 72% 14%,#d9e8ff 0 1.5px,transparent 2.5px),radial-gradient(circle at 37% 68%,#fff0a8 0 1px,transparent 2px),radial-gradient(circle at 88% 62%,#e6d7ff 0 1.5px,transparent 2.5px);background-size:110px 90px,160px 120px,130px 150px,190px 140px;opacity:.78;animation:star-unlock-drift 12s linear infinite}
+.legendary-unlock.star-unlock::after{background:radial-gradient(circle at 50% 43%,rgba(128,170,255,.28),transparent 35%),radial-gradient(circle at 50% 46%,rgba(255,228,150,.12),transparent 52%);opacity:1;animation:star-unlock-pulse 3.5s ease-in-out infinite}
+.legendary-unlock.star-unlock img{filter:drop-shadow(0 0 25px rgba(153,188,255,.68)) drop-shadow(0 0 48px rgba(255,228,150,.28))}
+.legendary-unlock.star-unlock .legendary-copy strong{color:#f3e9ff}.legendary-unlock.star-unlock .legendary-info b{color:#d9e7ff}
+@keyframes star-unlock-drift{to{background-position:110px 180px,-160px 240px,130px -150px,-190px 280px}}
+@keyframes star-unlock-pulse{50%{opacity:.62;transform:scale(1.04)}}
+
+/* Stable tower-card fallback for a missing raster asset. */
+.tower-image-wrap.asset-fallback{display:grid!important;place-items:center;background:radial-gradient(circle,#eee3b0,#73624c)!important;color:#fff1a8;font:24px Georgia,serif;text-shadow:0 2px 5px #35291c}
+.peace-tower-card-icon{position:relative;display:block;width:62px;height:48px;filter:drop-shadow(0 3px 2px rgba(68,50,20,.3))}
+.peace-card-base{position:absolute;left:5px;right:5px;bottom:2px;height:19px;border:2px solid #6a4a2c;border-radius:48% 48% 36% 36%;background:linear-gradient(#c99a60,#7b5433)}
+.peace-card-base::after{content:"";position:absolute;left:10px;right:10px;top:-8px;height:13px;border:1px solid rgba(91,58,31,.75);border-radius:50%;background:#d2ad75}
+.peace-card-cat{position:absolute;bottom:18px;width:22px;height:25px;border-radius:50% 50% 44% 44%;box-shadow:inset 0 -5px rgba(0,0,0,.08)}
+.peace-card-cat::before{content:"";position:absolute;left:3px;top:-13px;width:17px;height:17px;border-radius:50%}
+.peace-card-cat::after{content:"";position:absolute;left:6px;top:-10px;width:10px;height:7px;border-radius:50%;background:rgba(255,246,205,.8)}
+.peace-card-cat.drobby{left:15px;background:#2d2926}.peace-card-cat.drobby::before{background:linear-gradient(90deg,#2d2926 0 55%,#f4ead5 56%)}
+.peace-card-cat.hima{right:13px;background:#b9905e}.peace-card-cat.hima::before{background:#b9905e;box-shadow:inset 5px 0 rgba(92,62,38,.25),inset -5px 0 rgba(92,62,38,.18)}
+.peace-card-flower{position:absolute;left:50%;top:1px;color:#f3ca55;font-style:normal;font-size:13px;text-shadow:0 1px #7d5b25,0 0 6px rgba(255,232,146,.85);transform:translateX(-50%)}
+.tower-image.peace-tower-image{width:70px!important;height:54px!important;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(68,50,20,.28))}
+
+/* Compact research panel: gameplay continues behind it. */
+.field-wrap > .research-lab{position:absolute;z-index:15;inset:auto 12px 82px auto;display:block;width:min(410px,44%);max-height:72%;padding:0;background:none;backdrop-filter:none;pointer-events:none}
+.field-wrap > .research-lab.hidden{display:none}
+.field-wrap > .research-lab > div{width:100%;max-height:100%;padding:16px;overflow:auto;pointer-events:auto;box-shadow:inset 0 0 0 3px #fff5d3,0 10px 28px rgba(0,0,0,.4)}
+.field-wrap > .research-lab h2{font-size:18px}.field-wrap > .research-lab p{margin:5px 0;font-size:11px}
+.field-wrap > .research-lab .research-option{margin:5px 0;padding:8px}.field-wrap > .research-lab .research-option span{font-size:10px}
+.field-wrap > .research-lab .research-option button{min-width:118px;padding:5px;font-size:10px}
+.top-actions #research-button{position:relative}.top-actions #research-button.new-research{animation:research-new-button 1.6s ease-in-out infinite}.top-actions #research-button.new-research::after{content:attr(data-badge);position:absolute;top:-9px;right:-8px;padding:2px 5px;border:1px solid #7a4b15;border-radius:8px;background:#ffe180;color:#743e13;box-shadow:0 0 10px rgba(255,217,100,.8);font:8px "Mochiy Pop One"}@keyframes research-new-button{50%{transform:translateY(-3px);filter:brightness(1.15);box-shadow:inset 0 0 0 2px #e5b963,0 3px 0 rgba(0,0,0,.25),0 0 16px rgba(255,218,112,.72)}}
+.research-unlock-event{position:absolute;z-index:23;inset:0;display:grid;place-items:center;background:rgba(26,31,20,.7);backdrop-filter:blur(2px)}.research-unlock-event.hidden{display:none}.research-unlock-card{width:min(620px,88%);padding:24px 30px;border:4px solid #745026;border-radius:24px;background:linear-gradient(145deg,#fff1c7,#e3c47e);box-shadow:inset 0 0 0 3px rgba(255,250,220,.85),0 18px 45px rgba(0,0,0,.5);color:#4d371d;text-align:center;animation:research-event-in .55s ease both}.research-unlock-card>small{color:#8a641f;letter-spacing:.16em}.research-unlock-card h2{margin:7px 0 3px;color:#38573b;font:25px "Mochiy Pop One"}.research-house{font-size:62px;filter:drop-shadow(0 6px 5px rgba(70,45,15,.3));animation:research-house-float 2.4s ease-in-out infinite}.research-dialogue{display:grid;grid-template-columns:1fr 1fr;gap:12px}.research-dialogue p{margin:5px 0;padding:11px 14px;border:1px solid rgba(132,91,39,.5);border-radius:18px;background:rgba(255,250,226,.75);font:14px/1.65 "Yu Mincho",YuMincho,serif;text-align:left}.research-dialogue b{display:block;color:#865422}.research-unlock-help{margin:12px 0;font:13px/1.65 "Yu Mincho",YuMincho,serif}.research-unlock-card>div:last-child{display:flex;justify-content:center;gap:12px}.research-unlock-card button{min-width:145px;padding:10px 15px;border:2px solid #735022;border-radius:12px;background:#f7e2a8;color:#51361a;font-weight:bold;cursor:pointer}.research-unlock-card #research-unlock-go{background:linear-gradient(#ffe288,#d6a548)}@keyframes research-event-in{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}@keyframes research-house-float{50%{transform:translateY(-4px)}}
+@media(max-width:900px){.field-wrap > .research-lab{right:7px;bottom:58px;width:min(350px,54%);max-height:75%}.field-wrap > .research-lab > div{padding:10px}.field-wrap > .research-lab .research-option{padding:6px}}
+@media(max-width:900px) and (orientation:landscape){.next-wave{display:block;right:6px;top:52px;width:32%;padding:5px 7px;border-width:2px;border-radius:8px}.next-wave small{font-size:6px}.next-wave strong{margin:1px 0 3px;font-size:7px}.wave-dialogue{gap:2px;padding-top:3px}.wave-dialogue p{gap:3px;font-size:6px}.sell-confirm>div{width:min(320px,68%);padding:12px;border-width:2px}.sell-confirm strong{margin:3px 0 6px;font-size:13px}.sell-confirm dl>div{padding:2px 6px;font-size:9px}.sell-confirm p{margin:6px 0 4px;font-size:9px}.sell-actions button{padding:5px;font-size:9px}}
+@media(max-width:900px) and (orientation:landscape){.story-continue header{top:2%;width:64%}.story-continue header h2{font-size:18px}.story-continue header p{font-size:9px}.continue-speech{top:15%;width:32%;min-height:132px;padding:13px 16px;font-size:7.5px;line-height:1.6}.drobby-speech{left:1.5%}.himawari-speech{right:1.5%;width:34%}.continue-choice{bottom:10%;width:68%;padding:7px 9px;border-width:2px}.continue-choice h3{margin-bottom:4px;font-size:9px}.continue-choice>div{gap:6px}.continue-choice button{padding:5px 7px;border-width:2px;border-radius:8px;font-size:7px}.story-continue footer{padding:3px 8px;font-size:6px}.story-continue footer strong{font-size:11px}}
+@media(max-width:900px) and (orientation:landscape){.preparation-phase{top:5px;min-width:170px;padding:4px 9px;border-width:2px;border-radius:9px}.preparation-phase strong{font-size:9px}.preparation-phase span{font-size:6px}.preparation-phase:not(.hidden)~.selected-tower-indicator:not(.hidden){top:43px}}
+
+/* Shared soft picture-book legendary unlock presentation. */
+.legendary-unlock.soft-unlock{background:rgba(5,8,10,.93);cursor:pointer}
+.legendary-unlock.soft-unlock img{z-index:1;opacity:0;animation:legendary-reveal 3.2s .25s ease-out forwards}
+.legendary-unlock.soft-unlock .legendary-line-one{animation:legendary-text-in .9s .7s ease forwards}
+.legendary-unlock.soft-unlock .legendary-name{animation:legendary-text-in 1s 1.3s ease forwards}
+.legendary-unlock.soft-unlock .legendary-unlocked{animation:legendary-text-in .8s 1.8s ease forwards}
+.legendary-unlock.soft-unlock .legendary-info{animation:legendary-text-in .9s 2.25s ease forwards}
+.legendary-unlock.king-unlock{background:radial-gradient(circle at 50% 40%,#5f481c 0,#17120a 52%,#050403 100%)}
+.legendary-unlock.king-unlock::before{background:linear-gradient(108deg,transparent 22%,rgba(255,228,139,.22) 35%,transparent 48%),linear-gradient(72deg,transparent 47%,rgba(255,205,83,.14) 56%,transparent 68%);opacity:.95;animation:legendary-light 7s ease-in-out infinite}
+.legendary-unlock.king-unlock::after{background:radial-gradient(circle at 50% 42%,rgba(255,222,111,.38),transparent 38%),radial-gradient(circle at 20% 18%,rgba(255,238,167,.9) 0 1px,transparent 3px),radial-gradient(circle at 78% 32%,rgba(255,210,92,.75) 0 1px,transparent 3px),radial-gradient(circle at 40% 76%,rgba(255,233,150,.72) 0 1px,transparent 3px);background-size:auto,150px 120px,190px 150px,170px 180px;opacity:.85;animation:legendary-particles 16s linear infinite}
+.legendary-unlock.king-unlock .legendary-forest-light::after{content:"♛";position:absolute;top:7%;left:50%;color:rgba(255,223,126,.76);font-size:72px;text-shadow:0 0 24px rgba(255,205,78,.7);transform:translateX(-50%);animation:continue-pulse 2.2s ease-in-out infinite}
+.legendary-unlock.queen-unlock{background:radial-gradient(circle at 50% 40%,#756426 0,#24200d 52%,#080703 100%)}
+.legendary-unlock.queen-unlock::before{background:radial-gradient(ellipse at 15% 20%,rgba(255,220,87,.55) 0 3px,transparent 5px),radial-gradient(ellipse at 75% 28%,rgba(255,239,151,.48) 0 4px,transparent 6px),radial-gradient(ellipse at 35% 68%,rgba(227,172,50,.48) 0 3px,transparent 5px),radial-gradient(ellipse at 58% 8%,rgba(255,245,178,.35) 0 8px,transparent 13px);background-size:120px 150px,170px 130px,145px 180px,210px 170px;animation:star-unlock-drift 13s linear infinite}
+.legendary-unlock.queen-unlock::after{background:radial-gradient(circle at 50% 43%,rgba(255,225,108,.3),transparent 43%);opacity:.9}
+.legendary-unlock.queen-unlock .legendary-forest-light::after{content:"🌻";position:absolute;top:8%;left:50%;font-size:64px;opacity:.7;text-shadow:0 0 22px rgba(255,225,91,.8);transform:translateX(-50%);animation:continue-pulse 2.4s ease-in-out infinite}
+.legendary-unlock.star-unlock .legendary-forest-light::after{content:"✦";position:absolute;top:8%;left:50%;font-size:68px;color:#f1e8ff;text-shadow:0 0 22px rgba(165,188,255,.9),0 0 36px rgba(255,235,157,.45);transform:translateX(-50%);animation:continue-pulse 2.1s ease-in-out infinite}
+.legendary-unlock.peace-unlock{background:radial-gradient(circle at 50% 40%,#4d5133 0,#151a11 54%,#050704 100%)}
+.legendary-unlock.peace-unlock::before{background:radial-gradient(ellipse at 20% 28%,rgba(255,236,177,.42) 0 4px,transparent 7px),radial-gradient(ellipse at 75% 22%,rgba(213,231,169,.36) 0 5px,transparent 8px),radial-gradient(ellipse at 44% 76%,rgba(255,205,139,.32) 0 3px,transparent 6px),linear-gradient(110deg,transparent 28%,rgba(255,238,176,.16) 38%,transparent 50%);background-size:150px 145px,210px 160px,180px 190px,auto;animation:star-unlock-drift 16s linear infinite}
+.legendary-unlock.peace-unlock::after{background:radial-gradient(circle at 50% 44%,rgba(255,238,183,.28),transparent 38%),radial-gradient(circle at 50% 52%,rgba(145,190,119,.16),transparent 58%);opacity:.92}
+.legendary-unlock.peace-unlock .legendary-forest-light::after{content:"✿";position:absolute;top:8%;left:50%;font-size:66px;color:#fff1bf;text-shadow:0 0 22px rgba(255,231,151,.86),0 0 36px rgba(187,219,141,.42);transform:translateX(-50%);animation:continue-pulse 2.5s ease-in-out infinite}
+.legendary-unlock.soft-unlock.burst .legendary-forest-light::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 42%,rgba(255,236,166,.38),transparent 30%);animation:legendary-burst 1.8s ease-out forwards}
+/* Credits: a quiet parchment page that stays separate from game progress. */
+.mode-card .credits-menu-button{width:auto;min-width:150px;margin:8px auto 0;padding:8px 18px;border-color:rgba(119,78,35,.72);background:linear-gradient(#efe0b7,#c6a56d);color:#4c351f;font-size:13px;box-shadow:0 3px 8px rgba(40,22,9,.22)}
+.credits-screen{position:fixed;z-index:135;inset:0;display:grid;place-items:center;padding:28px;background:radial-gradient(circle at 50% 30%,rgba(112,74,37,.45),rgba(16,9,5,.94) 72%);overflow:hidden}
+.credits-screen.hidden{display:none}
+.credits-parchment{position:relative;width:min(680px,90vw);max-height:min(820px,88vh);padding:38px 54px 30px;overflow-y:auto;border:7px double #765022;border-radius:18px;background:radial-gradient(circle at 50% 18%,rgba(255,249,218,.72),transparent 36%),linear-gradient(105deg,#d1ad70,#f1dfae 9%,#ead39a 90%,#b98e52);color:#49331e;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.65),inset 0 0 42px rgba(89,52,17,.28)}
+.credits-parchment::before{content:"";position:absolute;inset:13px;border:1px solid rgba(124,82,35,.48);border-radius:10px;pointer-events:none}
+.credits-parchment header{position:relative;padding-bottom:18px;border-bottom:1px solid rgba(113,73,30,.45)}
+.credits-parchment header small{letter-spacing:.28em;color:#8a5c27}
+.credits-parchment h2{margin:10px 0 3px;font-family:serif;font-size:clamp(24px,4vw,38px)}
+.credits-parchment header p{margin:0;color:#79542d}
+.credits-content{position:relative;display:grid;gap:18px;padding:25px 0}
+.credits-content section{padding-bottom:14px;border-bottom:1px solid rgba(112,74,33,.22)}
+.credits-content h3{margin:0 0 6px;color:#704820;font:700 15px/1.5 serif;letter-spacing:.08em}
+.credits-content p{margin:0;font:18px/1.7 serif}.credits-content p small{font-size:13px;color:#735a3d}
+.credits-content a{color:#70451c;text-decoration-color:rgba(112,69,28,.55);text-underline-offset:3px}.credits-content a:hover,.credits-content a:focus-visible{color:#9a5d18;text-decoration-thickness:2px}
+#credits-back{position:relative;min-width:150px;padding:10px 28px;border:2px solid #70491f;border-radius:10px;background:linear-gradient(#fff0c2,#cba66b);color:#4c3218;font-weight:700;cursor:pointer}
+#credits-back:hover,#credits-back:focus-visible{filter:brightness(1.08);box-shadow:0 0 15px rgba(255,216,130,.45)}
+@media(max-width:760px){.credits-screen{padding:12px}.credits-parchment{max-height:92vh;padding:28px 28px 22px}.credits-content{gap:12px}.credits-content p{font-size:16px}}
+
+/* Mouse encyclopedia inside the Library. */
+.library-tabs{position:absolute;z-index:14;top:3.5%;left:50%;display:flex;gap:8px;padding:6px;border:1px solid rgba(206,152,75,.55);border-radius:999px;background:rgba(26,14,8,.74);box-shadow:0 8px 22px rgba(0,0,0,.42),inset 0 0 0 1px rgba(255,233,178,.12);transform:translateX(-50%)}
+.library-tabs.hidden{display:none}
+.library-tabs button{min-width:112px;padding:9px 18px;border:1px solid rgba(168,115,52,.65);border-radius:999px;background:linear-gradient(#6a3d1d,#352012);color:#e6c17c;font:700 14px Georgia,"Yu Mincho",serif;letter-spacing:.08em;cursor:pointer}
+.library-tabs button.active{background:linear-gradient(#e1b066,#8c5626);color:#fff3cf;box-shadow:0 0 16px rgba(227,166,72,.28),inset 0 0 0 2px rgba(255,237,181,.18)}
+.mouse-encyclopedia{position:relative;z-index:2;width:min(1110px,94vw);max-height:86vh;overflow:hidden;padding:34px 34px 26px;border:9px ridge #5d351d;border-radius:16px;background:radial-gradient(ellipse at 50% 18%,rgba(255,236,176,.92),rgba(222,188,124,.96) 56%,rgba(157,103,48,.98)),repeating-radial-gradient(circle at 30% 30%,rgba(90,55,25,.045) 0 1px,transparent 1px 7px);box-shadow:0 26px 70px rgba(0,0,0,.62),inset 0 0 0 3px rgba(255,245,202,.38);color:#3f2815}
+.mouse-encyclopedia.hidden{display:none}
+.mouse-encyclopedia-heading{text-align:center}
+.mouse-encyclopedia-heading small{display:block;color:#8b6233;font:700 11px Georgia,serif;letter-spacing:.28em}
+.mouse-encyclopedia-heading h2{margin:5px 0 4px;color:#4f3018;font:700 clamp(24px,3vw,36px) Georgia,"Yu Mincho",serif;letter-spacing:.12em}
+.mouse-encyclopedia-heading p{margin:0 0 18px;color:#6f4b25;font:15px/1.5 "Yu Mincho",YuMincho,serif}
+.mouse-encyclopedia-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;max-height:calc(86vh - 205px);overflow:auto;padding:6px 6px 12px;scrollbar-width:thin;scrollbar-color:#a87337 rgba(95,58,24,.16)}
+.mouse-encyclopedia-grid::-webkit-scrollbar,.mouse-encyclopedia-detail::-webkit-scrollbar{width:8px}.mouse-encyclopedia-grid::-webkit-scrollbar-thumb,.mouse-encyclopedia-detail::-webkit-scrollbar-thumb{border-radius:999px;background:#a87337}.mouse-encyclopedia-grid::-webkit-scrollbar-track,.mouse-encyclopedia-detail::-webkit-scrollbar-track{background:rgba(95,58,24,.14)}
+.mouse-card{position:relative;min-height:176px;padding:12px 10px 10px;border:2px solid rgba(103,65,27,.62);border-radius:12px;background:linear-gradient(#f8e8bd,#d7af68);color:#402815;box-shadow:inset 0 0 0 2px rgba(255,246,212,.44),0 6px 13px rgba(69,38,16,.24);font-family:Georgia,"Yu Mincho",serif;text-align:center;cursor:pointer}
+.mouse-card:hover,.mouse-card:focus-visible,.mouse-card.selected{outline:none;border-color:#b77e35;filter:brightness(1.04);box-shadow:inset 0 0 0 2px rgba(255,246,212,.58),0 0 0 3px rgba(229,172,78,.24),0 9px 16px rgba(69,38,16,.28)}
+.mouse-card.locked{filter:sepia(.35) saturate(.55);color:#796142}
+.mouse-card-art{position:relative;display:grid;width:82px;height:68px;margin:0 auto 8px;place-items:center}
+.mouse-card-art img{position:relative;z-index:2;max-width:100%;max-height:100%;object-fit:contain;filter:drop-shadow(0 5px 5px rgba(65,38,18,.25))}
+.mouse-card.locked .mouse-card-art{border-radius:50%;background:radial-gradient(ellipse,rgba(70,49,32,.18),transparent 70%)}
+.mouse-card-fallback{position:absolute;z-index:1;color:#6b4a29;font-size:30px}.mouse-card.locked .mouse-card-fallback{font-size:42px;color:#4b3828;filter:blur(.2px);opacity:.72}
+.mouse-card strong,.mouse-card small,.mouse-card em{display:block}.mouse-card strong{min-height:36px;font-size:15px;line-height:1.25}.mouse-card small{margin-top:3px;color:#6d481f;font-size:12px}.mouse-card em{margin-top:6px;color:#8a632f;font-size:11px;font-style:normal}
+.mouse-encyclopedia-detail{position:absolute;z-index:20;inset:88px 34px 26px;display:grid;grid-template-columns:minmax(180px,28%) minmax(0,1fr);gap:20px;overflow:auto;padding:24px;border:3px solid #7b4d22;border-radius:14px;background:linear-gradient(145deg,rgba(255,239,190,.98),rgba(221,181,110,.98));box-shadow:0 16px 45px rgba(47,25,10,.48),inset 0 0 0 2px rgba(255,249,218,.44)}
+.mouse-encyclopedia-detail.hidden{display:none}
+#mouse-encyclopedia-detail-close{position:absolute;top:10px;right:12px;width:34px;height:30px;border:1px solid #7b4d22;border-radius:9px;background:#d9ad62;color:#432915;font-weight:900;cursor:pointer}
+.mouse-detail-art{position:relative;display:grid;min-height:210px;place-items:center;border:2px solid rgba(115,72,30,.42);border-radius:12px;background:radial-gradient(ellipse at 50% 42%,rgba(255,250,218,.8),rgba(189,132,64,.22));overflow:hidden}
+.mouse-detail-art img{position:relative;z-index:2;max-width:88%;max-height:190px;object-fit:contain;filter:drop-shadow(0 10px 9px rgba(61,35,17,.28))}
+#mouse-detail-fallback{position:absolute;color:#6d4b2b;font-size:76px;opacity:.75}
+.mouse-detail-copy small{display:inline-block;padding:4px 10px;border:1px solid rgba(126,78,31,.44);border-radius:999px;background:rgba(255,247,218,.55);color:#714b21;font-weight:900}
+.mouse-detail-copy h3{margin:10px 0 8px;color:#3d2512;font:700 28px Georgia,"Yu Mincho",serif}.mouse-detail-copy p{margin:0 0 12px;color:#65431f;line-height:1.65}
+.mouse-detail-copy dl{display:grid;gap:8px;margin:0}.mouse-detail-copy dl>div{display:grid;grid-template-columns:88px minmax(0,1fr);gap:10px;padding:8px 10px;border-radius:9px;background:rgba(255,248,221,.44)}.mouse-detail-copy dt{color:#7b5426;font-weight:900}.mouse-detail-copy dd{margin:0;line-height:1.55}
+.unlock-notice.mouse-encyclopedia-notice{top:20px;right:18px;left:auto;min-width:230px;transform:none;padding:11px 16px;border-color:#8f6330;border-radius:12px;background:linear-gradient(145deg,#fff2bd,#d7ab5a);color:#4d3016;white-space:normal;text-align:left;font:13px/1.45 "Yu Mincho",YuMincho,serif;animation:mouse-encyclopedia-notice 2.6s ease both}
+.unlock-notice.mouse-encyclopedia-notice b,.unlock-notice.mouse-encyclopedia-notice span{display:block}.unlock-notice.mouse-encyclopedia-notice span{margin-top:3px;font-size:16px;font-weight:900}
+@keyframes mouse-encyclopedia-notice{0%{opacity:0;transform:translateY(-8px)}12%,82%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-5px)}}
+@media(max-width:900px){
+  .library-tabs{top:2%;gap:5px;padding:4px}.library-tabs button{min-width:82px;padding:6px 9px;font-size:10px}
+  .mouse-encyclopedia{width:96vw;max-height:91vh;padding:28px 16px 14px}.mouse-encyclopedia-heading h2{font-size:22px}.mouse-encyclopedia-heading p{margin-bottom:10px;font-size:11px}
+  .mouse-encyclopedia-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-height:calc(91vh - 150px)}
+  .mouse-card{min-height:132px;padding:8px 6px}.mouse-card-art{width:62px;height:48px}.mouse-card strong{min-height:28px;font-size:11px}.mouse-card small,.mouse-card em{font-size:9px}
+  .mouse-encyclopedia-detail{inset:66px 12px 12px;grid-template-columns:1fr;gap:10px;padding:14px}.mouse-detail-art{min-height:120px}.mouse-detail-art img{max-height:110px}.mouse-detail-copy h3{font-size:20px}.mouse-detail-copy p{font-size:12px}.mouse-detail-copy dl>div{grid-template-columns:62px minmax(0,1fr);font-size:11px}
+}
+
+/* Research lab: fixed chrome with an independently scrolling research list. */
+.field-wrap > .research-lab{height:min(620px,calc(100% - 104px));max-height:none;overflow:hidden}
+.field-wrap > .research-lab > .research-panel{box-sizing:border-box;display:flex;flex-direction:column;width:100%;height:100%;max-height:none;padding:0;overflow:hidden;pointer-events:auto}
+.research-header{position:relative;z-index:2;flex:0 0 auto;padding:15px 17px 10px;border-bottom:2px solid rgba(114,80,31,.38);background:linear-gradient(145deg,#fff1bf,#e5ca88);box-shadow:0 5px 12px rgba(75,49,19,.12)}
+.field-wrap > .research-lab .research-header h2{margin:0 42px 6px;font-size:18px}
+.field-wrap > .research-lab .research-summary{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:5px 12px}
+.field-wrap > .research-lab .research-summary p{margin:0;font-size:11px;white-space:normal}
+.research-retry-notice{margin:7px 0 0!important;padding:6px 9px;border:1px solid rgba(112,82,47,.42);border-radius:8px;background:rgba(104,87,66,.12);color:#6c5842;font-weight:800}
+.research-retry-notice.hidden{display:none}
+.research-lab.retry-readonly .research-option button{filter:grayscale(.85);opacity:.58;cursor:not-allowed;box-shadow:none}
+.top-actions #research-button.retry-locked{filter:none;opacity:1;cursor:pointer}
+.field-wrap > .research-lab .research-header > #research-close{position:absolute;top:9px;right:11px;z-index:3;width:34px;height:34px;padding:0;border:2px solid #6e4a20;border-radius:50%;background:#fff6d8;color:#51361a;font-size:18px;line-height:1;cursor:pointer}
+#research-options{min-height:0;flex:1 1 auto;padding:7px 10px 12px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
+.research-option{transition:opacity .18s ease,filter .18s ease,border-color .18s ease,box-shadow .18s ease}
+.research-option:has(button:disabled){opacity:.7;filter:saturate(.7)}
+.research-option:has(button:not(:disabled)){border-color:#b47c25;background:rgba(255,252,230,.96);box-shadow:0 2px 8px rgba(128,83,25,.15)}
+.research-option button:not(:disabled){background:linear-gradient(#ffe58c,#e7ae3e);color:#4d3214;box-shadow:inset 0 1px rgba(255,255,255,.7),0 2px 6px rgba(112,67,13,.25);font-weight:800}
+.research-option button:not(:disabled):hover,.research-option button:not(:disabled):focus-visible{filter:brightness(1.1);box-shadow:inset 0 1px rgba(255,255,255,.8),0 0 12px rgba(242,184,62,.55)}
+.research-option button:disabled{background:#c7b995;color:#6f6654;box-shadow:none}
+@media(max-width:900px){.field-wrap > .research-lab{top:7px;right:7px;bottom:auto;height:calc(100% - 14px);max-height:none}.field-wrap > .research-lab > .research-panel{padding:0}.research-header{padding:9px 11px 7px}.field-wrap > .research-lab .research-header h2{margin-bottom:4px;font-size:15px}.field-wrap > .research-lab .research-summary{grid-template-columns:1fr}.field-wrap > .research-lab .research-summary p{font-size:9px}#research-options{padding:5px 7px 8px}}
+@media(max-height:520px) and (orientation:landscape){.field-wrap > .research-lab{width:min(390px,52%);height:calc(100% - 10px);top:5px}.research-header{padding:7px 10px 5px}.field-wrap > .research-lab .research-header h2{font-size:14px}.field-wrap > .research-lab .research-summary{grid-template-columns:1fr 1fr}.field-wrap > .research-lab .research-summary p{font-size:8px}.field-wrap > .research-lab .research-option{margin:4px 0;padding:5px}}
+
+.story-continue.game-over-scene::before,.endless-retry.game-over-scene::before{content:"";position:absolute;z-index:0;inset:0;background:rgba(14,12,10,.38);pointer-events:none;animation:gameover-dim-in .8s ease both}
+.story-continue.game-over-scene>*,.endless-retry.game-over-scene>*{z-index:1}
+.story-continue.game-over-scene #continue-title,.endless-retry.game-over-scene #endless-retry-title{animation:gameover-title-in 1.15s .18s ease both}
+.gameover-snack-result{display:block!important;margin:6px auto 10px;padding:6px 12px;border:1px solid rgba(117,78,35,.42);border-radius:10px;background:rgba(255,246,213,.72);font:11px/1.45 "Yu Mincho",YuMincho,serif}
+.gameover-snack-result strong,.gameover-snack-result span,.gameover-snack-result b{display:inline;margin:0 5px}
+.continue-choice .continue-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.endless-retry-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+@keyframes gameover-dim-in{from{opacity:0}to{opacity:1}}
+@keyframes gameover-title-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@media(max-width:900px) and (orientation:landscape){.gameover-snack-result{margin:3px auto 5px;padding:3px 6px;font-size:7px}.continue-choice .continue-actions{gap:6px}.endless-retry-actions{gap:5px}.endless-retry-actions button{padding:6px;font-size:8px}}
