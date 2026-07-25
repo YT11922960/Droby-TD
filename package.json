@@ -1,0 +1,8 @@
+{
+  "name": "drobby-td",
+  "private": true,
+  "scripts": {
+    "simulate:waves": "node scripts/simulate-waves.js",
+    "test": "node --test"
+  }
+}
