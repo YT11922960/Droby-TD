@@ -1,5 +1,6 @@
 (()=>{
  const WAREHOUSE_ROUTE_UNLOCK_WAVE=50;
+ const BARRICADE_BLOCK_COUNT=10;
  const warehouse={x:132,y:190,doorX:198,doorY:202};
  const warehouseRoute=[
   [953,100],[914,82],[858,68],[790,60],[716,62],[642,73],
@@ -8,6 +9,24 @@
  const warehouseBuildSpots=[
   [105,332],[215,330],[318,286],[374,214],[382,104],[282,72],[492,82]
  ];
+ const barricadeSystems=[
+  {
+   id:"branch",
+   label:"ルート2",
+   startWave:35,
+   routeId:"branch",
+   labelPosition:[770,564],
+   points:[[1115,520],[1035,542],[950,565],[865,588],[780,607],[695,619],[610,623],[525,619],[440,608],[365,594],[300,578]]
+  },
+  {
+   id:"warehouse",
+   label:"倉庫ルート",
+   startWave:50,
+   routeId:"warehouse",
+   labelPosition:[690,198],
+   points:[[900,150],[830,145],[760,145],[690,153],[620,168],[550,190],[485,215],[420,238],[355,257],[290,267],[230,270]]
+  }
+ ];
  let warehouseSpotStart=-1;
  let pendingSnackDelivery=0;
  let lastDeliveryFrame=-Infinity;
@@ -15,6 +34,20 @@
 
  function warehouseModeActive(){return gameMode==="endless"}
  function warehouseRouteOpen(){return warehouseModeActive()&&wave+1>=WAREHOUSE_ROUTE_UNLOCK_WAVE}
+ function barricadeVisible(system){
+  if(!warehouseModeActive()||wave+1<system.startWave)return false;
+  return system.id!=="branch"||routeBranchActive;
+ }
+ function barricadeProgress(system){
+  if(!barricadeVisible(system))return 0;
+  return Math.max(0,Math.min(BARRICADE_BLOCK_COUNT,wave-system.startWave+1));
+ }
+ function barricadeSegments(system,count=barricadeProgress(system)){
+  const segments=[];
+  for(let index=0;index<Math.min(count,system.points.length-1);index++)segments.push({system,index,a:system.points[index],b:system.points[index+1]});
+  return segments;
+ }
+ function activeBarricadeSegments(){return barricadeSystems.flatMap(system=>barricadeSegments(system))}
 
  function syncWarehouseBuildSpots(){
   if(warehouseModeActive()){
@@ -82,6 +115,66 @@
   ctx.strokeText("倉庫への分岐",888,51);
   ctx.fillText("倉庫への分岐",888,51);
   ctx.restore();
+ }
+
+ function drawBarricadeBlock(segment){
+  const [ax,ay]=segment.a,[bx,by]=segment.b,dx=bx-ax,dy=by-ay,length=Math.hypot(dx,dy),angle=Math.atan2(dy,dx),variant=(segment.index+(segment.system.id==="warehouse"?1:0))%3;
+  ctx.save();
+  ctx.translate((ax+bx)/2,(ay+by)/2);
+  ctx.rotate(angle);
+  ctx.fillStyle="rgba(35,24,14,.3)";
+  ctx.beginPath();ctx.ellipse(0,12,length*.46,10,0,0,Math.PI*2);ctx.fill();
+  const wood=ctx.createLinearGradient(0,-13,0,14);
+  wood.addColorStop(0,variant===0?"#b77c43":variant===1?"#a96d3a":"#c08a50");
+  wood.addColorStop(1,variant===0?"#76502e":variant===1?"#684426":"#805432");
+  ctx.fillStyle=wood;ctx.strokeStyle="#4e321e";ctx.lineWidth=2.2;
+  ctx.beginPath();ctx.roundRect(-length*.46,-13,length*.92,27,7);ctx.fill();ctx.stroke();
+  ctx.strokeStyle="rgba(236,190,111,.28)";ctx.lineWidth=1.2;
+  [-6,3].forEach(y=>{ctx.beginPath();ctx.moveTo(-length*.4,y);ctx.lineTo(length*.4,y+variant-1);ctx.stroke()});
+  ctx.fillStyle="#4a321f";
+  [-length*.31,length*.31].forEach(x=>{ctx.beginPath();ctx.roundRect(x-3,-18,6,36,2);ctx.fill()});
+  ctx.fillStyle="#c6a061";
+  [-length*.31,length*.31].forEach(x=>{ctx.beginPath();ctx.arc(x,-5,1.8,0,Math.PI*2);ctx.fill()});
+  if(segment.index%3===1){ctx.globalAlpha=.72;ctx.font="15px serif";ctx.textAlign="center";ctx.fillText("🍃",0,-14)}
+  ctx.restore();
+ }
+
+ function drawNextBarricadeSite(system,count){
+  if(count>=BARRICADE_BLOCK_COUNT)return;
+  const a=system.points[count],b=system.points[count+1];
+  if(!a||!b)return;
+  const x=(a[0]+b[0])/2,y=(a[1]+b[1])/2,angle=Math.atan2(b[1]-a[1],b[0]-a[0]),length=Math.hypot(b[0]-a[0],b[1]-a[1]);
+  ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.globalAlpha=.34;ctx.strokeStyle="#e7c98d";ctx.lineWidth=2;ctx.setLineDash([7,7]);ctx.beginPath();ctx.roundRect(-length*.43,-12,length*.86,24,6);ctx.stroke();ctx.setLineDash([]);ctx.rotate(-angle);ctx.globalAlpha=.72;ctx.font="18px serif";ctx.textAlign="center";ctx.fillText("🪵",0,-13);ctx.restore();
+ }
+
+ function drawBarricadeStatus(system,count){
+  const [x,y]=system.labelPosition,complete=count>=BARRICADE_BLOCK_COUNT;
+  ctx.save();ctx.textAlign="center";ctx.font="bold 12px 'Mochiy Pop One',sans-serif";const text=complete?`${system.label} 防壁完成`:`${system.label} 防壁 ${count}/${BARRICADE_BLOCK_COUNT}`,width=ctx.measureText(text).width+20;
+  ctx.fillStyle="rgba(58,40,23,.76)";ctx.strokeStyle="rgba(242,216,156,.72)";ctx.lineWidth=1.5;ctx.beginPath();ctx.roundRect(x-width/2,y-14,width,24,8);ctx.fill();ctx.stroke();ctx.fillStyle="#fff0bd";ctx.fillText(text,x,y+3);ctx.restore();
+ }
+
+ function drawBarricades(){
+  barricadeSystems.forEach(system=>{
+   if(!barricadeVisible(system))return;
+   const count=barricadeProgress(system);
+   barricadeSegments(system,count).forEach(drawBarricadeBlock);
+   drawNextBarricadeSite(system,count);
+   drawBarricadeStatus(system,count);
+  });
+ }
+
+ function cross(ax,ay,bx,by,cx,cy){return(bx-ax)*(cy-ay)-(by-ay)*(cx-ax)}
+ function pointOnSegment(px,py,ax,ay,bx,by){return Math.abs(cross(ax,ay,bx,by,px,py))<.001&&px>=Math.min(ax,bx)-.001&&px<=Math.max(ax,bx)+.001&&py>=Math.min(ay,by)-.001&&py<=Math.max(ay,by)+.001}
+ function segmentsIntersect(a,b,c,d){
+  const c1=cross(a[0],a[1],b[0],b[1],c[0],c[1]),c2=cross(a[0],a[1],b[0],b[1],d[0],d[1]),c3=cross(c[0],c[1],d[0],d[1],a[0],a[1]),c4=cross(c[0],c[1],d[0],d[1],b[0],b[1]);
+  if(((c1>0&&c2<0)||(c1<0&&c2>0))&&((c3>0&&c4<0)||(c3<0&&c4>0)))return true;
+  return Math.abs(c1)<.001&&pointOnSegment(c[0],c[1],a[0],a[1],b[0],b[1])||Math.abs(c2)<.001&&pointOnSegment(d[0],d[1],a[0],a[1],b[0],b[1])||Math.abs(c3)<.001&&pointOnSegment(a[0],a[1],c[0],c[1],d[0],d[1])||Math.abs(c4)<.001&&pointOnSegment(b[0],b[1],c[0],c[1],d[0],d[1]);
+ }
+ function lineBlocked(x1,y1,x2,y2){return activeBarricadeSegments().some(({a,b})=>segmentsIntersect([x1,y1],[x2,y2],a,b))}
+ function withVisibleEnemiesFrom(x,y,callback){
+  const allEnemies=enemies;
+  enemies=allEnemies.filter(enemy=>!lineBlocked(x,y,enemy.x,enemy.y));
+  try{return callback()}finally{enemies=allEnemies}
  }
 
  function snackStackCount(){
@@ -200,8 +293,37 @@
   originalDrawField();
   if(!warehouseModeActive())return;
   if(warehouseRouteOpen())drawOpenWarehouseRoute();else drawClosedWarehouseApproach();
+  drawBarricades();
   drawWarehouse();
   drawSnackDeliveries();
+ };
+
+ const originalSelectTowerTarget=selectTowerTarget;
+ selectTowerTarget=function(t,targets){return originalSelectTowerTarget(t,targets.filter(enemy=>!lineBlocked(t.x,t.y-35,enemy.x,enemy.y)))};
+
+ const originalActivatePeaceTower=activatePeaceTower;
+ activatePeaceTower=function(t){return withVisibleEnemiesFrom(t.x,t.y-18,()=>originalActivatePeaceTower(t))};
+
+ const originalApplyHimawariAreaSlow=applyHimawariAreaSlow;
+ applyHimawariAreaSlow=function(center,profile){return withVisibleEnemiesFrom(center.x,center.y,()=>originalApplyHimawariAreaSlow(center,profile))};
+
+ const originalUpdateShot=updateShot;
+ updateShot=function(s){
+  if(s.dead)return;
+  if(s.spread){
+   const nextX=s.x+Math.cos(s.angle)*7,nextY=s.y+Math.sin(s.angle)*7;
+   if(lineBlocked(s.x,s.y,nextX,nextY)){addEffectParticle({type:"spark",x:(s.x+nextX)/2,y:(s.y+nextY)/2,vx:0,vy:0,life:18,size:3,color:"#e7c78c"},true);s.dead=true;return}
+   return originalUpdateShot(s);
+  }
+  if(!s.target||s.target.dead||s.target.returningHome)return originalUpdateShot(s);
+  const dx=s.target.x-s.x,dy=s.target.y-s.y,d=Math.hypot(dx,dy);
+  if(d<10+s.target.hitRadius*.4){
+   if(s.area||s.kind==="hima")return withVisibleEnemiesFrom(s.target.x,s.target.y,()=>originalUpdateShot(s));
+   return originalUpdateShot(s);
+  }
+  const nextX=s.x+dx/d*7,nextY=s.y+dy/d*7;
+  if(lineBlocked(s.x,s.y,nextX,nextY)){addEffectParticle({type:"spark",x:(s.x+nextX)/2,y:(s.y+nextY)/2,vx:0,vy:0,life:18,size:3,color:"#e7c78c"},true);s.dead=true;return}
+  return originalUpdateShot(s);
  };
 
  const originalAddSnacks=addSnacks;
@@ -215,6 +337,8 @@
   unlockWave:WAREHOUSE_ROUTE_UNLOCK_WAVE,
   position:{...warehouse},
   route:warehouseRoute.map(point=>[...point]),
-  buildSpots:warehouseBuildSpots.map(point=>[...point])
+  buildSpots:warehouseBuildSpots.map(point=>[...point]),
+  barricades:barricadeSystems.map(system=>({id:system.id,label:system.label,startWave:system.startWave,points:system.points.map(point=>[...point])})),
+  blocksShot:(x1,y1,x2,y2)=>lineBlocked(x1,y1,x2,y2)
  });
 })();
