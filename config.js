@@ -5,7 +5,7 @@ window.GAME_CONFIG=Object.freeze({
 window.addEventListener("DOMContentLoaded",()=>{
  if(document.querySelector('script[data-feature="snack-warehouse"]'))return;
  const script=document.createElement("script");
- script.src="snack-warehouse-v3.js?v=5";
+ script.src="snack-warehouse-v4.js?v=6";
  script.async=false;
  script.dataset.feature="snack-warehouse";
  script.addEventListener("error",()=>console.error("Failed to load snack warehouse feature."),{once:true});
