@@ -3,20 +3,35 @@ window.GAME_CONFIG=Object.freeze({
 });
 
 window.addEventListener("DOMContentLoaded",()=>{
- if(document.querySelector('script[data-feature="snack-warehouse"]'))return;
- const warehouseScript=document.createElement("script");
- warehouseScript.src="snack-warehouse-v5.js?v=7";
- warehouseScript.async=false;
- warehouseScript.dataset.feature="snack-warehouse";
- warehouseScript.addEventListener("error",()=>console.error("Failed to load snack warehouse feature."),{once:true});
- warehouseScript.addEventListener("load",()=>{
-  if(document.querySelector('script[data-feature="route-targeting-fix"]'))return;
+ const loadLateGameBalance=()=>{
+  if(document.querySelector('script[data-feature="late-game-balance"]'))return;
+  const balanceScript=document.createElement("script");
+  balanceScript.src="late-game-balance.js?v=1";
+  balanceScript.async=false;
+  balanceScript.dataset.feature="late-game-balance";
+  balanceScript.addEventListener("error",()=>console.error("Failed to load late-game balance fixes."),{once:true});
+  document.body.appendChild(balanceScript);
+ };
+
+ const loadTargetingFix=()=>{
+  const existing=document.querySelector('script[data-feature="route-targeting-fix"]');
+  if(existing){loadLateGameBalance();return}
   const targetingScript=document.createElement("script");
   targetingScript.src="route-targeting-fix.js?v=2";
   targetingScript.async=false;
   targetingScript.dataset.feature="route-targeting-fix";
+  targetingScript.addEventListener("load",loadLateGameBalance,{once:true});
   targetingScript.addEventListener("error",()=>console.error("Failed to load route targeting fix."),{once:true});
   document.body.appendChild(targetingScript);
- },{once:true});
+ };
+
+ const existingWarehouse=document.querySelector('script[data-feature="snack-warehouse"]');
+ if(existingWarehouse){loadTargetingFix();return}
+ const warehouseScript=document.createElement("script");
+ warehouseScript.src="snack-warehouse-v5.js?v=7";
+ warehouseScript.async=false;
+ warehouseScript.dataset.feature="snack-warehouse";
+ warehouseScript.addEventListener("load",loadTargetingFix,{once:true});
+ warehouseScript.addEventListener("error",()=>console.error("Failed to load snack warehouse feature."),{once:true});
  document.body.appendChild(warehouseScript);
 });
