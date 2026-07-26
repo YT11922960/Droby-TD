@@ -12,11 +12,11 @@
  const barricadeSystems=[
   {
    id:"branch",
-   label:"ルート2",
+   label:"ルート間",
    startWave:35,
    routeId:"branch",
-   labelPosition:[770,564],
-   points:[[1115,520],[1035,542],[950,565],[865,588],[780,607],[695,619],[610,623],[525,619],[440,608],[365,594],[300,578]]
+   labelPosition:[900,447],
+   points:[[1110,455],[1070,465],[1030,476],[990,487],[950,499],[910,511],[870,523],[830,535],[790,547],[750,559],[710,571]]
   },
   {
    id:"warehouse",
@@ -299,7 +299,10 @@
  };
 
  const originalSelectTowerTarget=selectTowerTarget;
- selectTowerTarget=function(t,targets){return originalSelectTowerTarget(t,targets.filter(enemy=>!lineBlocked(t.x,t.y-35,enemy.x,enemy.y)))};
+ selectTowerTarget=function(t,targets){
+  if(t.kind==="star")return originalSelectTowerTarget(t,targets);
+  return originalSelectTowerTarget(t,targets.filter(enemy=>!lineBlocked(t.x,t.y-35,enemy.x,enemy.y)));
+ };
 
  const originalActivatePeaceTower=activatePeaceTower;
  activatePeaceTower=function(t){return withVisibleEnemiesFrom(t.x,t.y-18,()=>originalActivatePeaceTower(t))};
@@ -310,6 +313,7 @@
  const originalUpdateShot=updateShot;
  updateShot=function(s){
   if(s.dead)return;
+  if(s.kind==="star")return originalUpdateShot(s);
   if(s.spread){
    const nextX=s.x+Math.cos(s.angle)*7,nextY=s.y+Math.sin(s.angle)*7;
    if(lineBlocked(s.x,s.y,nextX,nextY)){addEffectParticle({type:"spark",x:(s.x+nextX)/2,y:(s.y+nextY)/2,vx:0,vy:0,life:18,size:3,color:"#e7c78c"},true);s.dead=true;return}
