@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded",()=>{
  warehouseScript.addEventListener("load",()=>{
   if(document.querySelector('script[data-feature="route-targeting-fix"]'))return;
   const targetingScript=document.createElement("script");
-  targetingScript.src="route-targeting-fix.js?v=1";
+  targetingScript.src="route-targeting-fix.js?v=2";
   targetingScript.async=false;
   targetingScript.dataset.feature="route-targeting-fix";
   targetingScript.addEventListener("error",()=>console.error("Failed to load route targeting fix."),{once:true});
