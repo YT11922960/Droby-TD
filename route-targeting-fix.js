@@ -1,4 +1,5 @@
 (()=>{
+ const ROUTE_LOCK_FRAMES=180;
  const routeDistanceCache=new WeakMap();
 
  function routeMetrics(route){
@@ -26,28 +27,44 @@
   return Math.hypot(next[0]-enemy.x,next[1]-enemy.y)+suffixDistances[segment+1];
  }
 
- function compareFrontmost(a,b){
-  const distanceDifference=remainingDistanceToObjective(a)-remainingDistanceToObjective(b);
-  if(Math.abs(distanceDifference)>.01)return distanceDifference;
-  // Stable fallback for enemies at effectively the same location.
-  return (a.hp/a.maxHp)-(b.hp/b.maxHp);
- }
-
- selectTowerTarget=function(t,targets){
-  if(!targets?.length)return undefined;
-  if(t.kind!=="star")return targets.sort(compareFrontmost)[0];
-
-  const shieldTargets=targets.filter(enemy=>starShieldPriority(enemy)>0&&enemy.shieldHp>0);
-  if(shieldTargets.length){
-   return shieldTargets.sort((a,b)=>
-    starShieldPriority(b)-starShieldPriority(a)||
-    b.shieldHp-a.shieldHp||
-    compareFrontmost(a,b)
-   )[0];
-  }
-
-  return targets.sort((a,b)=>(b.boss?1:0)-(a.boss?1:0)||compareFrontmost(a,b))[0];
+ // The original target selector sorts by enemyPathProgress in descending order.
+ // Returning negative remaining distance keeps the existing warehouse wall filter,
+ // Star priorities, and Peace-tower helpers while making different routes comparable.
+ enemyPathProgress=function(enemy){
+  const distance=remainingDistanceToObjective(enemy);
+  return Number.isFinite(distance)?-distance:-Infinity;
  };
 
- window.ROUTE_TARGETING_FIX=Object.freeze({remainingDistanceToObjective});
+ const previousSelectTowerTarget=selectTowerTarget;
+ selectTowerTarget=function(t,targets){
+  if(!targets?.length)return undefined;
+
+  // Star keeps its global shield/boss role and does not lock to one route.
+  if(t.kind==="star")return previousSelectTowerTarget(t,targets);
+
+  const now=Number.isFinite(frame)?frame:0;
+  if(t.targetRouteId&&now<(t.targetRouteLockUntil||0)){
+   const sameRouteTargets=targets.filter(enemy=>enemy.routeId===t.targetRouteId);
+   if(sameRouteTargets.length){
+    const lockedTarget=previousSelectTowerTarget(t,sameRouteTargets);
+    if(lockedTarget)return lockedTarget;
+   }
+  }
+
+  const target=previousSelectTowerTarget(t,targets);
+  if(!target){
+   t.targetRouteId=null;
+   t.targetRouteLockUntil=0;
+   return undefined;
+  }
+
+  t.targetRouteId=target.routeId;
+  t.targetRouteLockUntil=now+ROUTE_LOCK_FRAMES;
+  return target;
+ };
+
+ window.ROUTE_TARGETING_FIX=Object.freeze({
+  remainingDistanceToObjective,
+  routeLockFrames:ROUTE_LOCK_FRAMES
+ });
 })();
