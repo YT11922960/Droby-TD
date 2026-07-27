@@ -26,16 +26,45 @@
   return Math.min(MAX_LATE_GAME_TOWER_SLOTS,INITIAL_TOWER_SLOTS+safeLevel*2);
  };
 
+ function isPriorityPeaceCandidate(enemy){
+  if(
+   !enemy||
+   enemy.warehouseReturning||
+   enemy.dead||
+   enemy.returningHome||
+   enemy.returningHomeBoss||
+   enemy.hp<=0||
+   enemy.boss
+  )return false;
+
+  // Small-shield mice are the only special enemy added to the return-home pool.
+  // Giant shields and other support/special enemies remain excluded.
+  if(enemy.kind==="shield")return true;
+  return isPeaceReturnCandidate(enemy);
+ }
+
+ function peaceReturnPriority(enemy){
+  if(enemy.kind==="shield"&&(enemy.shieldHp||0)>0)return 3;
+  if(enemy.kind==="shield")return 2;
+  return enemy.hp/enemy.maxHp>=.7?1:0;
+ }
+
+ function selectPriorityPeaceTargets(candidates,count){
+  return [...candidates].sort((a,b)=>
+   peaceReturnPriority(b)-peaceReturnPriority(a)||
+   enemyPathProgress(b)-enemyPathProgress(a)
+  ).slice(0,count);
+ }
+
  // "おかえり" is a call, not a projectile. It ignores the warehouse wall,
  // while thieves already carrying snacks home remain ineligible.
  activatePeaceTower=function(t){
   const range=effectiveRange(t);
   const candidates=enemies.filter(enemy=>
-   !enemy.warehouseReturning&&
-   isPeaceReturnCandidate(enemy)&&
+   isPriorityPeaceCandidate(enemy)&&
    Math.hypot(enemy.x-t.x,enemy.y-t.y)<=range
   );
-  const returnTargets=selectPeaceReturnTargets(candidates,t.type.returnHomeCount||3);
+  const returnTargets=selectPriorityPeaceTargets(candidates,t.type.returnHomeCount||3);
   if(!returnTargets.length)return;
   spawnPeaceCallEffect(t);
   playPeaceCallSound();
@@ -43,11 +72,14 @@
   console.log("Peace tower activated",{
    returned:returnTargets.length,
    wallIgnored:true,
+   smallShieldCandidates:candidates.filter(enemy=>enemy.kind==="shield").length,
    healthyCandidates:candidates.filter(enemy=>enemy.hp/enemy.maxHp>=.7).length,
    range:Math.round(range),
    targets:returnTargets.map(enemy=>({
     kind:enemy.kind,
     routeId:enemy.routeId,
+    shieldHp:Math.max(0,Math.round(enemy.shieldHp||0)),
+    priority:peaceReturnPriority(enemy),
     hpRate:Number((enemy.hp/enemy.maxHp).toFixed(2)),
     progress:Number(enemyPathProgress(enemy).toFixed(2))
    }))
@@ -109,6 +141,7 @@
   maxSlotResearchLevel:MAX_SLOT_RESEARCH_LEVEL,
   maxTowerSlots:MAX_LATE_GAME_TOWER_SLOTS,
   slotCosts:[...EXTRA_SLOT_COSTS],
-  peaceIgnoresWarehouseWall:true
+  peaceIgnoresWarehouseWall:true,
+  peacePrioritizesSmallShields:true
  });
 })();
