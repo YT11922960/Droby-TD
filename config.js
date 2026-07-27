@@ -3,13 +3,25 @@ window.GAME_CONFIG=Object.freeze({
 });
 
 window.addEventListener("DOMContentLoaded",()=>{
+ const loadBackgroundRefinement=()=>{
+  if(document.querySelector('script[data-feature="background-refinement"]'))return;
+  const backgroundScript=document.createElement("script");
+  backgroundScript.src="background-refinement.js?v=1";
+  backgroundScript.async=false;
+  backgroundScript.dataset.feature="background-refinement";
+  backgroundScript.addEventListener("error",()=>console.error("Failed to load background refinement."),{once:true});
+  document.body.appendChild(backgroundScript);
+ };
+
  const loadRoute3Flow=()=>{
-  if(document.querySelector('script[data-feature="route3-flow-fix"]'))return;
+  const existing=document.querySelector('script[data-feature="route3-flow-fix"]');
+  if(existing){loadBackgroundRefinement();return}
   const flowScript=document.createElement("script");
   flowScript.src="route3-flow-fix.js?v=1";
   flowScript.async=false;
   flowScript.dataset.feature="route3-flow-fix";
-  flowScript.addEventListener("error",()=>console.error("Failed to load Route 3 flow fixes."),{once:true});
+  flowScript.addEventListener("load",loadBackgroundRefinement,{once:true});
+  flowScript.addEventListener("error",()=>{console.error("Failed to load Route 3 flow fixes.");loadBackgroundRefinement()},{once:true});
   document.body.appendChild(flowScript);
  };
 
