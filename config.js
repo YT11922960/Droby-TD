@@ -6,7 +6,7 @@ window.addEventListener("DOMContentLoaded",()=>{
  const loadBackgroundRefinement=()=>{
   if(document.querySelector('script[data-feature="background-refinement"]'))return;
   const backgroundScript=document.createElement("script");
-  backgroundScript.src="background-refinement.js?v=1";
+  backgroundScript.src="background-refinement.js?v=2";
   backgroundScript.async=false;
   backgroundScript.dataset.feature="background-refinement";
   backgroundScript.addEventListener("error",()=>console.error("Failed to load background refinement."),{once:true});
