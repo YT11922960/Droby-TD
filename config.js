@@ -41,7 +41,7 @@ window.addEventListener("DOMContentLoaded",()=>{
   const existing=document.querySelector('script[data-feature="late-game-balance"]');
   if(existing){loadBarricadeCrossingFix();return}
   const balanceScript=document.createElement("script");
-  balanceScript.src="late-game-balance.js?v=1";
+  balanceScript.src="late-game-balance.js?v=2";
   balanceScript.async=false;
   balanceScript.dataset.feature="late-game-balance";
   balanceScript.addEventListener("load",loadBarricadeCrossingFix,{once:true});
