@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+ <defs>
+  <filter id="roadEdge" x="-15%" y="-20%" width="130%" height="140%">
+   <feTurbulence type="fractalNoise" baseFrequency="0.018 0.055" numOctaves="2" seed="50" result="noise"/>
+   <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="softSoil" x="-20%" y="-30%" width="140%" height="160%"><feGaussianBlur stdDeviation="4"/></filter>
+  <filter id="warehouseShadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur stdDeviation="7"/></filter>
+  <linearGradient id="warehouseWall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98954"/><stop offset="1" stop-color="#745033"/></linearGradient>
+  <linearGradient id="warehouseRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#76502f"/><stop offset="1" stop-color="#49301e"/></linearGradient>
+  <pattern id="dirt" width="32" height="24" patternUnits="userSpaceOnUse">
+   <rect width="32" height="24" fill="#c6a36a"/>
+   <circle cx="5" cy="8" r="1.5" fill="#9e7b4b" opacity=".42"/>
+   <circle cx="23" cy="17" r="1.2" fill="#e2c58f" opacity=".5"/>
+   <path d="M12 4l8 2M3 20l7-2M25 6l5-1" stroke="#87683f" stroke-width="1" opacity=".25"/>
+  </pattern>
+ </defs>
+ <image href="forest-map.png" x="0" y="0" width="1200" height="760" preserveAspectRatio="none"/>
+
+ <!-- Route 2 is baked into this background. -->
+ <g filter="url(#roadEdge)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M1205 560 C1155 551 1105 525 1050 511 C992 496 943 520 900 555 C857 590 820 632 770 649 C720 666 678 652 638 626 C598 600 567 575 523 580 C477 585 448 630 407 654 C363 680 314 679 268 687 C238 692 218 703 198 713" stroke="#4e4a2d" stroke-width="68" opacity=".26" filter="url(#softSoil)"/>
+  <path d="M1205 560 C1155 551 1105 525 1050 511 C992 496 943 520 900 555 C857 590 820 632 770 649 C720 666 678 652 638 626 C598 600 567 575 523 580 C477 585 448 630 407 654 C363 680 314 679 268 687 C238 692 218 703 198 713" stroke="#79633f" stroke-width="56" opacity=".72"/>
+  <path d="M1205 560 C1155 551 1105 525 1050 511 C992 496 943 520 900 555 C857 590 820 632 770 649 C720 666 678 652 638 626 C598 600 567 575 523 580 C477 585 448 630 407 654 C363 680 314 679 268 687 C238 692 218 703 198 713" stroke="url(#dirt)" stroke-width="44"/>
+  <path d="M1205 560 C1155 551 1105 525 1050 511 C992 496 943 520 900 555 C857 590 820 632 770 649 C720 666 678 652 638 626 C598 600 567 575 523 580 C477 585 448 630 407 654 C363 680 314 679 268 687 C238 692 218 703 198 713" stroke="#ead3a0" stroke-width="25" opacity=".2"/>
+ </g>
+
+ <!-- A broad, irregular clearing connects Route 3 to the warehouse. -->
+ <g filter="url(#roadEdge)">
+  <ellipse cx="136" cy="253" rx="116" ry="100" fill="#7f693f" opacity=".28" filter="url(#softSoil)"/>
+  <ellipse cx="136" cy="253" rx="105" ry="90" fill="#a98a57" opacity=".86"/>
+  <ellipse cx="145" cy="260" rx="84" ry="67" fill="#ccb17c" opacity=".34"/>
+ </g>
+
+ <!-- Route 3 is part of the same painted map rather than a runtime stroke. -->
+ <g filter="url(#roadEdge)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M953 100 C925 128 892 140 848 142 C803 144 776 122 730 128 C681 135 652 172 621 209 C590 246 550 260 505 248 C457 235 427 202 382 208 C338 215 326 258 298 282 C269 307 236 272 198 242" stroke="#4a492d" stroke-width="63" opacity=".25" filter="url(#softSoil)"/>
+  <path d="M953 100 C925 128 892 140 848 142 C803 144 776 122 730 128 C681 135 652 172 621 209 C590 246 550 260 505 248 C457 235 427 202 382 208 C338 215 326 258 298 282 C269 307 236 272 198 242" stroke="#765f3b" stroke-width="52" opacity=".74"/>
+  <path d="M953 100 C925 128 892 140 848 142 C803 144 776 122 730 128 C681 135 652 172 621 209 C590 246 550 260 505 248 C457 235 427 202 382 208 C338 215 326 258 298 282 C269 307 236 272 198 242" stroke="url(#dirt)" stroke-width="40"/>
+  <path d="M953 100 C925 128 892 140 848 142 C803 144 776 122 730 128 C681 135 652 172 621 209 C590 246 550 260 505 248 C457 235 427 202 382 208 C338 215 326 258 298 282 C269 307 236 272 198 242" stroke="#ead3a0" stroke-width="23" opacity=".2"/>
+ </g>
+
+ <!-- Grass, stones and roots visually stitch the new roads into the forest. -->
+ <g opacity=".72">
+  <g fill="#718348"><ellipse cx="890" cy="172" rx="18" ry="7" transform="rotate(-15 890 172)"/><ellipse cx="760" cy="164" rx="16" ry="6" transform="rotate(20 760 164)"/><ellipse cx="646" cy="144" rx="19" ry="7" transform="rotate(-18 646 144)"/><ellipse cx="560" cy="290" rx="18" ry="7"/><ellipse cx="432" cy="174" rx="17" ry="6" transform="rotate(15 432 174)"/><ellipse cx="327" cy="323" rx="16" ry="6" transform="rotate(-12 327 323)"/><ellipse cx="233" cy="211" rx="17" ry="7"/></g>
+  <g fill="#766548"><ellipse cx="926" cy="154" rx="7" ry="4"/><ellipse cx="818" cy="109" rx="6" ry="4"/><ellipse cx="687" cy="202" rx="8" ry="5"/><ellipse cx="590" cy="176" rx="7" ry="4"/><ellipse cx="477" cy="275" rx="7" ry="4"/><ellipse cx="365" cy="180" rx="8" ry="5"/><ellipse cx="276" cy="314" rx="6" ry="4"/></g>
+  <g fill="#73874a"><ellipse cx="1135" cy="535" rx="19" ry="7" transform="rotate(-18 1135 535)"/><ellipse cx="1030" cy="548" rx="15" ry="6" transform="rotate(24 1030 548)"/><ellipse cx="865" cy="622" rx="17" ry="6" transform="rotate(-22 865 622)"/><ellipse cx="700" cy="680" rx="20" ry="7"/><ellipse cx="550" cy="548" rx="17" ry="6" transform="rotate(-20 550 548)"/><ellipse cx="430" cy="690" rx="18" ry="7"/></g>
+ </g>
+
+ <!-- Warehouse, crates and sacks are baked into the WAVE50 background. -->
+ <g transform="translate(132 235)">
+  <ellipse cx="0" cy="60" rx="83" ry="22" fill="#362718" opacity=".3" filter="url(#warehouseShadow)"/>
+  <rect x="-63" y="-25" width="126" height="84" rx="10" fill="url(#warehouseWall)" stroke="#4a311f" stroke-width="3"/>
+  <g stroke="#5b3b24" stroke-width="1.4" opacity=".45"><path d="M-40-22v78M-14-22v78M14-22v78M40-22v78"/></g>
+  <path d="M-78-23L0-75 78-23Z" fill="url(#warehouseRoof)" stroke="#392517" stroke-width="3"/>
+  <g stroke="#d2a867" stroke-width="2" opacity=".25"><path d="M-52-28L0-71M-26-28L0-71M0-28V-71M26-28L0-71M52-28L0-71"/></g>
+  <rect x="27" y="3" width="32" height="56" rx="4" fill="#482e1c" stroke="#2b1b11" stroke-width="3"/>
+  <circle cx="49" cy="31" r="2.7" fill="#d7b266"/>
+  <rect x="-45" y="-3" width="29" height="25" rx="3" fill="#ead392" stroke="#674724" stroke-width="2"/>
+  <path d="M-30-3v25M-45 9h29" stroke="#8d693e" stroke-width="1.5"/>
+  <g fill="#9b6837" stroke="#59391f" stroke-width="2"><rect x="-59" y="34" width="32" height="25" rx="3"/><rect x="-30" y="42" width="29" height="17" rx="3"/></g>
+  <g fill="#d5ad6e" stroke="#70502f" stroke-width="1.5"><path d="M-47 41q-8 10-3 21q10 8 20 0q5-11-3-21z"/><path d="M-23 42q-7 9-3 19q9 7 18 0q4-10-3-19z"/><path d="M0 43q-7 9-3 18q9 7 18 0q4-9-3-18z"/></g>
+  <rect x="-62" y="-72" width="124" height="28" rx="6" fill="#e8cd8c" stroke="#735027" stroke-width="2"/>
+  <text x="0" y="-53" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#51351c">おやつ倉庫</text>
+ </g>
+ <g opacity=".72" fill="#8e6a3c" stroke="#593a21" stroke-width="2"><rect x="40" y="302" width="32" height="25" rx="4"/><rect x="208" y="294" width="30" height="23" rx="4"/></g>
+ <g transform="translate(966 112) rotate(-5)" opacity=".84"><rect x="-3" y="-25" width="6" height="36" rx="2" fill="#6b4a2b"/><path d="M2-24h43l-9 10 9 10H2z" fill="#b8874d" stroke="#5d3e22" stroke-width="2"/><text x="22" y="-9" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="700" fill="#4d331d">倉庫道</text></g>
+</svg>
