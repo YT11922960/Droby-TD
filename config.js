@@ -3,13 +3,25 @@ window.GAME_CONFIG=Object.freeze({
 });
 
 window.addEventListener("DOMContentLoaded",()=>{
+ const loadRoute3Flow=()=>{
+  if(document.querySelector('script[data-feature="route3-flow-fix"]'))return;
+  const flowScript=document.createElement("script");
+  flowScript.src="route3-flow-fix.js?v=1";
+  flowScript.async=false;
+  flowScript.dataset.feature="route3-flow-fix";
+  flowScript.addEventListener("error",()=>console.error("Failed to load Route 3 flow fixes."),{once:true});
+  document.body.appendChild(flowScript);
+ };
+
  const loadHudLayout=()=>{
-  if(document.querySelector('script[data-feature="hud-layout-fix"]'))return;
+  const existing=document.querySelector('script[data-feature="hud-layout-fix"]');
+  if(existing){loadRoute3Flow();return}
   const hudScript=document.createElement("script");
   hudScript.src="hud-layout-fix.js?v=1";
   hudScript.async=false;
   hudScript.dataset.feature="hud-layout-fix";
-  hudScript.addEventListener("error",()=>console.error("Failed to load HUD layout fix."),{once:true});
+  hudScript.addEventListener("load",loadRoute3Flow,{once:true});
+  hudScript.addEventListener("error",()=>{console.error("Failed to load HUD layout fix.");loadRoute3Flow()},{once:true});
   document.body.appendChild(hudScript);
  };
 
