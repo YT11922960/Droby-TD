@@ -61,13 +61,29 @@ window.addEventListener("DOMContentLoaded",()=>{
   document.body.appendChild(targetingScript);
  };
 
+ const loadFinalMap=()=>{
+  const files=["final-map-data-01.js?v=1","final-map-data-02.js?v=1","final-map-data-03.js?v=1","final-map-data-04.js?v=1","final-map-background.js?v=1"];
+  let index=0;
+  const next=()=>{
+   if(index>=files.length){loadTargetingFix();return}
+   const file=files[index++],feature=`final-map-${index}`;
+   if(document.querySelector(`script[data-feature="${feature}"]`)){next();return}
+   const script=document.createElement("script");
+   script.src=file;script.async=false;script.dataset.feature=feature;
+   script.addEventListener("load",next,{once:true});
+   script.addEventListener("error",()=>{console.error(`Failed to load ${file}.`);loadTargetingFix()},{once:true});
+   document.body.appendChild(script);
+  };
+  next();
+ };
+
  const existingWarehouse=document.querySelector('script[data-feature="snack-warehouse"]');
- if(existingWarehouse){loadTargetingFix();return}
+ if(existingWarehouse){loadFinalMap();return}
  const warehouseScript=document.createElement("script");
  warehouseScript.src="snack-warehouse-v5.js?v=7";
  warehouseScript.async=false;
  warehouseScript.dataset.feature="snack-warehouse";
- warehouseScript.addEventListener("load",loadTargetingFix,{once:true});
+ warehouseScript.addEventListener("load",loadFinalMap,{once:true});
  warehouseScript.addEventListener("error",()=>console.error("Failed to load snack warehouse feature."),{once:true});
  document.body.appendChild(warehouseScript);
 });
