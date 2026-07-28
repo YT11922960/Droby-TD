@@ -81,7 +81,7 @@
  };
 
  function previewRoutes(){
-  const routes=[{id:"main",points:path}];
+  const routes=[{id:"main",points:warehouse.mainRoute||routePathById("main")}];
   if(routeBranchActive)routes.push({id:"branch",points:routePathById("branch")});
   const nextWave=wave+1;
   if(gameMode==="endless"&&nextWave>=warehouse.unlockWave)routes.push({id:"warehouse",points:warehouse.route});
