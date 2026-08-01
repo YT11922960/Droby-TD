@@ -63,18 +63,22 @@ window.addEventListener("DOMContentLoaded",()=>{
 
  const loadFinalMap=()=>{
   const files=[
-   "final-map-v3-data-01.js?v=1",
-   "final-map-v3-data-02.js?v=1",
-   "final-map-v3-data-03.js?v=1",
-   "final-map-v3-data-04.js?v=1",
-   "final-map-v3-verify.js?v=1",
-   "final-map-background.js?v=2",
+   "final-map-data-01.js?v=4",
+   "final-map-data-02.js?v=4",
+   "final-map-data-03.js?v=4",
+   "final-map-data-04.js?v=4",
+   "final-map-data-05.js?v=4",
+   "final-map-data-06.js?v=4",
+   "final-map-data-07.js?v=4",
+   "final-map-data-08.js?v=4",
+   "final-map-data-09.js?v=4",
+   "final-map-background.js?v=4",
    "final-map-layout-fix.js?v=1"
   ];
   let index=0;
   const next=()=>{
    if(index>=files.length){loadTargetingFix();return}
-   const file=files[index++],feature=`final-map-v3-${index}`;
+   const file=files[index++],feature=`final-map-hq-${index}`;
    if(document.querySelector(`script[data-feature="${feature}"]`)){next();return}
    const script=document.createElement("script");
    script.src=file;script.async=false;script.dataset.feature=feature;
