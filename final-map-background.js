@@ -1,12 +1,14 @@
 (()=>{
  const previousWarehouse=window.SNACK_WAREHOUSE;
- if(!previousWarehouse||!Array.isArray(window.FINAL_MAP_V3_CHUNKS)||!window.FINAL_MAP_V3_CHUNKS.length)return;
+ const mapChunks=window.FINAL_MAP_CHUNKS;
+ if(!previousWarehouse||!Array.isArray(mapChunks)||!mapChunks.length)return;
 
  const WIDTH=1200,HEIGHT=760;
+ const finalMapData=`data:image/avif;base64,${mapChunks.join("")}`;
  const finalMap=new Image();
  finalMap.decoding="async";
- finalMap.src=`data:image/avif;base64,${window.FINAL_MAP_V3_CHUNKS.join("")}`;
- finalMap.addEventListener("error",()=>console.error("Failed to load the illustrated endless map."),{once:true});
+ finalMap.src=finalMapData;
+ finalMap.addEventListener("error",()=>console.error("Failed to load the high-quality endless map."),{once:true});
 
  const finalMainPath=[
   [1070,78],[1060,105],[1038,135],[1010,168],[980,198],[945,225],
@@ -57,6 +59,19 @@
  function endlessMode(){return gameMode==="endless"}
  function warehouseOpen(){return endlessMode()&&wave+1>=(previousWarehouse.unlockWave||50)}
  function imageReady(){return finalMap.complete&&finalMap.naturalWidth>0}
+ function applyCssBackground(){
+  if(canvas.style.backgroundImage!==`url("${finalMapData}")`)canvas.style.backgroundImage=`url("${finalMapData}")`;
+  canvas.style.backgroundSize="100% 100%";
+  canvas.style.backgroundPosition="center";
+  canvas.style.backgroundRepeat="no-repeat";
+ }
+ function clearCssBackground(){
+  if(!canvas.style.backgroundImage)return;
+  canvas.style.backgroundImage="";
+  canvas.style.backgroundSize="";
+  canvas.style.backgroundPosition="";
+  canvas.style.backgroundRepeat="";
+ }
  function replacePoints(target,source){target.splice(0,target.length,...source.map(point=>[...point]))}
  function syncFinalLayout(){
   if(endlessMode()&&!finalLayoutApplied){
@@ -73,6 +88,7 @@
   originalSpots.forEach((point,index)=>{if(spots[index])spots[index]=[...point]});
   finalLayoutApplied=false;
  }
+ finalMap.addEventListener("load",()=>{if(endlessMode())applyCssBackground()},{once:true});
 
  const previousRoutePathById=routePathById;
  routePathById=function(routeId){
@@ -147,8 +163,13 @@
  drawField=function(){
   syncFinalLayout();
   previousDrawField();
-  if(!endlessMode()||!imageReady())return;
-  ctx.save();ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality="high";ctx.drawImage(finalMap,0,0,WIDTH,HEIGHT);ctx.restore();
+  if(!endlessMode()){
+   clearCssBackground();
+   return;
+  }
+  if(!imageReady())return;
+  applyCssBackground();
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,canvas.width,canvas.height);ctx.restore();
   drawFinalWall();drawSnackFlights();
  };
 
