@@ -68,7 +68,8 @@ window.addEventListener("DOMContentLoaded",()=>{
    "final-map-v3-data-03.js?v=1",
    "final-map-v3-data-04.js?v=1",
    "final-map-v3-verify.js?v=1",
-   "final-map-background.js?v=2"
+   "final-map-background.js?v=2",
+   "final-map-layout-fix.js?v=1"
   ];
   let index=0;
   const next=()=>{
