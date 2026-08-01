@@ -62,11 +62,17 @@ window.addEventListener("DOMContentLoaded",()=>{
  };
 
  const loadFinalMap=()=>{
-  const files=["final-map-data-01.js?v=1","final-map-data-02.js?v=1","final-map-data-03.js?v=1","final-map-data-04.js?v=1","final-map-background.js?v=1"];
+  const files=[
+   "final-map-v3-data-01.js?v=1",
+   "final-map-v3-data-02.js?v=1",
+   "final-map-v3-data-03.js?v=1",
+   "final-map-v3-data-04.js?v=1",
+   "final-map-background.js?v=2"
+  ];
   let index=0;
   const next=()=>{
    if(index>=files.length){loadTargetingFix();return}
-   const file=files[index++],feature=`final-map-${index}`;
+   const file=files[index++],feature=`final-map-v3-${index}`;
    if(document.querySelector(`script[data-feature="${feature}"]`)){next();return}
    const script=document.createElement("script");
    script.src=file;script.async=false;script.dataset.feature=feature;
