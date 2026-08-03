@@ -73,7 +73,8 @@ window.addEventListener("DOMContentLoaded",()=>{
    "final-map-data-08.js?v=4",
    "final-map-data-09.js?v=4",
    "final-map-background.js?v=4",
-   "final-map-layout-fix.js?v=1"
+   "final-map-layout-fix.js?v=1",
+   "final-map-canvas-restore.js?v=1"
   ];
   let index=0;
   const next=()=>{
